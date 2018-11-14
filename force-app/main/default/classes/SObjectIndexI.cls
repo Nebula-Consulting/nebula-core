@@ -6,8 +6,8 @@
 
 public interface SObjectIndexI {
 
-    void put(SObject newObj);
-    List<SObject> getAll(Object objVal);
+    SObjectIndexI put(SObject newObj);
+    List<SObject> getAll(Object key);
     List<SObject> getAll(SObject spec);
     List<SObject> getAll(Map<String, Object> spec);
     List<SObject> values();

@@ -1,10 +1,9 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 14/11/2018
- * @description (if required)
  */
 
-public with sharing class SObjectIndexLeaf implements SObjectIndexI {
+public class SObjectIndexLeaf implements SObjectIndexI {
 
     private List<SObject> objects;
 
@@ -12,43 +11,44 @@ public with sharing class SObjectIndexLeaf implements SObjectIndexI {
         objects = new List<SObject>();
     }
 
-    public void put(SObject newObj) {
+    public SObjectIndexI put(SObject newObj) {
         objects.add(newObj);
+        return this;
     }
-    public List<SObject> getAll(Object objVal) {
+    public List<SObject> getAll(Object key) {
         return objects;
     }
     public List<SObject> values() {
         return objects;
     }
     public Set<Id> remove(SObject spec) {
-        Set<Id> rval = new Set<Id>();
-        for(integer i=objects.size()-1; i >= 0; i--) {
+        Set<Id> returnVal = new Set<Id>();
+        for(Integer i=objects.size()-1; i >= 0; i--) {
             if(objects[i] == spec) {
-                if(objects[i].id != null) {
-                    rval.add(objects[i].id);
+                if(objects[i].Id != null) {
+                    returnVal.add(objects[i].Id);
                 }
                 objects.remove(i);
             }
         }
-        return rval;
+        return returnVal;
     }
     public Set<Id> remove(Map<String, Object> spec) {
-        Set<Id> rval = new Set<Id>();
+        Set<Id> returnVal = new Set<Id>();
 
         for(SObject thiSObject : objects) {
-            rval.add(thiSObject.Id);
+            returnVal.add(thiSObject.Id);
         }
         objects = new List<SObject>();
-        return rval;
+        return returnVal;
     }
     public Set<String> keySet(String field) {
         return new Set<String>();
     }
     public SObjectIndexI deepClone() {
-        SObjectIndexLeaf rval = new SObjectIndexLeaf();
+        SObjectIndexLeaf returnVal = new SObjectIndexLeaf();
 
-        rval.objects = objects.deepClone(true, true, true);
-        return rval;
+        returnVal.objects = objects.deepClone(true, true, true);
+        return returnVal;
     }
 }

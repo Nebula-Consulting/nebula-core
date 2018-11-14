@@ -126,9 +126,6 @@ private class SObjectIndexTest {
         SObjectIndex theIndex = new SObjectIndex(ACCOUNT_ID).putAll(data);
 
         System.assertEquals(2, theIndex.getAll(togAccount.Id).size());
-        Set<Id> ks = theIndex.keySetId();
-        System.assertEquals(1, ks.size());
-        System.assert(ks.contains(togAccount.Id));
 
         Set<String> ks2 = theIndex.keySet();
         System.assertEquals(1, ks2.size());
@@ -167,20 +164,8 @@ private class SObjectIndexTest {
     }
 
     @IsTest
-    static void idTest() {
-        SObjectIndex theIndex = new SObjectIndex(Account.Name.getDescribe().getName());
-
-        theIndex.put(togAccount);
-        Set<Id> indexIds = theIndex.getIds();
-        System.assertEquals(1, indexIds.size());
-        System.assert(indexIds.contains(togAccount.Id));
-
-        System.assert(theIndex.keySet('MailingStreet').isEmpty());
-    }
-
-    @IsTest
     static void twoHitsMap() {
-        SObjectIndex theIndex = new sObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME}).setData(
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME}).putAll(
                 new List<Contact> { new Contact(AccountId = null, FirstName = 'John', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Fred', LastName = 'Deer')
@@ -198,7 +183,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void twoHitsSubIndex() {
-        SObjectIndex theIndex =  new sObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME}).setData(
+        SObjectIndex theIndex =  new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME}).putAll(
                 new List<Contact> { new Contact(AccountId = null, FirstName = 'John', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Fred', LastName = 'Deer')
