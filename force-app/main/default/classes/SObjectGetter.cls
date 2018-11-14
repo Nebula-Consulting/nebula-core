@@ -5,7 +5,7 @@
  * are not directly possible on SObject
  */
 
-global inherited sharing class SObjectGetter {
+global class SObjectGetter {
     
     global static Object get(SObject obj, String field) {
         if(field.indexOf('.') > 0) {

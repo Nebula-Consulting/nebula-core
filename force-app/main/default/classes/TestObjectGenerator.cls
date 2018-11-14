@@ -3,7 +3,7 @@
  * @date 09/11/2018
  */
 @IsTest
-public without sharing class TestObjectGenerator {
+public class TestObjectGenerator {
 
     private Account testAccount;
     private Contact testContact;
