@@ -7,8 +7,6 @@
 
 global class SObjectIndex implements SObjectIndexI {
 
-    global class SingleIndexedFieldOnlyException extends Exception {}
-
     global SObjectIndex(String fieldName)  {
         this(new List<String>{fieldName}, 0);
     }
@@ -65,8 +63,6 @@ global class SObjectIndex implements SObjectIndexI {
 
     /**
     * @description Get a single object in the index where the indexed field is equal to key.
-    * Only applicable to indexes on a single field (throws SingleIndexedFieldOnlyException if called on index with
-    * more fields indexed)
     * @param key a value for the indexed field
     * @return a matching object (if more than one match, it picks the first one in the index,
     * in the same order that they were added). null, if there is no match
@@ -78,8 +74,6 @@ global class SObjectIndex implements SObjectIndexI {
 
     /**
     * @description Get all objects in the index where the indexed field is equal to objVal
-    * Only applicable to indexes on a single field (throws SingleIndexedFieldOnlyException if called on index with
-    * more fields indexed)
     * @param key a value for the indexed field
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
@@ -89,10 +83,8 @@ global class SObjectIndex implements SObjectIndexI {
         SObjectIndexI thisIndex = children.get(keyString);
         if(thisIndex == null) {
             return new List<SObject>();
-        } else if(!(thisIndex instanceof SObjectIndexLeaf)) {
-            throw new SingleIndexedFieldOnlyException();
         } else {
-            return thisIndex.getAll(key);
+            return thisIndex.values();
         }
     }
 

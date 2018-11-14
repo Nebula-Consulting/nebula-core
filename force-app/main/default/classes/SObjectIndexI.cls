@@ -15,5 +15,4 @@ public interface SObjectIndexI {
     Set<Id> remove(Map<String, Object> spec);
     Set<String> keySet(String field);
     SObjectIndexI deepClone();
-
 }
