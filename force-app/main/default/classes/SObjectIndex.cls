@@ -7,15 +7,23 @@
 
 global class SObjectIndex implements SObjectIndexI {
 
-    global SObjectIndex(String fieldName)  {
-        this(new List<String>{fieldName}, 0);
-    }
-    global SObjectIndex(List<String> indexFields)  {
-        this(indexFields, 0);
-    }
-    global SObjectIndex setIsCaseInsensitive(Boolean isCaseInsensitive)  {
-        this.isCaseInsensitive = isCaseInsensitive;
-        return this;
+    global class Builder {
+
+        private SObjectIndex returnVal;
+
+        global Builder(String fieldName) {
+            returnVal = new SObjectIndex(new List<String>{fieldName}, 0);
+        }
+        global Builder(List<String> indexFields) {
+            returnVal = new SObjectIndex(indexFields, 0);
+        }
+        global Builder setIsCaseInsensitive(Boolean isCaseInsensitive) {
+            returnVal.isCaseInsensitive = isCaseInsensitive;
+            return this;
+        }
+        global SObjectIndex build() {
+            return returnVal;
+        }
     }
 
     private List<String> allIndexFields;
@@ -26,14 +34,19 @@ global class SObjectIndex implements SObjectIndexI {
     private Map<String, SObjectIndexI> children;
     private Boolean isCaseInsensitive;
 
-    private SObjectIndex(List<String> allIndexFields, Integer fieldDepth) {
-        this.thisIndexDepth = fieldDepth;
+    private SObjectIndex(List<String> allIndexFields, Integer thisIndexDepth) {
+        this.thisIndexDepth = thisIndexDepth;
         this.allIndexFields = allIndexFields;
-        this.thisIndexField = allIndexFields[fieldDepth];
-        this.isLastIndexLayer = fieldDepth == allIndexFields.size()-1;
+        this.thisIndexField = allIndexFields[thisIndexDepth];
+        this.isLastIndexLayer = thisIndexDepth == allIndexFields.size()-1;
 
         this.children = new Map<String, SObjectIndexI>();
         this.isCaseInsensitive = false;
+    }
+
+    private SObjectIndex setIsCaseInsensitive(Boolean isCaseInsensitive) {
+        this.isCaseInsensitive = isCaseInsensitive;
+        return this;
     }
 
     global SObjectIndex putAll(List<SObject> newObjects) {
@@ -232,7 +245,7 @@ global class SObjectIndex implements SObjectIndexI {
     */
     global SObjectIndex deepClone() {
         SObjectIndex returnVal;
-        returnVal = new SObjectIndex(thisIndexField);
+        returnVal = new SObjectIndex(allIndexFields, thisIndexDepth).setIsCaseInsensitive(isCaseInsensitive);
 
         for(String key : children.keySet()) {
             returnVal.children.put(key, children.get(key).deepClone());

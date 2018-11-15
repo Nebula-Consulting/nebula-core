@@ -14,7 +14,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void emptyIndex() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ ACCOUNT_ID, LAST_NAME });
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ ACCOUNT_ID, LAST_NAME }).build();
 
         System.assertEquals(null, theIndex.get(new Contact()));
         System.assert(theIndex.isEmpty());
@@ -22,7 +22,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void singleHit() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ ACCOUNT_ID, LAST_NAME });
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ ACCOUNT_ID, LAST_NAME }).build();
 
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
@@ -45,8 +45,9 @@ private class SObjectIndexTest {
 
     @IsTest
     static void caseInsensitive() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME})
-                .setIsCaseInsensitive(true);
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME})
+                .setIsCaseInsensitive(true)
+                .build();
 
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
@@ -57,8 +58,9 @@ private class SObjectIndexTest {
 
     @IsTest
     static void caseInsensitiveMap() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME})
-                .setIsCaseInsensitive(true);
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME})
+                .setIsCaseInsensitive(true)
+                .build();
 
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
@@ -71,8 +73,9 @@ private class SObjectIndexTest {
 
     @IsTest
     static void caseInsensitiveReverse() {
-        SObjectIndex theIndex = new SObjectIndex(LAST_NAME)
-                .setIsCaseInsensitive(true);
+        SObjectIndex theIndex = new SObjectIndex.Builder(LAST_NAME)
+                .setIsCaseInsensitive(true)
+                .build();
 
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE.toLowerCase());
         theIndex.put(togContact);
@@ -82,7 +85,7 @@ private class SObjectIndexTest {
     }
 
     private static SObjectIndex getTwoHitsIndex() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME});
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME}).build();
 
         theIndex.putAll(new List<Contact> { new Contact(AccountId = togAccount.Id, FirstName = 'John', LastName = DOE),
                 new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = DOE),
@@ -108,7 +111,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void nearHit() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME});
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME}).build();
 
         theIndex.put(new Contact(AccountId = togAccount.Id, FirstName = 'John', LastName = DOE));
         theIndex.put(new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = DOE + 2));
@@ -123,7 +126,7 @@ private class SObjectIndexTest {
                 new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = DOE + 2)
         };
 
-        SObjectIndex theIndex = new SObjectIndex(ACCOUNT_ID).putAll(data);
+        SObjectIndex theIndex = new SObjectIndex.Builder(ACCOUNT_ID).build().putAll(data);
 
         System.assertEquals(2, theIndex.getAll(togAccount.Id).size());
 
@@ -138,7 +141,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void crossObjectField() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{'Account.Name', LAST_NAME});
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{'Account.Name', LAST_NAME}).build();
 
         Contact togContact = new Contact(AccountId = togAccount.Id,  LastName = DOE);
         insert togContact;
@@ -155,7 +158,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void exactHitMap() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME});
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME}).build();
 
         theIndex.put(new Contact(AccountId = togAccount.Id, LastName = DOE));
 
@@ -165,7 +168,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void twoHitsMap() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME}).putAll(
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME}).build().putAll(
                 new List<Contact> { new Contact(AccountId = null, FirstName = 'John', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Fred', LastName = 'Deer')
@@ -183,7 +186,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void twoHitsSubIndex() {
-        SObjectIndex theIndex =  new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME}).putAll(
+        SObjectIndex theIndex =  new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME}).build().putAll(
                 new List<Contact> { new Contact(AccountId = null, FirstName = 'John', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = 'Doe'),
                         new Contact(AccountId = togAccount.Id, FirstName = 'Fred', LastName = 'Deer')
@@ -227,7 +230,7 @@ private class SObjectIndexTest {
 
     @IsTest
     static void removeMap() {
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME, Contact.FirstName.getDescribe().getName()});
+        SObjectIndex theIndex = new SObjectIndex.Builder(new List<String>{ACCOUNT_ID, LAST_NAME, Contact.FirstName.getDescribe().getName()}).build();
 
         theIndex.putAll(new List<Contact> { new Contact(AccountId = togAccount.Id, FirstName = 'John', LastName = DOE),
                 new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = DOE),
