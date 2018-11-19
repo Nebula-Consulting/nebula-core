@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>SObjectIndex_Case_Insensitive_Error</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SObjectIndex Case Insensitive Error</shortDescription>
+        <value>setIsCaseInsensitive(Boolean isCaseInsensitive) can only be called on an empty SObjectIndex</value>
+    </labels>
+</CustomLabels>

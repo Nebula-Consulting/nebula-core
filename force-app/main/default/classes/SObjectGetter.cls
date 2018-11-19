@@ -25,9 +25,4 @@ global class SObjectGetter {
             return obj.get(field);
         }
     }
-
-    global static String getString(SObject obj, String field) {
-        Object val = get(obj, field);
-        return val == null ? null : val.toString();
-    }
 }

@@ -245,7 +245,7 @@ global class SObjectIndex implements SObjectIndexI {
     }
 
     private String getKeyFrom(SObject obj) {
-        String returnVal = SObjectGetter.getString(obj, thisIndexField);
+        String returnVal = String.valueOf(SObjectGetter.get(obj, thisIndexField));
         if(isCaseInsensitive && returnVal != null) {
             return returnVal.toLowerCase();
         } else {

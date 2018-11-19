@@ -15,10 +15,10 @@ private class SObjectGetterTest {
 
         SObject queriedContact = [SELECT Id, LastName, Account.Name, FirstName FROM Contact WHERE Id = :togContact.Id];
 
-        System.assertEquals(togAccount.Name, SObjectGetter.getString(queriedContact, 'Account.Name'));
+        System.assertEquals(togAccount.Name, String.valueOf(SObjectGetter.get(queriedContact, 'Account.Name')));
         System.assertEquals(togContact.LastName, SObjectGetter.get(queriedContact, 'LastName'));
         System.assertEquals(null, SObjectGetter.get(queriedContact, 'FirstName'));
-        System.assertEquals(null, SObjectGetter.getString(queriedContact, 'FirstName'));
+        System.assertEquals(null, String.valueOf(SObjectGetter.get(queriedContact, 'FirstName')));
     }
 
     @IsTest
@@ -29,6 +29,6 @@ private class SObjectGetterTest {
 
         SObject queriedContact = [SELECT Id, LastName, Account.Name, FirstName FROM Contact WHERE Id = :togContact.Id];
 
-        System.assertEquals(null, SObjectGetter.getString(queriedContact, 'Account.Name'));
+        System.assertEquals(null, String.valueOf(SObjectGetter.get(queriedContact, 'Account.Name')));
     }
 }
