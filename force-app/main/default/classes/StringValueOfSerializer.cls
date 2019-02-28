@@ -5,7 +5,7 @@
  */
 
 global class StringValueOfSerializer implements Serializer {
-    global String serialise(Object o) {
+    global String serialize(Object o) {
         return String.valueOf(o);
     }
 }

@@ -15,40 +15,28 @@ public class SObjectIndexLeaf implements SObjectIndexI {
         objects.add(newObj);
         return this;
     }
+
     public List<SObject> getAll(Object key) {
         return objects;
     }
+
     public List<SObject> values() {
         return objects;
     }
-    public Set<Id> remove(SObject spec) {
-        Set<Id> returnVal = new Set<Id>();
-        for(Integer i=objects.size()-1; i >= 0; i--) {
-            if(objects[i] == spec) {
-                if(objects[i].Id != null) {
-                    returnVal.add(objects[i].Id);
-                }
-                objects.remove(i);
-            }
-        }
-        return returnVal;
-    }
-    public Set<Id> remove(Map<String, Object> spec) {
-        Set<Id> returnVal = new Set<Id>();
 
-        for(SObject thiSObject : objects) {
-            returnVal.add(thiSObject.Id);
-        }
+    private List<SObject> remove() {
+        List<SObject> returnVal = objects;
         objects = new List<SObject>();
         return returnVal;
     }
+
+    public List<SObject> remove(SObject spec) {
+        return remove();
+    }
+    public List<SObject> remove(Map<String, Object> spec) {
+        return remove();
+    }
     public Set<String> keySet(String field) {
         return new Set<String>();
-    }
-    public SObjectIndexI deepClone() {
-        SObjectIndexLeaf returnVal = new SObjectIndexLeaf();
-
-        returnVal.objects = objects.deepClone(true, true, true);
-        return returnVal;
     }
 }

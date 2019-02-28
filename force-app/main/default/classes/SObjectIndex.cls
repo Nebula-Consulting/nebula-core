@@ -1,7 +1,7 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 06/11/2018
- * @description Container for SObject, indexed by one or more of the SObject's fields. Fields can be references to
+ * @description Container for SObjects, indexed by one or more of the SObject's fields. Fields can be references to
  * related objects, and a case-insensitive mode is available.
  */
 
@@ -14,20 +14,29 @@ global class SObjectIndex implements SObjectIndexI {
         this(indexFields, 0);
     }
     global SObjectIndex setIsCaseInsensitive(Boolean isCaseInsensitive)  {
+        if(isCaseInsensitive) {
+            return setKeySerializer(new LowerCaseSerializer());
+        } else {
+            return setKeySerializer(new StringValueOfSerializer());
+        }
+    }
+
+    private SObjectIndex setKeySerializer(Serializer keySerializer) {
         if(!isEmpty()) {
             throw new IllegalStateException(Label.SObjectIndex_Case_Insensitive_Error);
+        } else {
+            this.keySerializer = keySerializer;
         }
-        this.isCaseInsensitive = isCaseInsensitive;
         return this;
     }
 
-    private List<String> allIndexFields;
-    private Integer thisIndexDepth;
-    private String thisIndexField;
-    private Boolean isLastIndexLayer;
+    private final List<String> allIndexFields;
+    private final Integer thisIndexDepth;
+    private final String thisIndexField;
+    private final Boolean isLastIndexLayer;
+    private Serializer keySerializer;
 
     private Map<String, SObjectIndexI> children;
-    private Boolean isCaseInsensitive;
 
     private SObjectIndex(List<String> allIndexFields, Integer fieldDepth) {
         this.thisIndexDepth = fieldDepth;
@@ -35,8 +44,8 @@ global class SObjectIndex implements SObjectIndexI {
         this.thisIndexField = allIndexFields[fieldDepth];
         this.isLastIndexLayer = fieldDepth == allIndexFields.size()-1;
 
+        this.keySerializer = new StringValueOfSerializer();
         this.children = new Map<String, SObjectIndexI>();
-        this.isCaseInsensitive = false;
     }
 
     global SObjectIndex putAll(List<SObject> newObjects) {
@@ -46,21 +55,25 @@ global class SObjectIndex implements SObjectIndexI {
         return this;
     }
 
-    global SObjectIndex put(SObject newObj) {
-        String key = getKeyFrom(newObj);
-        SObjectIndexI thisIndex = children.get(key);
-
-        if(thisIndex == null) {
-            if(isLastIndexLayer) {
-                thisIndex = new SObjectIndexLeaf();
-            } else {
-                thisIndex = new SObjectIndex(allIndexFields, thisIndexDepth + 1).setIsCaseInsensitive(isCaseInsensitive);
-            }
-
-            children.put(key, thisIndex);
+    private SObjectIndexI getOrCreateIndexFor(String key) {
+        SObjectIndexI existingIndex = children.get(key);
+        if(existingIndex != null) {
+            return existingIndex;
         }
 
-        thisIndex.put(newObj);
+        SObjectIndexI newIndex;
+        if(isLastIndexLayer) {
+            newIndex = new SObjectIndexLeaf();
+        } else {
+            newIndex = new SObjectIndex(allIndexFields, thisIndexDepth + 1).setKeySerializer(keySerializer);
+        }
+
+        children.put(key, newIndex);
+        return newIndex;
+    }
+
+    global SObjectIndex put(SObject newObj) {
+        getOrCreateIndexFor(getKeyFrom(newObj)).put(newObj);
         return this;
     }
 
@@ -81,16 +94,9 @@ global class SObjectIndex implements SObjectIndexI {
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
     global List<SObject> getAll(Object key) {
-        String keyString = getKeyStringFrom(key);
-
-        SObjectIndexI thisIndex = children.get(keyString);
-        if(thisIndex == null) {
-            return new List<SObject>();
-        } else {
-            return thisIndex.values();
-        }
+        SObjectIndexI thisIndex = children.get(keySerializer.serialize(key));
+        return thisIndex == null ? new List<SObject>() : thisIndex.values();
     }
-
 
     /**
     * @description Get an object in the index which matches the spec object on all indexed fields. Note that a
@@ -112,12 +118,7 @@ global class SObjectIndex implements SObjectIndexI {
     */
     global List<SObject> getAll(SObject spec) {
         SObjectIndexI thisIndex = children.get(getKeyFrom(spec));
-
-        if(thisIndex != null) {
-            return thisIndex.getAll(spec);
-        } else {
-            return new List<SObject>();
-        }
+        return thisIndex != null ? thisIndex.getAll(spec) : new List<SObject>();
     }
 
     /**
@@ -127,21 +128,17 @@ global class SObjectIndex implements SObjectIndexI {
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
     global List<SObject> getAll(Map<String, Object> spec) {
-        List<SObject> returnVal = new List<SObject>();
-
         if(spec.containsKey(thisIndexField)) {
-            SObjectIndexI thisIndex = children.get(getKeyStringFrom(spec.get(thisIndexField)));
-
-            if(thisIndex != null) {
-                returnVal.addAll(thisIndex.getAll(spec));
-            }
+            SObjectIndexI thisIndex = children.get(getKeyFrom(spec));
+            return thisIndex != null ? thisIndex.getAll(spec) : new List<SObject>();
         } else {
             List<SObjectIndexI> subIndices = children.values();
+            List<SObject> returnVal = new List<SObject>();
             for(Integer i=0, size = subIndices.size(); i < size; i++) {
                 returnVal.addAll(subIndices[i].getAll(spec));
             }
+            return returnVal;
         }
-        return returnVal;
     }
 
     global Boolean isEmpty() {
@@ -156,26 +153,26 @@ global class SObjectIndex implements SObjectIndexI {
         if(thisIndexField == field) {
             return children.keySet();
         } else {
-            Set<String> returnVal = new Set<String>();
+            Set<String> keySet = new Set<String>();
 
             List<SObjectIndexI> subIndices = children.values();
             for(Integer i=0, size = subIndices.size(); i < size; i++) {
-                returnVal.addAll(subIndices[i].keySet(field));
+                keySet.addAll(subIndices[i].keySet(field));
             }
 
-            return returnVal;
+            return keySet;
         }
     }
 
     global List<SObject> values() {
-        List<SObject> returnVal = new List<SObject>();
+        List<SObject> values = new List<SObject>();
 
         List<SObjectIndexI> subIndices = children.values();
         for(Integer i=0, size = subIndices.size(); i < size; i++) {
-            returnVal.addAll(subIndices[i].values());
+            values.addAll(subIndices[i].values());
         }
 
-        return returnVal;
+        return values;
     }
 
     /**
@@ -187,82 +184,43 @@ global class SObjectIndex implements SObjectIndexI {
     * the current top-level. null if there is no match
     */
     global SObjectIndex getSubIndex(Object key) {
-        return (SObjectIndex) children.get(getKeyStringFrom(key));
+        return (SObjectIndex)children.get(keySerializer.serialize(key));
     }
 
     /**
     * @description Removes some entries from the index, based on the same matching criteria as getAll(sObject spec)
     * @param spec an sObject which has all of the indexed fields (not necessarily the same object as stored in the index)
-    * @return a set of Ids of the objects removed, or an empty set if there were no matches
+    * @return the list of objects removed, or an empty list if there were no matches
     */
-    global Set<Id> remove(SObject spec) {
+    global List<SObject> remove(SObject spec) {
         SObjectIndexI thisIndex = children.get(getKeyFrom(spec));
-
-        if(thisIndex != null) {
-            return thisIndex.remove(spec);
-        } else {
-            return new Set<Id>();
-        }
+        return thisIndex != null ? thisIndex.remove(spec) : new List<SObject>();
     }
 
     /**
     * @description Removes some entries from the index, based on the same matching criteria as getAll(Map<String, Object> spec)
     * @param spec a map of field names to values
-    * @return a set of Ids of the objects removed, or an empty set if there were no matches
+    * @return the list of objects removed, or an empty list if there were no matches
     */
-    global Set<Id> remove(Map<String, Object> spec) {
-        Set<Id> returnVal = new Set<Id>();
-
+    global List<SObject> remove(Map<String, Object> spec) {
         if(spec.containsKey(thisIndexField)) {
-            SObjectIndexI thisIndex = children.get(getKeyStringFrom(spec.get(thisIndexField)));
-
-            if(thisIndex != null) {
-                returnVal.addAll(thisIndex.remove(spec));
-            }
+            SObjectIndexI thisIndex = children.get(getKeyFrom(spec));
+            return thisIndex != null ? thisIndex.remove(spec) : new List<SObject>();
         } else {
+            List<SObject> removedValues = new List<SObject>();
             List<SObjectIndexI> subIndices = children.values();
             for(Integer i=0, size = subIndices.size(); i < size; i++) {
-                returnVal.addAll(subIndices[i].remove(spec));
+                removedValues.addAll(subIndices[i].remove(spec));
             }
+            return removedValues;
         }
-        return returnVal;
-    }
-
-    /**
-    * @description Deep clone the index, and the objects inside it. The result is a completely separate
-    * SObjectIndex where the entries have had List<sObject>.deepClone(true, true, true) called on them
-    * @return a deep clone of the SObjectIndex
-    */
-    global SObjectIndex deepClone() {
-        SObjectIndex returnVal;
-        returnVal = new SObjectIndex(thisIndexField);
-
-        for(String key : children.keySet()) {
-            returnVal.children.put(key, children.get(key).deepClone());
-        }
-
-        return returnVal;
     }
 
     private String getKeyFrom(SObject obj) {
-        String returnVal = String.valueOf(SObjectGetter.get(obj, thisIndexField));
-        if(isCaseInsensitive && returnVal != null) {
-            return returnVal.toLowerCase();
-        } else {
-            return returnVal;
-        }
+        return keySerializer.serialize(SObjectGetter.get(obj, thisIndexField));
     }
 
-    private String getKeyStringFrom(Object key) {
-        if(key == null) {
-            return null;
-        } else {
-            String returnVal = key.toString();
-            if(isCaseInsensitive) {
-                return returnVal.toLowerCase();
-            } else {
-                return returnVal;
-            }
-        }
+    private String getKeyFrom(Map<String, Object> aMap) {
+        return keySerializer.serialize(aMap.get(thisIndexField));
     }
 }

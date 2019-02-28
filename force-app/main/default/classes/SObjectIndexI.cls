@@ -11,8 +11,7 @@ public interface SObjectIndexI {
     List<SObject> getAll(SObject spec);
     List<SObject> getAll(Map<String, Object> spec);
     List<SObject> values();
-    Set<Id> remove(SObject spec);
-    Set<Id> remove(Map<String, Object> spec);
+    List<SObject> remove(SObject spec);
+    List<SObject> remove(Map<String, Object> spec);
     Set<String> keySet(String field);
-    SObjectIndexI deepClone();
 }

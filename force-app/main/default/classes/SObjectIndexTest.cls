@@ -219,31 +219,15 @@ private class SObjectIndexTest {
     }
 
     @IsTest
-    static void twoHitsClone() {
-        SObjectIndex theIndex = getTwoHitsIndex();
-        theIndex = theIndex.deepClone();
-
-        System.assertEquals(2, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
-        Set<String> keySetAcc = theIndex.keySet(ACCOUNT_ID);
-        System.assertEquals(1, keySetAcc.size());
-        System.assert(keySetAcc.contains(togAccount.Id));
-        Set<String> keySetName = theIndex.keySet(LAST_NAME);
-        System.assertEquals(2, keySetName.size());
-        System.assert(keySetName.contains(DOE));
-        System.assert(keySetName.contains('Deer'));
-    }
-
-    @IsTest
     static void remove() {
         SObjectIndex theIndex = getTwoHitsIndex();
 
         theIndex.remove(new Contact(AccountId = togAccount.Id, FirstName = 'John', LastName = DOE));
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        System.assertEquals(0, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
         Set<String> keySetName = theIndex.keySet(LAST_NAME);
         System.assertEquals(2, keySetName.size());
-        System.assert(keySetName.contains(DOE));
         System.assert(keySetName.contains('Deer'));
+        System.assert(keySetName.contains(DOE));
 
         System.assert(theIndex.remove(new Contact()).isEmpty());
     }

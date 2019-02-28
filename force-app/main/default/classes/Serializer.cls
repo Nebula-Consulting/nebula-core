@@ -4,6 +4,5 @@
  */
 
 global interface Serializer {
-
-    String serialise(Object o);
+    String serialize(Object o);
 }
