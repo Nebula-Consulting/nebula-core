@@ -10,7 +10,7 @@ public class TestContactGenerator extends TestRecordGenerator {
     public override SObject getObjectNoInsert(Map<String, Object> params) {
         return new Contact(
                 LastName = 'Test LastName',
-                AccountId = (linkToAccount ? parentTestRecords.getObjectWithInsert(Account.SObjectType, null, null).Id : null)
+                AccountId = (linkToAccount ? parentTestRecords.getObjectWithInsert(Account.SObjectType).Id : null)
         );
     }
 
