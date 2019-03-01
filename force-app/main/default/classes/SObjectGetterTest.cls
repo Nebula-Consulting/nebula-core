@@ -6,12 +6,12 @@
 @IsTest
 private class SObjectGetterTest {
 
-    static TestObjectGenerator tog = new TestObjectGenerator();
+    static TestRecords tog = new TestRecords();
 
     @IsTest
     public static void basic() {
-        Account togAccount = tog.getAccount();
-        Contact togContact = tog.getContact();
+        Account togAccount = (Account)tog.getObjectWithInsert(Account.SObjectType);
+        Contact togContact = (Contact)tog.getObjectWithInsert(Contact.SObjectType);
 
         SObject queriedContact = [SELECT Id, LastName, Account.Name, FirstName FROM Contact WHERE Id = :togContact.Id];
 
@@ -23,9 +23,7 @@ private class SObjectGetterTest {
 
     @IsTest
     public static void relationIsNullPartWay() {
-        Contact togContact = tog.getContact();
-        togContact.AccountId = null;
-        update togContact;
+        Contact togContact = (Contact)tog.getObjectWithInsert(Contact.SObjectType, 'No Account');
 
         SObject queriedContact = [SELECT Id, LastName, Account.Name, FirstName FROM Contact WHERE Id = :togContact.Id];
 

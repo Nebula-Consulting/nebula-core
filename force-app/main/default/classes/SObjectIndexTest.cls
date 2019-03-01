@@ -6,11 +6,11 @@
 @IsTest
 private class SObjectIndexTest {
 
-    private static TestObjectGenerator tog = new TestObjectGenerator();
+    private static TestRecords tog = new TestRecords();
     private final static String DOE = 'Doe';
     private final static String ACCOUNT_ID = Contact.AccountId.getDescribe().getName();
     private final static String LAST_NAME = Contact.LastName.getDescribe().getName();
-    private static Account togAccount = tog.getAccount();
+    private static Account togAccount = (Account)tog.getObjectWithInsert(Account.SObjectType);
 
     @IsTest
     static void emptyIndex() {

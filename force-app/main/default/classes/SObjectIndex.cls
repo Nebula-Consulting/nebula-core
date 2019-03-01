@@ -78,6 +78,17 @@ global class SObjectIndex implements SObjectIndexI {
     }
 
     /**
+    * @description Get a single object in the index, according to getAll(Map<String, Object> spec)
+    * @param spec a map of field names to values
+    * @return a matching object (if more than one match, it picks the first one in the index,
+    * in the same order that they were added). null, if there is no match
+    */
+    global SObject get(Map<String, Object> spec) {
+        List<SObject> returnVal = getAll(spec);
+        return returnVal.isEmpty() ? null : returnVal[0];
+    }
+
+    /**
     * @description Get a single object in the index where the indexed field is equal to key.
     * @param key a value for the indexed field
     * @return a matching object (if more than one match, it picks the first one in the index,
