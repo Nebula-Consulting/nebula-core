@@ -18,12 +18,4 @@ public abstract class TestRecordGenerator {
         }
         return record;
     }
-
-    public SObject getObjectNoInsert() {
-        return getObjectNoInsert(null);
-    }
-
-    public SObject getObjectWithInsert() {
-        return getObjectWithInsert(null);
-    }
 }

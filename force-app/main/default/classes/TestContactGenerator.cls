@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public with sharing class TestContactGenerator extends TestRecordGenerator {
+public class TestContactGenerator extends TestRecordGenerator {
 
     private Boolean linkToAccount = true;
 
