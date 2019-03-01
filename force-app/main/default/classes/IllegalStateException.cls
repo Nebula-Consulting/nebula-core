@@ -3,6 +3,6 @@
  * @date 15/11/2018
  */
 
-public with sharing class IllegalStateException extends Exception {
+public class IllegalStateException extends Exception {
 
 }

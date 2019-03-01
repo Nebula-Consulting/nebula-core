@@ -4,6 +4,5 @@
  */
 
 global class Constants {
-
     global final static Integer MAX_LONG_TEXT_FIELD_LENGTH = 131072;
 }

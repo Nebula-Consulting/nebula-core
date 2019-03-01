@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public abstract class TestRecordGenerator {
+public inherited sharing abstract class TestRecordGenerator {
 
     public TestRecords parentTestRecords;
 

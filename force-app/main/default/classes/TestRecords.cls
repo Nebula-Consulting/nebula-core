@@ -2,8 +2,7 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 09/11/2018
  */
-@IsTest
-public class TestRecords {
+public inherited sharing class TestRecords {
 
     private static final String GENERATOR_SOBJECT_FIELD = Test_Record_Generator__mdt.SObject__c.getDescribe().getName();
     private static final String GENERATOR_VARIANT_FIELD = Test_Record_Generator__mdt.Variant__c.getDescribe().getName();
