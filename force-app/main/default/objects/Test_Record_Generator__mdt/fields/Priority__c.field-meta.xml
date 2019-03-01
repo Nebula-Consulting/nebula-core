@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Priority__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description>Highest priority for a particular SObject and Variant is used. So, a package can define a way of creating a Contact which is then overridden by a higher priority defined in another package with adds required fields</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Highest priority for a particular SObject and Variant is used. So, a package can define a way of creating a Contact which is then overridden by a higher priority defined in another package with adds required fields</inlineHelpText>
+    <label>Priority</label>
+    <precision>18</precision>
+    <required>true</required>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>
