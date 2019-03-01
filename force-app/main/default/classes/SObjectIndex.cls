@@ -15,17 +15,17 @@ global class SObjectIndex implements SObjectIndexI {
     }
     global SObjectIndex setIsCaseInsensitive(Boolean isCaseInsensitive)  {
         if(isCaseInsensitive) {
-            return setKeySerializer(new LowerCaseSerializer());
+            return setKeyFunction(new StringLowerCaseFunction());
         } else {
-            return setKeySerializer(new StringValueOfSerializer());
+            return setKeyFunction(new IdentityFunction());
         }
     }
 
-    private SObjectIndex setKeySerializer(Serializer keySerializer) {
+    private SObjectIndex setKeyFunction(Function keyFunction) {
         if(!isEmpty()) {
             throw new IllegalStateException(Label.SObjectIndex_Case_Insensitive_Error);
         } else {
-            this.keySerializer = keySerializer;
+            this.keyFunction = keyFunction;
         }
         return this;
     }
@@ -34,9 +34,9 @@ global class SObjectIndex implements SObjectIndexI {
     private final Integer thisIndexDepth;
     private final String thisIndexField;
     private final Boolean isLastIndexLayer;
-    private Serializer keySerializer;
+    private Function keyFunction;
 
-    private Map<String, SObjectIndexI> children;
+    private Map<Object, SObjectIndexI> children;
 
     private SObjectIndex(List<String> allIndexFields, Integer fieldDepth) {
         this.thisIndexDepth = fieldDepth;
@@ -44,8 +44,8 @@ global class SObjectIndex implements SObjectIndexI {
         this.thisIndexField = allIndexFields[fieldDepth];
         this.isLastIndexLayer = fieldDepth == allIndexFields.size()-1;
 
-        this.keySerializer = new StringValueOfSerializer();
-        this.children = new Map<String, SObjectIndexI>();
+        this.keyFunction = new IdentityFunction();
+        this.children = new Map<Object, SObjectIndexI>();
     }
 
     global SObjectIndex putAll(List<SObject> newObjects) {
@@ -55,7 +55,7 @@ global class SObjectIndex implements SObjectIndexI {
         return this;
     }
 
-    private SObjectIndexI getOrCreateIndexFor(String key) {
+    private SObjectIndexI getOrCreateIndexFor(Object key) {
         SObjectIndexI existingIndex = children.get(key);
         if(existingIndex != null) {
             return existingIndex;
@@ -65,7 +65,7 @@ global class SObjectIndex implements SObjectIndexI {
         if(isLastIndexLayer) {
             newIndex = new SObjectIndexLeaf();
         } else {
-            newIndex = new SObjectIndex(allIndexFields, thisIndexDepth + 1).setKeySerializer(keySerializer);
+            newIndex = new SObjectIndex(allIndexFields, thisIndexDepth + 1).setKeyFunction(keyFunction);
         }
 
         children.put(key, newIndex);
@@ -94,7 +94,7 @@ global class SObjectIndex implements SObjectIndexI {
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
     global List<SObject> getAll(Object key) {
-        SObjectIndexI thisIndex = children.get(keySerializer.serialize(key));
+        SObjectIndexI thisIndex = children.get(keyFunction.call(key));
         return thisIndex == null ? new List<SObject>() : thisIndex.values();
     }
 
@@ -145,15 +145,15 @@ global class SObjectIndex implements SObjectIndexI {
         return children.isEmpty();
     }
 
-    global Set<String> keySet() {
+    global Set<Object> keySet() {
         return children.keySet();
     }
 
-    global Set<String> keySet(String field) {
+    global Set<Object> keySet(String field) {
         if(thisIndexField == field) {
             return children.keySet();
         } else {
-            Set<String> keySet = new Set<String>();
+            Set<Object> keySet = new Set<Object>();
 
             List<SObjectIndexI> subIndices = children.values();
             for(Integer i=0, size = subIndices.size(); i < size; i++) {
@@ -184,7 +184,7 @@ global class SObjectIndex implements SObjectIndexI {
     * the current top-level. null if there is no match
     */
     global SObjectIndex getSubIndex(Object key) {
-        return (SObjectIndex)children.get(keySerializer.serialize(key));
+        return (SObjectIndex)children.get(keyFunction.call(key));
     }
 
     /**
@@ -216,11 +216,11 @@ global class SObjectIndex implements SObjectIndexI {
         }
     }
 
-    private String getKeyFrom(SObject obj) {
-        return keySerializer.serialize(SObjectGetter.get(obj, thisIndexField));
+    private Object getKeyFrom(SObject obj) {
+        return keyFunction.call(SObjectGetter.get(obj, thisIndexField));
     }
 
-    private String getKeyFrom(Map<String, Object> aMap) {
-        return keySerializer.serialize(aMap.get(thisIndexField));
+    private Object getKeyFrom(Map<String, Object> aMap) {
+        return keyFunction.call(aMap.get(thisIndexField));
     }
 }

@@ -21,18 +21,14 @@ private class StackTracesTest {
             try {
                 insert new Contact();
             } catch (Exception e) {
-                System.debug('11111111111111111111111111111111111111111111111111111111');
-                System.debug(e.getStackTraceString());
                 throw new MyException(e);
             }
         } catch (Exception e) {
             testException = e;
         }
 
-        String message = StackTraces.getErrorMessage(testException);
+        List<String> messages = StackTraces.getErrorMessage(testException);
 
-        System.assert(message.contains(MAGIC_STRING));
-        System.debug('33333333333333333333333333333333333333333333333333333333');
-        System.debug(message);
+        System.assert(String.join(messages, ' ').contains(MAGIC_STRING));
     }
 }

@@ -13,5 +13,5 @@ public interface SObjectIndexI {
     List<SObject> values();
     List<SObject> remove(SObject spec);
     List<SObject> remove(Map<String, Object> spec);
-    Set<String> keySet(String field);
+    Set<Object> keySet(String field);
 }

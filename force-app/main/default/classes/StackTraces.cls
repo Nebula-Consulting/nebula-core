@@ -13,10 +13,11 @@ global class StackTraces {
      * @param e an Exception
      * @return the messages and stack traces from e and all nested Exceptions inside it
      */
-    global static String getErrorMessage(Exception e) {
-        String returnVal = '';
+    global static List<String> getErrorMessage(Exception e) {
+        List<String> returnVal = new List<String>();
         do {
-            returnVal = e.getMessage() + '\n' + e.getStackTraceString() + returnVal;
+            returnVal.add(e.getMessage());
+            returnVal.add(e.getStackTraceString());
             e = e.getCause();
         } while(e != null);
         return returnVal;

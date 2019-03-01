@@ -36,7 +36,7 @@ public class SObjectIndexLeaf implements SObjectIndexI {
     public List<SObject> remove(Map<String, Object> spec) {
         return remove();
     }
-    public Set<String> keySet(String field) {
-        return new Set<String>();
+    public Set<Object> keySet(String field) {
+        return new Set<Object>();
     }
 }
