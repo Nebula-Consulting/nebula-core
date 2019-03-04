@@ -5,7 +5,13 @@
 
 public inherited sharing abstract class TestRecordGenerator {
 
-    public TestRecords parentTestRecords;
+    protected Test_Record_Generator__mdt metadata;
+    protected TestRecords parentHierarchy;
+
+    public void setup(TestRecords parentHierarchy, Test_Record_Generator__mdt metadata) {
+        this.parentHierarchy = parentHierarchy;
+        this.metadata = metadata;
+    }
 
     public abstract SObject getObjectNoInsert(Map<String, Object> params);
 

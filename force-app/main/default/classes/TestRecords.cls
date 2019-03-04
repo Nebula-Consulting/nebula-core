@@ -7,11 +7,13 @@ public inherited sharing class TestRecords {
     private static final String GENERATOR_SOBJECT_FIELD = Test_Record_Generator__mdt.SObject__c.getDescribe().getName();
     private static final String GENERATOR_VARIANT_FIELD = Test_Record_Generator__mdt.Variant__c.getDescribe().getName();
 
+    private List<Test_Record_Generator__mdt> mockMetadata;
+
     private SObjectIndex generatorMetadata {get {
         if(generatorMetadata == null) {
             generatorMetadata = new SObjectIndex(
                     new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
-                    .putAll(
+                    .putAll(mockMetadata != null ? mockMetadata :
                     [
                             SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c
                             FROM Test_Record_Generator__mdt
@@ -25,6 +27,11 @@ public inherited sharing class TestRecords {
 
     public TestRecords() {
         generators = new Map<Id, TestRecordGenerator>();
+    }
+
+    public TestRecords(List<Test_Record_Generator__mdt> mockMetadata) {
+        this();
+        this.mockMetadata = mockMetadata;
     }
 
     private TestRecordGenerator getGenerator(SObjectType objectType, String variant) {
@@ -58,7 +65,7 @@ public inherited sharing class TestRecords {
                     '. Check that it is global and that the namespace is included.');
         } else {
             TestRecordGenerator newGenerator = (TestRecordGenerator)TypeLoader.getInstance(generatorType, thisGeneratorMetadata.Parameters__c);
-            newGenerator.parentTestRecords = this;
+            newGenerator.setup(this, thisGeneratorMetadata);
             generators.put(thisGeneratorMetadata.Id, newGenerator);
             return newGenerator;
         }

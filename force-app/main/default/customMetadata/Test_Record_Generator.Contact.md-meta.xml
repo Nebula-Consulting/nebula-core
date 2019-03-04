@@ -4,11 +4,28 @@
     <protected>false</protected>
     <values>
         <field>Apex_Class__c</field>
-        <value xsi:type="xsd:string">TestContactGenerator</value>
+        <value xsi:type="xsd:string">TestMetadataRecordGenerator</value>
     </values>
     <values>
         <field>Parameters__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">{
+  &quot;LastName&quot;: {
+    &quot;valueFunction&quot;: {
+      &quot;apexClass&quot;: &quot;nebc.TestFieldFunctions.AppendRandomNumber&quot;,
+      &quot;parameters&quot;: {
+        &quot;value&quot;: &quot;Last Name&quot;
+      }
+    }
+  },
+  &quot;AccountId&quot;: {
+    &quot;valueFunction&quot;: {
+      &quot;apexClass&quot;: &quot;nebc.TestFieldFunctions.CreateRecord&quot;,
+      &quot;parameters&quot;: {
+        &quot;sObject&quot;: &quot;Account&quot;
+      }
+    }
+  }
+}</value>
     </values>
     <values>
         <field>Priority__c</field>
