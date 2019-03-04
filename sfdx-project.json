@@ -2,10 +2,16 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "Nebula Core",
+      "versionName": "0.1",
+      "versionNumber": "0.1.0.NEXT"
     }
   ],
   "namespace": "nebc",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "44.0"
+  "sourceApiVersion": "44.0",
+  "packageAliases": {
+    "Nebula Core": "0Ho0J000000XZAHSA4"
+  }
 }
