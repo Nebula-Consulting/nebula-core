@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description>Order of execution of the trigger handlers (i.e. lower numbers are run first). It is recommended that you begin with intervals of 10 between handlers, leaving space for more to fit in-between</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Order of execution of the trigger handlers (i.e. lower numbers are run first). It is recommended that you begin with intervals of 10 between handlers, leaving space for more to fit in-between</inlineHelpText>
+    <label>Order</label>
+    <precision>18</precision>
+    <required>true</required>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>
