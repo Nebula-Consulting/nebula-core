@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public interface AfterDelete {
+global interface AfterDelete {
 
     void handleAfterDelete(List<SObject> oldList);
 }

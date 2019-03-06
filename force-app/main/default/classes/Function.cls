@@ -4,6 +4,6 @@
  * @description Allows you to pass functions around
  */
 
-public interface Function {
+global interface Function {
     Object call(Object o);
 }

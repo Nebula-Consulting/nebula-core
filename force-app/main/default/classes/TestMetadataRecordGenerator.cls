@@ -5,7 +5,7 @@
  * define constants or functions for each field
  */
 
-public class TestMetadataRecordGenerator extends TestRecordGenerator {
+global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
     public class FieldValueGenerator {
 
@@ -43,7 +43,7 @@ public class TestMetadataRecordGenerator extends TestRecordGenerator {
         }
     }
 
-    public override SObject getObjectNoInsert(Map<String, Object> params) {
+    global override SObject getObjectNoInsert(Map<String, Object> params) {
         Map<String, Object> metaObjectDescription = (Map<String, Object>)JSON.deserializeUntyped(metadata.Parameters__c);
 
         Map<String, Object> concreteObjectDescription = new Map<String, Object>();

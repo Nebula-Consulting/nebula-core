@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public interface AfterInsert {
+global interface AfterInsert {
 
     void handleAfterInsert(List<SObject> newList);
 }

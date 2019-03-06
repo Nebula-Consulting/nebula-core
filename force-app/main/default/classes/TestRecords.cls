@@ -2,7 +2,7 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 09/11/2018
  */
-public inherited sharing class TestRecords {
+global inherited sharing class TestRecords {
 
     private static final String GENERATOR_SOBJECT_FIELD = Test_Record_Generator__mdt.SObject__c.getDescribe().getName();
     private static final String GENERATOR_VARIANT_FIELD = Test_Record_Generator__mdt.Variant__c.getDescribe().getName();
@@ -25,7 +25,7 @@ public inherited sharing class TestRecords {
 
     private Map<Id, TestRecordGenerator> generators;
 
-    public TestRecords() {
+    global TestRecords() {
         generators = new Map<Id, TestRecordGenerator>();
     }
 
@@ -71,23 +71,23 @@ public inherited sharing class TestRecords {
         }
     }
 
-    public SObject getObjectNoInsert(SObjectType objectType) {
+    global SObject getObjectNoInsert(SObjectType objectType) {
         return getObjectNoInsert(objectType, null, null);
     }
-    public SObject getObjectNoInsert(SObjectType objectType, String variant) {
+    global SObject getObjectNoInsert(SObjectType objectType, String variant) {
         return getObjectNoInsert(objectType, variant, null);
     }
-    public SObject getObjectNoInsert(SObjectType objectType, String variant, Map<String, Object> params) {
+    global SObject getObjectNoInsert(SObjectType objectType, String variant, Map<String, Object> params) {
         return getGenerator(objectType, variant).getObjectNoInsert(params);
     }
 
-    public SObject getObjectWithInsert(SObjectType objectType) {
+    global SObject getObjectWithInsert(SObjectType objectType) {
         return getObjectWithInsert(objectType, null, null);
     }
-    public SObject getObjectWithInsert(SObjectType objectType, String variant) {
+    global SObject getObjectWithInsert(SObjectType objectType, String variant) {
         return getObjectWithInsert(objectType, variant, null);
     }
-    public SObject getObjectWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
+    global SObject getObjectWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
         return getGenerator(objectType, variant).getObjectWithInsert(params);
     }
 }

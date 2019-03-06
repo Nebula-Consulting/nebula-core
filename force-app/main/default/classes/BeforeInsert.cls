@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public interface BeforeInsert {
+global interface BeforeInsert {
 
     void handleBeforeInsert(List<SObject> newList);
 }

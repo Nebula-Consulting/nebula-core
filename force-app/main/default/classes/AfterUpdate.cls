@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public interface AfterUpdate {
+global interface AfterUpdate {
 
     void handleAfterUpdate(List<SObject> oldList, List<SObject> newList);
 }

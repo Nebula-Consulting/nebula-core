@@ -3,6 +3,6 @@
  * @date 2019-03-01
  */
 
-public class ClassNotFoundException extends Exception {
+global class ClassNotFoundException extends Exception {
 
 }

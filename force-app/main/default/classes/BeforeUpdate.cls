@@ -3,7 +3,7 @@
  * @date 2019-03-01
  */
 
-public interface BeforeUpdate {
+global interface BeforeUpdate {
 
     void handleBeforeUpdate(List<SObject> oldList, List<SObject> newList);
 }
