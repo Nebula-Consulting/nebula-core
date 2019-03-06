@@ -6,5 +6,5 @@
 
 global interface TestFieldFunction {
 
-    Object getValue(TestRecords parentHierarchy, Map<String, Object> parameters);
+    Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters);
 }

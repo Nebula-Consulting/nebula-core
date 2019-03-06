@@ -6,7 +6,7 @@
 @IsTest
 private class QueryBuilderTest {
 
-    private static TestRecords testRecordGenerator = new TestRecords();
+    private static TestRecordSource testRecordGenerator = new TestRecordSource();
     private static Account testAccount = (Account)testRecordGenerator.getObjectWithInsert(Account.SObjectType);
 
     @IsTest

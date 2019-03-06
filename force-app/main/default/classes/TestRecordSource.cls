@@ -2,7 +2,7 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 09/11/2018
  */
-global inherited sharing class TestRecords {
+global inherited sharing class TestRecordSource {
 
     private static final String GENERATOR_SOBJECT_FIELD = Test_Record_Generator__mdt.SObject__c.getDescribe().getName();
     private static final String GENERATOR_VARIANT_FIELD = Test_Record_Generator__mdt.Variant__c.getDescribe().getName();
@@ -25,11 +25,11 @@ global inherited sharing class TestRecords {
 
     private Map<Id, TestRecordGenerator> generators;
 
-    global TestRecords() {
+    global TestRecordSource() {
         generators = new Map<Id, TestRecordGenerator>();
     }
 
-    public TestRecords(List<Test_Record_Generator__mdt> mockMetadata) {
+    public TestRecordSource(List<Test_Record_Generator__mdt> mockMetadata) {
         this();
         this.mockMetadata = mockMetadata;
     }

@@ -6,7 +6,7 @@
 @IsTest
 private class SObjectGetterTest {
 
-    static TestRecords tog = new TestRecords();
+    static TestRecordSource tog = new TestRecordSource();
 
     @IsTest
     public static void basic() {

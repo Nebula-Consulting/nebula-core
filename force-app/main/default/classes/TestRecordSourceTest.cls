@@ -4,11 +4,11 @@
  */
 
 @IsTest
-private class TestRecordsTest {
+private class TestRecordSourceTest {
 
     @IsTest
     static void noMatchingMetadata() {
-        TestRecords testRecords = new TestRecords(new List<Test_Record_Generator__mdt>());
+        TestRecordSource testRecords = new TestRecordSource(new List<Test_Record_Generator__mdt>());
 
         try {
             testRecords.getObjectWithInsert(Account.SObjectType);
@@ -23,7 +23,7 @@ private class TestRecordsTest {
     @IsTest
     static void noApexClassImplementation() {
         String className = 'noSuchClass';
-        TestRecords testRecords = new TestRecords(new List<Test_Record_Generator__mdt>{
+        TestRecordSource testRecords = new TestRecordSource(new List<Test_Record_Generator__mdt>{
                 new Test_Record_Generator__mdt(
                         Apex_Class__c = className,
                         Priority__c = 0,

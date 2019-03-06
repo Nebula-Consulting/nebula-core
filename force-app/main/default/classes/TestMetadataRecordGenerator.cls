@@ -9,10 +9,10 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
     public class FieldValueGenerator {
 
-        private TestRecords parentHierarchy;
+        private TestRecordSource parentHierarchy;
         private Map<String, Object> fieldConfig;
 
-        public FieldValueGenerator(TestRecords parentHierarchy, Map<String, Object> fieldConfig) {
+        public FieldValueGenerator(TestRecordSource parentHierarchy, Map<String, Object> fieldConfig) {
             this.parentHierarchy = parentHierarchy;
             this.fieldConfig = fieldConfig;
         }

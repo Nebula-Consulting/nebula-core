@@ -6,7 +6,7 @@
 @IsTest
 private class SObjectIndexTest {
 
-    private static TestRecords tog = new TestRecords();
+    private static TestRecordSource tog = new TestRecordSource();
     private final static String DOE = 'Doe';
     private final static String ACCOUNT_ID = Contact.AccountId.getDescribe().getName();
     private final static String LAST_NAME = Contact.LastName.getDescribe().getName();

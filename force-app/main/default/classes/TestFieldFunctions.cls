@@ -7,14 +7,14 @@
 global class TestFieldFunctions {
 
     global class AppendRandomNumber implements TestFieldFunction {
-        public Object getValue(TestRecords parentHierarchy, Map<String, Object> parameters) {
+        public Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters) {
             String value = (String)parameters.get('value');
             return value == null ? value : (value + String.valueOf(Math.random()));
         }
     }
 
     global class CreateRecord implements TestFieldFunction {
-        public Object getValue(TestRecords parentHierarchy, Map<String, Object> parameters) {
+        public Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters) {
             SObject targetInstance = (SObject)TypeLoader.getType((String)parameters.get('sObject')).newInstance();
             return parentHierarchy.getObjectWithInsert(
                     targetInstance.getSObjectType(),
