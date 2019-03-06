@@ -6,27 +6,29 @@
 @IsTest
 private class SObjectGetterTest {
 
-    static TestRecordSource tog = new TestRecordSource();
+    static TestRecordSource testRecordSource = new TestRecordSource();
+    static TestRecordSource testRecordSource2 = new TestRecordSource();
 
     @IsTest
     public static void basic() {
-        Account togAccount = (Account)tog.getObjectWithInsert(Account.SObjectType);
-        Contact togContact = (Contact)tog.getObjectWithInsert(Contact.SObjectType);
+        Account togAccount = (Account) testRecordSource.getObjectWithInsert(Account.SObjectType);
+        Account childAccount = (Account) testRecordSource2.getObjectNoInsert(Account.SObjectType);
+        childAccount.ParentId = togAccount.Id;
+        insert childAccount;
 
-        SObject queriedContact = [SELECT Id, LastName, Account.Name, FirstName FROM Contact WHERE Id = :togContact.Id];
+        Account queriedAccount = [SELECT Id, Name, Parent.Name, Industry FROM Account WHERE Id = :togAccount.Id];
 
-        System.assertEquals(togAccount.Name, String.valueOf(SObjectGetter.get(queriedContact, 'Account.Name')));
-        System.assertEquals(togContact.LastName, SObjectGetter.get(queriedContact, 'LastName'));
-        System.assertEquals(null, SObjectGetter.get(queriedContact, 'FirstName'));
-        System.assertEquals(null, String.valueOf(SObjectGetter.get(queriedContact, 'FirstName')));
+        System.assertEquals(queriedAccount.Parent.Name, String.valueOf(SObjectGetter.get(queriedAccount, 'Parent.Name')));
+        System.assertEquals(queriedAccount.Name, SObjectGetter.get(queriedAccount, 'Name'));
+        System.assertEquals(null, SObjectGetter.get(queriedAccount, 'Industry'));
     }
 
     @IsTest
     public static void relationIsNullPartWay() {
-        Contact togContact = (Contact)tog.getObjectWithInsert(Contact.SObjectType, 'No Account');
+        Account togAccount = (Account) testRecordSource.getObjectWithInsert(Account.SObjectType);
 
-        SObject queriedContact = [SELECT Id, LastName, Account.Name, FirstName FROM Contact WHERE Id = :togContact.Id];
+        Account queriedAccount = [SELECT Id, Name, Parent.Name FROM Account WHERE Id = :togAccount.Id];
 
-        System.assertEquals(null, String.valueOf(SObjectGetter.get(queriedContact, 'Account.Name')));
+        System.assertEquals(null, String.valueOf(SObjectGetter.get(queriedAccount, 'Parent.Name')));
     }
 }

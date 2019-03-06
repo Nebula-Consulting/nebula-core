@@ -18,9 +18,7 @@ private class TestMetadataRecordGeneratorTest {
                         SObject__c = 'Account',
                         Parameters__c = JSON.serialize(
                                 new Map<String, Object>{
-                                        'Name' => new Map<String, Object>{
-                                                'value' => accountName
-                                        }
+                                        'Name' => accountName
                                 }
                         )
                 )
@@ -65,9 +63,7 @@ private class TestMetadataRecordGeneratorTest {
                 new Test_Record_Generator__mdt(
                         SObject__c = 'Contact',
                         Parameters__c = JSON.serialize(
-                                new Map<String, Object>{'BirthDate' => new Map<String, Object>{
-                                        'value' => birthDate
-                                }
+                                new Map<String, Object>{'BirthDate' => birthDate
                                 }
                         )
                 )
@@ -86,9 +82,7 @@ private class TestMetadataRecordGeneratorTest {
                 new Test_Record_Generator__mdt(
                         SObject__c = 'Case',
                         Parameters__c = JSON.serialize(
-                                new Map<String, Object>{'ClosedDate' => new Map<String, Object>{
-                                        'value' => closeDate
-                                }
+                                new Map<String, Object>{'ClosedDate' => closeDate
                                 }
                         )
                 )

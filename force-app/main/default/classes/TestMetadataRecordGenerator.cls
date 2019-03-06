@@ -21,15 +21,23 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
         private TestRecordSource parentHierarchy;
         private Map<String, Object> fieldConfig;
+        private Object fieldValue;
         private DescribeFieldResult fieldDescribe;
 
-        public FieldValueGenerator(TestRecordSource parentHierarchy, Map<String, Object> fieldConfig, DescribeFieldResult fieldDescribe) {
+        public FieldValueGenerator(TestRecordSource parentHierarchy, Object fieldValue, DescribeFieldResult fieldDescribe) {
             this.parentHierarchy = parentHierarchy;
-            this.fieldConfig = fieldConfig;
+            if(fieldValue instanceof Map<String, Object>) {
+                this.fieldConfig = (Map<String, Object>)fieldValue;
+            } else {
+                this.fieldValue = fieldValue;
+            }
+
             this.fieldDescribe = fieldDescribe;
         }
 
-        private Map<String, Object> valueFunction { get { return (Map<String, Object>)fieldConfig.get('valueFunction');} set; }
+        private Map<String, Object> valueFunction { get {
+            return fieldConfig == null ? null : (Map<String, Object>)fieldConfig.get('valueFunction');
+        } set; }
 
         private Type getFieldFunctionClass() {
             Type fieldFunctionClass = null;
@@ -49,16 +57,15 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             if (fieldFunctionClass == null) {
                 switch on fieldDescribe.getType() {
                     when DATE {
-                        return JSON.deserialize('"' + fieldConfig.get('value') + '"', Date.class);
+                        return JSON.deserialize('"' + fieldValue + '"', Date.class);
                     }
                     when DATETIME {
-                        return JSON.deserialize('"' + fieldConfig.get('value') + '"', Datetime.class);
+                        return JSON.deserialize('"' + fieldValue + '"', Datetime.class);
                     }
                     when else {
-                        return fieldConfig.get('value');
+                        return fieldValue;
                     }
                 }
-
             } else {
                 TestFieldFunction testFieldFunction = ((TestFieldFunction) fieldFunctionClass.newInstance());
                 return testFieldFunction.getValue(parentHierarchy, (Map<String, Object>)valueFunction.get('parameters'));
@@ -77,7 +84,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         for(String thisFieldName : metaObjectDescription.keySet()) {
             FieldValueGenerator thisFieldValueGenerator = new FieldValueGenerator(
                     parentHierarchy,
-                    (Map<String, Object>) metaObjectDescription.get(thisFieldName),
+                    metaObjectDescription.get(thisFieldName),
                     fields.get(thisFieldName).getDescribe()
             );
 
