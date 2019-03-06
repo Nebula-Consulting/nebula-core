@@ -13,9 +13,10 @@ global inherited sharing class TestRecordSource {
         if(generatorMetadata == null) {
             generatorMetadata = new SObjectIndex(
                     new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
-                    .putAll(mockMetadata != null ? mockMetadata :
+                    .putAll((mockMetadata != null) ? mockMetadata :
                     [
-                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c
+                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c,
+                            (SELECT Field__c, Value__c, Apex_Class__c, Apex_Class_Parameters__c FROM Test_Record_Generator_Fields__r)
                             FROM Test_Record_Generator__mdt
                             ORDER BY Priority__c ASC
                     ]);

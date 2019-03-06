@@ -6,10 +6,10 @@
 global inherited sharing abstract class TestRecordGenerator {
 
     global Test_Record_Generator__mdt metadata {get; private set;}
-    global TestRecordSource parentHierarchy {get; private set;}
+    global TestRecordSource parentRecordSource {get; private set;}
 
-    public void setup(TestRecordSource parentHierarchy, Test_Record_Generator__mdt metadata) {
-        this.parentHierarchy = parentHierarchy;
+    public void setup(TestRecordSource parentRecordSource, Test_Record_Generator__mdt metadata) {
+        this.parentRecordSource = parentRecordSource;
         this.metadata = metadata;
     }
 

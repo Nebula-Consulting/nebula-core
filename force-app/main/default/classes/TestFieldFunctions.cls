@@ -7,27 +7,34 @@
 global class TestFieldFunctions {
 
     global class AppendRandomNumber implements TestFieldFunction {
-        public Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters) {
-            String value = (String)parameters.get('value');
+        global Object getValue(TestRecordSource parentRecordSource, Object value) {
             return value == null ? value : (value + String.valueOf(Math.random()));
         }
     }
 
     global class CreateRecord implements TestFieldFunction {
-        public Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters) {
-            SObject targetInstance = (SObject)TypeLoader.getType((String)parameters.get('sObject')).newInstance();
-            return parentHierarchy.getObjectWithInsert(
+
+        global String sObjectType;
+        global String variant;
+
+        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+            SObject targetInstance = (SObject)TypeLoader.getType((String)sObjectType).newInstance();
+            return parentRecordSource.getObjectWithInsert(
                     targetInstance.getSObjectType(),
-                    (String)parameters.get('variant')
+                    variant
             ).Id;
         }
     }
 
     global class GetRecordTypeId implements TestFieldFunction {
-        public Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters) {
+
+        global String sObjectType;
+        global String developerName;
+
+        global Object getValue(TestRecordSource parentRecordSource, Object value) {
             return NamedSObjectCache.getRecordType(
-                    (String)parameters.get('SObjectType'),
-                    (String)parameters.get('DeveloperName')
+                    sObjectType,
+                    developerName
             ).Id;
         }
     }

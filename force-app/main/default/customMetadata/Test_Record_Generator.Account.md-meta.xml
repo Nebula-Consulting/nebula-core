@@ -8,16 +8,7 @@
     </values>
     <values>
         <field>Parameters__c</field>
-        <value xsi:type="xsd:string">{
-  &quot;Name&quot;: {
-    &quot;valueFunction&quot;: {
-      &quot;apexClass&quot;: &quot;nebc.TestFieldFunctions.AppendRandomNumber&quot;,
-      &quot;parameters&quot;: {
-        &quot;value&quot;: &quot;Account Name&quot;
-      }
-    }
-  }
-}</value>
+        <value xsi:nil="true"/>
     </values>
     <values>
         <field>Priority__c</field>
