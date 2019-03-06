@@ -10,16 +10,10 @@ global inherited sharing class NamedSObjectCache {
 
     private static Map<String, Map<String, SObject>> typeToNameToObject = new Map<String, Map<String, SObject>>();
 
-    /**
-    * @description Convenience method for retrieving Record Types. NB Uses getRecordTypeInfosByDeveloperName,
-    * not a query
-    * @param developerName developer name of the RT
-    * @param sObjectType sObjectType of the RT
-    *
-    * @return the matching Record Type including just the DeveloperName and Id. Or null, if there is no match
-    * @example
-    * RecordType rt = NamedSObjectCache.getRecordType('Staff', 'Contact');
-    */
+    global static RecordType getRecordType(String sObjectType, String developerName) {
+        return getRecordType(((SObject)Type.forName(sObjectType).newInstance()).getSObjectType(), developerName);
+    }
+
     global static RecordType getRecordType(SObjectType sObjectType, String developerName) {
         String nameKey = getNameKey(developerName, 'sObjectType = \'' + sObjectType.getDescribe().getName() + '\'');
         Map<String, SObject> cachedRecordTypes = getNameToObject('RecordType');

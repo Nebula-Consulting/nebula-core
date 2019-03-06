@@ -22,4 +22,14 @@ global class TestFieldFunctions {
             ).Id;
         }
     }
+
+    global class GetRecordTypeId implements TestFieldFunction {
+        public Object getValue(TestRecordSource parentHierarchy, Map<String, Object> parameters) {
+            return NamedSObjectCache.getRecordType(
+                    (String)parameters.get('SObjectType'),
+                    (String)parameters.get('DeveloperName')
+            ).Id;
+        }
+    }
+
 }
