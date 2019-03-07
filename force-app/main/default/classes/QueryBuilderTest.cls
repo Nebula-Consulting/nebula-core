@@ -6,8 +6,11 @@
 @IsTest
 private class QueryBuilderTest {
 
-    private static TestRecordSource testRecordGenerator = new TestRecordSource();
-    private static Account testAccount = (Account)testRecordGenerator.getObject(Account.SObjectType).withInsert();
+    private static TestRecordSource testRecordSource = new TestRecordSource();
+    static {
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
+    }
+    private static Account testAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
 
     @IsTest
     public static void queryFields() {

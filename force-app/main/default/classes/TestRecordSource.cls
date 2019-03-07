@@ -7,19 +7,16 @@ global inherited sharing class TestRecordSource {
     private static final String GENERATOR_SOBJECT_FIELD = Test_Record_Generator__mdt.SObject__c.getDescribe().getName();
     private static final String GENERATOR_VARIANT_FIELD = Test_Record_Generator__mdt.Variant__c.getDescribe().getName();
 
-    private List<Test_Record_Generator__mdt> mockMetadata;
-    private List<Test_Record_Generator_Field__mdt> mockFieldMetadata;
-
     private SObjectIndex generatorMetadata {get {
         if(generatorMetadata == null) {
             generatorMetadata = new SObjectIndex(
                     new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
-                    .putAll((mockMetadata != null) ? mockMetadata :
-                            [
-                                    SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c
-                                    FROM Test_Record_Generator__mdt
-                                    ORDER BY Priority__c DESC
-                            ]);
+                    .putAll(
+                    [
+                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c
+                            FROM Test_Record_Generator__mdt
+                            ORDER BY Priority__c DESC
+                    ]);
         }
         return generatorMetadata;
     } set;}
@@ -28,12 +25,12 @@ global inherited sharing class TestRecordSource {
         if(generatorFieldMetadata == null) {
             generatorFieldMetadata = new SObjectIndex(
                     Test_Record_Generator_Field__mdt.Test_Record_Generator__c.getDescribe().getName())
-                    .putAll((mockFieldMetadata != null) ? mockFieldMetadata :
-                            [
-                                    SELECT Test_Record_Generator__c, Field__c, Value__c, Apex_Class__c,
-                                            Apex_Class_Parameters__c
-                                    FROM Test_Record_Generator_Field__mdt
-                            ]);
+                    .putAll(
+                    [
+                            SELECT Test_Record_Generator__c, Field__c, Value__c, Apex_Class__c,
+                                    Apex_Class_Parameters__c
+                            FROM Test_Record_Generator_Field__mdt
+                    ]);
         }
         return generatorFieldMetadata;
     } set;}
@@ -42,11 +39,6 @@ global inherited sharing class TestRecordSource {
 
     global TestRecordSource() {
         generators = new Map<Id, TestRecordGenerator>();
-    }
-
-    public TestRecordSource(List<Test_Record_Generator__mdt> mockMetadata) {
-        this();
-        this.mockMetadata = mockMetadata;
     }
 
     private TestRecordGenerator getGenerator(SObjectType objectType, String variant) {
@@ -145,10 +137,20 @@ global inherited sharing class TestRecordSource {
     private static Integer metadataIdNumber = 1;
 
     private Id getNextMetadataId() {
-        return Test_Record_Generator__mdt.SObjectType.getDescribe().getKeyPrefix() + String.valueOf(metadataIdNumber++).leftPad(4, '0') + '0'.repeat(8);
+        return Test_Record_Generator__mdt.SObjectType.getDescribe().getKeyPrefix()
+                + String.valueOf(metadataIdNumber++).leftPad(4, '0')
+                + '0'.repeat(8);
     }
 
-    global void setMetadata(SObject exampleObject, Test_Record_Generator__mdt metadataRecord) {
+    /**
+     * Adds a Test_Record_Generator__mdt to this instance without it being in the org. For test TestRecordSource without
+     * packaging any metadata records
+     *
+     * @param metadataRecord
+     *
+     * @return the metadataRecord, with a made-up Id filled in
+     */
+    public Test_Record_Generator__mdt addTemporaryMetadata(Test_Record_Generator__mdt metadataRecord) {
         metadataRecord.Id = getNextMetadataId();
 
         List<Test_Record_Generator__mdt> existingMatches = generatorMetadata.getAll(metadataRecord);
@@ -158,15 +160,42 @@ global inherited sharing class TestRecordSource {
             existingMatches.add(metadataRecord);
             Lists.sort(existingMatches, new TestRecordGeneratorPriorityComparator());
         }
+        return metadataRecord;
+    }
+
+    /**
+     * Like addTemporaryMetadata(Test_Record_Generator__mdt), but for fields
+     *
+     * @param metadataFields
+     */
+    public void addTemporaryMetadataFields(List<Test_Record_Generator_Field__mdt> metadataFields) {
+        generatorFieldMetadata.putAll(metadataFields);
+    }
+
+    /**
+     * Like addTemporaryMetadata(Test_Record_Generator__mdt), but makes it easy by allowing taking an example
+     * object instead of metadata records
+     *
+     * @param exampleObject
+     * @param priority
+     * @return the created Test_Record_Generator__mdt, with a made-up Id
+     */
+    public Test_Record_Generator__mdt addTemporaryMetadataFromInstance(SObject exampleObject, Decimal priority) {
+        Test_Record_Generator__mdt metadataRecordWithId = addTemporaryMetadata(new Test_Record_Generator__mdt(
+                Priority__c = priority,
+                Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                SObject__c = exampleObject.getSObjectType().getDescribe().getName()
+        ));
 
         Map<String, Object> populatedFields = exampleObject.getPopulatedFieldsAsMap();
         List<Test_Record_Generator_Field__mdt> newFields = new List<Test_Record_Generator_Field__mdt>();
         for(String field : populatedFields.keySet()) {
             newFields.add(new Test_Record_Generator_Field__mdt(
-                    Test_Record_Generator__c = metadataRecord.Id,
+                    Test_Record_Generator__c = metadataRecordWithId.Id,
                     Field__c = field,
                     Value__c = String.valueOf(populatedFields.get(field))));
         }
         generatorFieldMetadata.putAll(newFields);
+        return metadataRecordWithId;
     }
 }

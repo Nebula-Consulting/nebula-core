@@ -9,10 +9,15 @@ private class SObjectGetterTest {
     static TestRecordSource testRecordSource = new TestRecordSource();
     static TestRecordSource testRecordSource2 = new TestRecordSource();
 
+    static {
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
+        testRecordSource2.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
+    }
+
     @IsTest
     public static void basic() {
         Account togAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
-        Account childAccount = (Account) testRecordSource2.getObject(Account.SObjectType).withInsert();
+        Account childAccount = (Account) testRecordSource2.getObject(Account.SObjectType).withoutInsert();
         childAccount.ParentId = togAccount.Id;
         insert childAccount;
 

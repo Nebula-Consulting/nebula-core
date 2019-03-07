@@ -6,12 +6,14 @@
 @IsTest
 private class TestRecordSourceTest {
 
+    static TestRecordSource testRecordSource = new TestRecordSource();
+
     @IsTest
     static void noMatchingMetadata() {
-        TestRecordSource testRecords = new TestRecordSource(new List<Test_Record_Generator__mdt>());
+        testRecordSource = new TestRecordSource();
 
         try {
-            testRecords.getObject(Account.SObjectType).withInsert();
+            testRecordSource.getObject(Account.SObjectType).withInsert();
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains('No Test_Record_Generator__mdt found'));
@@ -23,16 +25,16 @@ private class TestRecordSourceTest {
     @IsTest
     static void noApexClassImplementation() {
         String className = 'noSuchClass';
-        TestRecordSource testRecords = new TestRecordSource(new List<Test_Record_Generator__mdt>{
+
+        testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
                         Apex_Class__c = className,
                         Priority__c = 0,
                         SObject__c = 'Account'
-                )
-        });
+                ));
 
         try {
-            testRecords.getObject(Account.SObjectType).withInsert();
+            testRecordSource.getObject(Account.SObjectType).withInsert();
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains(className));
@@ -43,19 +45,11 @@ private class TestRecordSourceTest {
 
     @IsTest
     static void setMetadata() {
-        TestRecordSource testRecords = new TestRecordSource();
         String accountName = 'Some wacky thing not in the metadata';
 
-        testRecords.setMetadata(
-                new Account(Name = accountName),
-                new Test_Record_Generator__mdt(
-                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
-                        Priority__c = 0,
-                        SObject__c = 'Account'
-                )
-        );
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0);
 
-        Account result = (Account)testRecords.getObject(Account.SObjectType).withoutInsert();
+        Account result = (Account)testRecordSource.getObject(Account.SObjectType).withoutInsert();
 
         System.assertEquals(accountName, result.Name);
     }

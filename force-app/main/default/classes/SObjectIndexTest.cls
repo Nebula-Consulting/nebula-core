@@ -6,11 +6,16 @@
 @IsTest
 private class SObjectIndexTest {
 
-    private static TestRecordSource tog = new TestRecordSource();
+    private static TestRecordSource testRecordSource = new TestRecordSource();
     private final static String DOE = 'Doe';
     private final static String ACCOUNT_ID = Contact.AccountId.getDescribe().getName();
     private final static String LAST_NAME = Contact.LastName.getDescribe().getName();
-    private static Account togAccount = (Account)tog.getObject(Account.SObjectType).withInsert();
+
+    static {
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
+    }
+
+    private static Account togAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
 
     @IsTest
     static void emptyIndex() {

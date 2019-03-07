@@ -19,10 +19,11 @@ global class TestFieldFunctions {
 
         global Object getValue(TestRecordSource parentRecordSource, Object value) {
             SObject targetInstance = (SObject)TypeLoader.getType((String)sObjectType).newInstance();
-            return parentRecordSource.getObjectWithInsert(
-                    targetInstance.getSObjectType(),
-                    variant
-            ).Id;
+            return parentRecordSource
+                    .getObject(targetInstance.getSObjectType())
+                    .asVariant(variant)
+                    .withInsert()
+                    .Id;
         }
     }
 
