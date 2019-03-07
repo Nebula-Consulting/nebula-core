@@ -43,15 +43,20 @@ private class TestRecordSourceTest {
 
     @IsTest
     static void setMetadata() {
-        String className = 'noSuchClass';
         TestRecordSource testRecords = new TestRecordSource();
+        String accountName = 'Some wacky thing not in the metadata';
 
-        testRecords.setMetadata(new Account(),
+        testRecords.setMetadata(
+                new Account(Name = accountName),
                 new Test_Record_Generator__mdt(
-                        Apex_Class__c = className,
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
                         Priority__c = 0,
                         SObject__c = 'Account'
                 )
         );
+
+        Account result = (Account)testRecords.getObject(Account.SObjectType).withoutInsert();
+
+        System.assertEquals(accountName, result.Name);
     }
 }

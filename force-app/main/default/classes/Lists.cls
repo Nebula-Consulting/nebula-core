@@ -6,7 +6,7 @@
 
 global class Lists {
 
-    global List<Object> sort(List<Object> toSort, Comparator comparator) {
+    global static List<Object> sort(List<Object> toSort, Comparator comparator) {
         return new QuickSort(comparator).quickSort(toSort);
     }
 

@@ -141,4 +141,32 @@ global inherited sharing class TestRecordSource {
             }
         }
     }
+
+    private static Integer metadataIdNumber = 1;
+
+    private Id getNextMetadataId() {
+        return Test_Record_Generator__mdt.SObjectType.getDescribe().getKeyPrefix() + String.valueOf(metadataIdNumber++).leftPad(4, '0') + '0'.repeat(8);
+    }
+
+    global void setMetadata(SObject exampleObject, Test_Record_Generator__mdt metadataRecord) {
+        metadataRecord.Id = getNextMetadataId();
+
+        List<Test_Record_Generator__mdt> existingMatches = generatorMetadata.getAll(metadataRecord);
+        if(existingMatches.isEmpty()) {
+            generatorMetadata.put(metadataRecord);
+        } else {
+            existingMatches.add(metadataRecord);
+            Lists.sort(existingMatches, new TestRecordGeneratorPriorityComparator());
+        }
+
+        Map<String, Object> populatedFields = exampleObject.getPopulatedFieldsAsMap();
+        List<Test_Record_Generator_Field__mdt> newFields = new List<Test_Record_Generator_Field__mdt>();
+        for(String field : populatedFields.keySet()) {
+            newFields.add(new Test_Record_Generator_Field__mdt(
+                    Test_Record_Generator__c = metadataRecord.Id,
+                    Field__c = field,
+                    Value__c = String.valueOf(populatedFields.get(field))));
+        }
+        generatorFieldMetadata.putAll(newFields);
+    }
 }
