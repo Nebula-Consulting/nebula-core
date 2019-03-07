@@ -76,7 +76,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
         Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
 
-        for(Test_Record_Generator_Field__mdt thisFieldMetadata : metadata.Test_Record_Generator_Fields__r) {
+        for(Test_Record_Generator_Field__mdt thisFieldMetadata : metadataFields) {
             FieldValueGenerator thisFieldValueGenerator = new FieldValueGenerator(
                     parentRecordSource,
                     thisFieldMetadata,

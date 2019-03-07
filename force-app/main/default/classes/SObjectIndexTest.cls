@@ -10,7 +10,7 @@ private class SObjectIndexTest {
     private final static String DOE = 'Doe';
     private final static String ACCOUNT_ID = Contact.AccountId.getDescribe().getName();
     private final static String LAST_NAME = Contact.LastName.getDescribe().getName();
-    private static Account togAccount = (Account)tog.getObjectWithInsert(Account.SObjectType);
+    private static Account togAccount = (Account)tog.getObject(Account.SObjectType).withInsert();
 
     @IsTest
     static void emptyIndex() {

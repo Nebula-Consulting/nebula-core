@@ -11,7 +11,7 @@ private class TestRecordSourceTest {
         TestRecordSource testRecords = new TestRecordSource(new List<Test_Record_Generator__mdt>());
 
         try {
-            testRecords.getObjectWithInsert(Account.SObjectType);
+            testRecords.getObject(Account.SObjectType).withInsert();
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains('No Test_Record_Generator__mdt found'));
@@ -32,12 +32,26 @@ private class TestRecordSourceTest {
         });
 
         try {
-            testRecords.getObjectWithInsert(Account.SObjectType);
+            testRecords.getObject(Account.SObjectType).withInsert();
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains(className));
             return;
         }
         System.assert(false, 'Should have thrown exception');
+    }
+
+    @IsTest
+    static void setMetadata() {
+        String className = 'noSuchClass';
+        TestRecordSource testRecords = new TestRecordSource();
+
+        testRecords.setMetadata(new Account(),
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = className,
+                        Priority__c = 0,
+                        SObject__c = 'Account'
+                )
+        );
     }
 }

@@ -7,7 +7,7 @@
 private class QueryBuilderTest {
 
     private static TestRecordSource testRecordGenerator = new TestRecordSource();
-    private static Account testAccount = (Account)testRecordGenerator.getObjectWithInsert(Account.SObjectType);
+    private static Account testAccount = (Account)testRecordGenerator.getObject(Account.SObjectType).withInsert();
 
     @IsTest
     public static void queryFields() {

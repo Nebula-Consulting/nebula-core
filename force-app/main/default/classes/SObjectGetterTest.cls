@@ -11,8 +11,8 @@ private class SObjectGetterTest {
 
     @IsTest
     public static void basic() {
-        Account togAccount = (Account) testRecordSource.getObjectWithInsert(Account.SObjectType);
-        Account childAccount = (Account) testRecordSource2.getObjectNoInsert(Account.SObjectType);
+        Account togAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
+        Account childAccount = (Account) testRecordSource2.getObject(Account.SObjectType).withInsert();
         childAccount.ParentId = togAccount.Id;
         insert childAccount;
 
@@ -25,7 +25,7 @@ private class SObjectGetterTest {
 
     @IsTest
     public static void relationIsNullPartWay() {
-        Account togAccount = (Account) testRecordSource.getObjectWithInsert(Account.SObjectType);
+        Account togAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
 
         Account queriedAccount = [SELECT Id, Name, Parent.Name FROM Account WHERE Id = :togAccount.Id];
 

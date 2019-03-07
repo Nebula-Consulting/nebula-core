@@ -8,20 +8,34 @@ global inherited sharing class TestRecordSource {
     private static final String GENERATOR_VARIANT_FIELD = Test_Record_Generator__mdt.Variant__c.getDescribe().getName();
 
     private List<Test_Record_Generator__mdt> mockMetadata;
+    private List<Test_Record_Generator_Field__mdt> mockFieldMetadata;
 
     private SObjectIndex generatorMetadata {get {
         if(generatorMetadata == null) {
             generatorMetadata = new SObjectIndex(
                     new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
                     .putAll((mockMetadata != null) ? mockMetadata :
-                    [
-                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c,
-                            (SELECT Field__c, Value__c, Apex_Class__c, Apex_Class_Parameters__c FROM Test_Record_Generator_Fields__r)
-                            FROM Test_Record_Generator__mdt
-                            ORDER BY Priority__c ASC
-                    ]);
+                            [
+                                    SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c
+                                    FROM Test_Record_Generator__mdt
+                                    ORDER BY Priority__c DESC
+                            ]);
         }
         return generatorMetadata;
+    } set;}
+
+    private SObjectIndex generatorFieldMetadata {get {
+        if(generatorFieldMetadata == null) {
+            generatorFieldMetadata = new SObjectIndex(
+                    Test_Record_Generator_Field__mdt.Test_Record_Generator__c.getDescribe().getName())
+                    .putAll((mockFieldMetadata != null) ? mockFieldMetadata :
+                            [
+                                    SELECT Test_Record_Generator__c, Field__c, Value__c, Apex_Class__c,
+                                            Apex_Class_Parameters__c
+                                    FROM Test_Record_Generator_Field__mdt
+                            ]);
+        }
+        return generatorFieldMetadata;
     } set;}
 
     private Map<Id, TestRecordGenerator> generators;
@@ -66,29 +80,65 @@ global inherited sharing class TestRecordSource {
                     '. Check that it is global and that the namespace is included.');
         } else {
             TestRecordGenerator newGenerator = (TestRecordGenerator)TypeLoader.getInstance(generatorType, thisGeneratorMetadata.Parameters__c);
-            newGenerator.setup(this, thisGeneratorMetadata);
+            newGenerator.setup(this, thisGeneratorMetadata, generatorFieldMetadata.getAll(thisGeneratorMetadata.Id));
             generators.put(thisGeneratorMetadata.Id, newGenerator);
             return newGenerator;
         }
     }
 
-    global SObject getObjectNoInsert(SObjectType objectType) {
-        return getObjectNoInsert(objectType, null, null);
-    }
-    global SObject getObjectNoInsert(SObjectType objectType, String variant) {
-        return getObjectNoInsert(objectType, variant, null);
-    }
-    global SObject getObjectNoInsert(SObjectType objectType, String variant, Map<String, Object> params) {
+    private SObject getObjectWithoutInsert(SObjectType objectType, String variant, Map<String, Object> params) {
         return getGenerator(objectType, variant).getObjectNoInsert(params);
     }
 
-    global SObject getObjectWithInsert(SObjectType objectType) {
-        return getObjectWithInsert(objectType, null, null);
-    }
-    global SObject getObjectWithInsert(SObjectType objectType, String variant) {
-        return getObjectWithInsert(objectType, variant, null);
-    }
-    global SObject getObjectWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
+    private SObject getObjectWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
         return getGenerator(objectType, variant).getObjectWithInsert(params);
+    }
+
+    global Builder getObject(SObjectType sObjectType) {
+        return new Builder(this, sObjectType);
+    }
+
+    global class Builder {
+        private TestRecordSource parent;
+        private SObjectType sObjectType;
+        private String variant;
+        private Map<String, Object> parameters;
+
+        private Builder(TestRecordSource parent, SObjectType sObjectType) {
+            this.parent = parent;
+            this.sObjectType = sObjectType;
+        }
+
+        global Builder asVariant(String variant) {
+            this.variant = variant;
+            return this;
+        }
+
+        global Builder useParameters(Map<String, Object> parameters) {
+            this.parameters = parameters;
+            return this;
+        }
+
+        global SObject withInsert() {
+            return parent.getObjectWithInsert(sObjectType, variant, parameters);
+        }
+
+        global SObject withoutInsert() {
+            return parent.getObjectWithoutInsert(sObjectType, variant, parameters);
+        }
+    }
+
+    private class TestRecordGeneratorPriorityComparator implements Comparator {
+        public Integer compare(Object object1, Object object2) {
+            Decimal priority1 = ((Test_Record_Generator__mdt)object1).Priority__c;
+            Decimal priority2 = ((Test_Record_Generator__mdt)object2).Priority__c;
+            if(priority1 == null && priority2 == null) {
+                return 0;
+            } else if(priority1 == null || priority2 == null) {
+                return priority1 == null ? 1 : -1;
+            } else {
+                return (Integer)(priority1 - priority2);
+            }
+        }
     }
 }
