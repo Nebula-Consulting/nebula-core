@@ -187,15 +187,67 @@ global inherited sharing class TestRecordSource {
                 SObject__c = exampleObject.getSObjectType().getDescribe().getName()
         ));
 
+        generatorFieldMetadata.putAll(getMetadataFields(exampleObject, metadataRecordWithId.Id));
+        return metadataRecordWithId;
+    }
+
+    private static List<Test_Record_Generator_Field__mdt> getMetadataFields(SObject exampleObject, Id testRecordGeneratorId) {
         Map<String, Object> populatedFields = exampleObject.getPopulatedFieldsAsMap();
         List<Test_Record_Generator_Field__mdt> newFields = new List<Test_Record_Generator_Field__mdt>();
         for(String field : populatedFields.keySet()) {
             newFields.add(new Test_Record_Generator_Field__mdt(
-                    Test_Record_Generator__c = metadataRecordWithId.Id,
+                    Test_Record_Generator__c = testRecordGeneratorId,
                     Field__c = field,
                     Value__c = String.valueOf(populatedFields.get(field))));
         }
-        generatorFieldMetadata.putAll(newFields);
-        return metadataRecordWithId;
+        return newFields;
+    }
+
+    private static Metadata.CustomMetadataValue getCustomMetadataValue(String field, Object value) {
+        Metadata.CustomMetadataValue returnValue = new Metadata.CustomMetadataValue();
+        returnValue.field = field;
+        returnValue.value = value;
+        return returnValue;
+    }
+
+    global static void insertMetadataFieldsFromExample(SObject exampleObject, String qualifiedApiName) {
+        List<Test_Record_Generator__mdt> parents = [
+                SELECT Id, DeveloperName, MasterLabel, QualifiedApiName
+                FROM Test_Record_Generator__mdt
+                WHERE QualifiedApiName = :qualifiedApiName];
+        System.assertEquals(1, parents.size(),
+                'No record found matching qualified API name "' + qualifiedApiName + '"'
+        );
+        Test_Record_Generator__mdt parent = parents[0];
+
+        List<Test_Record_Generator_Field__mdt> fields = getMetadataFields(exampleObject, null);
+
+        Metadata.DeployContainer mdContainer = new Metadata.DeployContainer();
+
+        for(Test_Record_Generator_Field__mdt thisField : fields) {
+            Metadata.CustomMetadata metadataToInsert = new Metadata.CustomMetadata();
+
+            metadataToInsert.fullName = Test_Record_Generator_Field__mdt.SObjectType.getDescribe().getName().removeEnd('__mdt')
+                    + '.' + parent.DeveloperName + '_' + thisField.Field__c;
+            metadataToInsert.label = parent.MasterLabel + ': ' + thisField.Field__c;
+
+            metadataToInsert.values.addAll(new List<Metadata.CustomMetadataValue>{
+                    getCustomMetadataValue(
+                            Test_Record_Generator_Field__mdt.Test_Record_Generator__c.getDescribe().getName(),
+                            parent.QualifiedApiName
+                    ),
+                    getCustomMetadataValue(
+                            Test_Record_Generator_Field__mdt.Field__c.getDescribe().getName(),
+                            thisField.Field__c
+                    ),
+                    getCustomMetadataValue(
+                            Test_Record_Generator_Field__mdt.Value__c.getDescribe().getName(),
+                            thisField.Value__c
+                    )
+            });
+            mdContainer.addMetadata(metadataToInsert);
+        }
+
+        Metadata.Operations.enqueueDeployment(mdContainer, new EmailResultsMetadataDeployCallback(UserInfo.getUserEmail()));
     }
 }
