@@ -82,7 +82,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
                     null,
                     thisField,
                     String.format(
-                            'Field {0} from {1} not found on {2}',
+                            'Field "{0}" from metadata "{1}" not found on SObject {2}',
                             new List<String>{thisFieldMetadata.Field__c, metadata.DeveloperName, metadata.SObject__c} )
             );
 
