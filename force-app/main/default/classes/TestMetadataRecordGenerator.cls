@@ -77,10 +77,19 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
 
         for(Test_Record_Generator_Field__mdt thisFieldMetadata : metadataFields) {
+            SObjectField thisField = fields.get(thisFieldMetadata.Field__c);
+            System.assertNotEquals(
+                    null,
+                    thisField,
+                    String.format(
+                            'Field {0} from {1} not found on {2}',
+                            new List<String>{thisFieldMetadata.Field__c, metadata.DeveloperName, metadata.SObject__c} )
+            );
+
             FieldValueGenerator thisFieldValueGenerator = new FieldValueGenerator(
                     parentRecordSource,
                     thisFieldMetadata,
-                    fields.get(thisFieldMetadata.Field__c).getDescribe()
+                    thisField.getDescribe()
             );
 
             concreteObjectDescription.put(thisFieldMetadata.Field__c, thisFieldValueGenerator.getValue());

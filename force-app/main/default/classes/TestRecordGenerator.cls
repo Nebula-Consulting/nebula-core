@@ -22,7 +22,15 @@ global inherited sharing abstract class TestRecordGenerator {
     global virtual SObject getObjectWithInsert(Map<String, Object> params) {
         if(record == null) {
             record = getObjectNoInsert(params);
-            insert record;
+            try {
+                insert record;
+            } catch (Exception e) {
+                throw new TestRecordGeneratorException('Exception creating test record '
+                                + metadata.DeveloperName
+                                + '\n'
+                                + e.getMessage());
+            }
+
         }
         return record;
     }

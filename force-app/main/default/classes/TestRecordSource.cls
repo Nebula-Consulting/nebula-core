@@ -13,7 +13,7 @@ global inherited sharing class TestRecordSource {
                     new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
                     .putAll(
                     [
-                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c
+                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c, DeveloperName
                             FROM Test_Record_Generator__mdt
                             ORDER BY Priority__c DESC
                     ]);
