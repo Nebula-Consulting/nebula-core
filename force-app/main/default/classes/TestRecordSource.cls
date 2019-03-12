@@ -86,27 +86,31 @@ global inherited sharing class TestRecordSource {
         return getGenerator(objectType, variant).getObjectWithInsert(params);
     }
 
-    global Builder getObject(SObjectType sObjectType) {
-        return new Builder(this, sObjectType);
+    private void doSetObject(SObjectType objectType, String variant, SObject record) {
+        getGenerator(objectType, variant).setObject(record);
     }
 
-    global class Builder {
+    global GetBuilder getObject(SObjectType sObjectType) {
+        return new GetBuilder(this, sObjectType);
+    }
+
+    global class GetBuilder {
         private TestRecordSource parent;
         private SObjectType sObjectType;
         private String variant;
         private Map<String, Object> parameters;
 
-        private Builder(TestRecordSource parent, SObjectType sObjectType) {
+        private GetBuilder(TestRecordSource parent, SObjectType sObjectType) {
             this.parent = parent;
             this.sObjectType = sObjectType;
         }
 
-        global Builder asVariant(String variant) {
+        global GetBuilder asVariant(String variant) {
             this.variant = variant;
             return this;
         }
 
-        global Builder useParameters(Map<String, Object> parameters) {
+        global GetBuilder useParameters(Map<String, Object> parameters) {
             this.parameters = parameters;
             return this;
         }
@@ -117,6 +121,30 @@ global inherited sharing class TestRecordSource {
 
         global SObject withoutInsert() {
             return parent.getObjectWithoutInsert(sObjectType, variant, parameters);
+        }
+    }
+
+    global SetBuilder setObject(SObjectType sObjectType) {
+        return new SetBuilder(this, sObjectType);
+    }
+
+    global class SetBuilder {
+        private TestRecordSource parent;
+        private SObjectType sObjectType;
+        private String variant;
+
+        private SetBuilder(TestRecordSource parent, SObjectType sObjectType) {
+            this.parent = parent;
+            this.sObjectType = sObjectType;
+        }
+
+        global SetBuilder asVariant(String variant) {
+            this.variant = variant;
+            return this;
+        }
+
+        global void set(SObject record) {
+            parent.doSetObject(sObjectType, variant, record);
         }
     }
 

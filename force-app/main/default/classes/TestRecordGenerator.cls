@@ -34,4 +34,8 @@ global inherited sharing abstract class TestRecordGenerator {
         }
         return record;
     }
+
+    global virtual void setObject(SObject record) {
+        this.record = record;
+    }
 }
