@@ -211,6 +211,12 @@ global inherited sharing class TestRecordSource {
     }
 
     global static void insertMetadataFieldsFromExample(SObject exampleObject, String qualifiedApiName) {
+        Metadata.Operations.enqueueDeployment(
+                getDeployContainerForMetadataFields(exampleObject, qualifiedApiName),
+                new EmailResultsMetadataDeployCallback(UserInfo.getUserEmail()));
+    }
+
+    global static Metadata.DeployContainer getDeployContainerForMetadataFields(SObject exampleObject, String qualifiedApiName) {
         List<Test_Record_Generator__mdt> parents = [
                 SELECT Id, DeveloperName, MasterLabel, QualifiedApiName
                 FROM Test_Record_Generator__mdt
@@ -228,7 +234,7 @@ global inherited sharing class TestRecordSource {
             Metadata.CustomMetadata metadataToInsert = new Metadata.CustomMetadata();
 
             metadataToInsert.fullName = Test_Record_Generator_Field__mdt.SObjectType.getDescribe().getName().removeEnd('__mdt')
-                    + '.' + parent.DeveloperName + '_' + thisField.Field__c;
+                    + '.' + parent.DeveloperName + '_' + thisField.Field__c.replaceAll('__', '_');
             metadataToInsert.label = parent.MasterLabel + ': ' + thisField.Field__c;
 
             metadataToInsert.values.addAll(new List<Metadata.CustomMetadataValue>{
@@ -248,6 +254,6 @@ global inherited sharing class TestRecordSource {
             mdContainer.addMetadata(metadataToInsert);
         }
 
-        Metadata.Operations.enqueueDeployment(mdContainer, new EmailResultsMetadataDeployCallback(UserInfo.getUserEmail()));
+        return mdContainer;
     }
 }
