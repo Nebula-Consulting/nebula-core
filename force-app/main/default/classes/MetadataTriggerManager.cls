@@ -76,7 +76,11 @@ global with sharing class MetadataTriggerManager {
         }
     }
 
-    global void handle(TriggerOperation triggerOperation, List<SObject> oldList, List<SObject> newList) {
+    global void handle() {
+        handle(Trigger.operationType, Trigger.old, Trigger.new);
+    }
+
+    public void handle(TriggerOperation triggerOperation, List<SObject> oldList, List<SObject> newList) {
         if(theseTriggers == null) {
             return;
         }
