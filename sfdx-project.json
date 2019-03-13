@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "Nebula Core",
-            "versionName": "0.12",
-            "versionNumber": "0.12.0.NEXT"
+            "versionName": "0.13",
+            "versionNumber": "0.13.0.NEXT"
         }
     ],
     "namespace": "nebc",
@@ -13,19 +13,9 @@
     "sourceApiVersion": "44.0",
     "packageAliases": {
         "Nebula Core": "0Ho0J000000XZAHSA4",
-        "Nebula Core@0.1.0-1": "04t0J000000F9G1QAK",
-        "Nebula Core@0.2.0-1": "04t0J000000F9GQQA0",
-        "Nebula Core@0.2.0-2": "04t0J000000F9GVQA0",
-        "Nebula Core@0.3.0-1": "04t0J000000F9GaQAK",
-        "Nebula Core@0.4.0-1": "04t0J000000F9GfQAK",
-        "Nebula Core@0.5.0-1": "04t0J000000F9GkQAK",
-        "Nebula Core@0.6.0-1": "04t0J000000F9GpQAK",
-        "Nebula Core@0.6.0-2": "04t0J000000F9GuQAK",
-        "Nebula Core@0.7.0-1": "04t0J000000F9GzQAK",
-        "Nebula Core@0.8.0-1": "04t0J000000F9H4QAK",
-        "Nebula Core@0.9.0-1": "04t0J000000F9H9QAK",
         "Nebula Core@0.10.0-1": "04t0J000000F9HYQA0",
         "Nebula Core@0.11.0-1": "04t0J000000F9HdQAK",
-        "Nebula Core@0.12.0-1": "04t0J000000F9HnQAK"
+        "Nebula Core@0.12.0-1": "04t0J000000F9HnQAK",
+        "Nebula Core@0.13.0-1": "04t0J000000F9HsQAK"
     }
 }

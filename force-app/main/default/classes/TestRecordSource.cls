@@ -86,10 +86,6 @@ global inherited sharing class TestRecordSource {
         return getGenerator(objectType, variant).getObjectWithInsert(params);
     }
 
-    private void doSetObject(SObjectType objectType, String variant, SObject record) {
-        getGenerator(objectType, variant).setObject(record);
-    }
-
     global GetBuilder getObject(SObjectType sObjectType) {
         return new GetBuilder(this, sObjectType);
     }
@@ -124,28 +120,11 @@ global inherited sharing class TestRecordSource {
         }
     }
 
-    global SetBuilder setObject(SObjectType sObjectType) {
-        return new SetBuilder(this, sObjectType);
+    global void setObjectAsVariant(SObject record, String variant) {
+        getGenerator(record.getSObjectType(), variant).setObject(record);
     }
-
-    global class SetBuilder {
-        private TestRecordSource parent;
-        private SObjectType sObjectType;
-        private String variant;
-
-        private SetBuilder(TestRecordSource parent, SObjectType sObjectType) {
-            this.parent = parent;
-            this.sObjectType = sObjectType;
-        }
-
-        global SetBuilder asVariant(String variant) {
-            this.variant = variant;
-            return this;
-        }
-
-        global void set(SObject record) {
-            parent.doSetObject(sObjectType, variant, record);
-        }
+    global void setObject(SObject record) {
+        setObjectAsVariant(record, null);
     }
 
     private class TestRecordGeneratorPriorityComparator implements Comparator {
