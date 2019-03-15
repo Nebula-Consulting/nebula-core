@@ -27,7 +27,7 @@ private class JsonObjectToSObjectTest {
         System.assertEquals(null, acc.Id);
     }
 
-    private class StringToDateConvertor implements Function {
+    private class StringToDateConverter implements Function {
         public Object call(Object o) {
             return Datetime.valueOf('' + o);
         }
@@ -36,16 +36,16 @@ private class JsonObjectToSObjectTest {
     @IsTest
     public static void dateConversion() {
         JsonObjectToSObject parser = new JsonObjectToSObject(Account.SObjectType)
-                .setFieldToFunction(new Map<String, Function>{'datefield' => new StringToDateConvertor()});
+                .setFieldToFunction(new Map<String, Function>{'dateField' => new StringToDateConverter()});
 
         String accountName = 'ACME';
-        Account acc = (Account)parser.toSObject(new Map<String, Object> {'Name' => accountName, 'datefield' => '2015-01-01 15:12:02'});
+        Account acc = (Account)parser.toSObject(new Map<String, Object> {'Name' => accountName, 'dateField' => '2015-01-01 15:12:02'});
 
         System.assertEquals(accountName, acc.Name);
     }
 
     @IsTest
-    public static void listversion() {
+    public static void listVersion() {
         JsonObjectToSObject parser = new JsonObjectToSObject(Account.SObjectType);
 
         String accountName = 'ACME';
@@ -70,7 +70,7 @@ private class JsonObjectToSObjectTest {
     }
 
     @IsTest
-    public static void unboxed() {
+    public static void unBoxed() {
         JsonObjectToSObject parser = new JsonObjectToSObject(Account.SObjectType)
                 .setObjectFieldToSObjectField(new Map<String, String> {'Account.Name' => 'Name'});
 
@@ -81,7 +81,7 @@ private class JsonObjectToSObjectTest {
     }
 
     @IsTest
-    public static void deeplyUnboxed() {
+    public static void deeplyUnBoxed() {
         JsonObjectToSObject parser = new JsonObjectToSObject(Account.SObjectType)
                 .setObjectFieldToSObjectField(new Map<String, String> {'meta.Account.Name' => 'Name'});
 

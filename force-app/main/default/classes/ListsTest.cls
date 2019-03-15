@@ -6,18 +6,22 @@
 @IsTest
 private class ListsTest {
 
+    @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts') // asserts are in delegate function
     @IsTest static void sortEvenArrayLength() {
         runSortTests(10, 1000);
     }
 
+    @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts') // asserts are in delegate function
     @IsTest static void sortOddArrayLength() {
         runSortTests(9, 1000);
     }
 
+    @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts') // asserts are in delegate function
     @IsTest static void sortLengthOne() {
         runSortTests(1, 1);
     }
 
+    @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts') // asserts are in delegate function
     @IsTest static void sortEmpty() {
         runSortTests(0, 1);
     }

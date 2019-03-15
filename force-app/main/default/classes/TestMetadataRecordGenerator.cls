@@ -37,6 +37,9 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             return fieldFunctionClass;
         }
 
+        // PMD seems to be wrongly thinking that the switch cases are variable names, so they shouldn't start with
+        // capital letters
+        @SuppressWarnings('PMD.VariableNamingConventions')
         private Object getSimpleValue() {
             switch on fieldDescribe.getType() {
                 when DATE {

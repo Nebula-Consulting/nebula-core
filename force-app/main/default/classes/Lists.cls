@@ -20,7 +20,7 @@ global class Lists {
     }
 
     global static List<Object> sort(List<Object> toSort, Comparator comparator) {
-        return new QuickSort(comparator).quickSort(toSort);
+        return new QuickSort(comparator).sort(toSort);
     }
 
     global static List<Object> filter(List<Object> toFilter, FilterFunction filterFunction) {
@@ -43,19 +43,20 @@ global class Lists {
         }
 
         // Sorts in-place, and returns the original array
-        public List<Object> quickSort(List<Object> toSort) {
-            quickSort(toSort, 0, toSort.size()-1);
+        public List<Object> sort(List<Object> toSort) {
+            sort(toSort, 0, toSort.size()-1);
             return toSort;
         }
 
-        private void quickSort(List<Object> toSort, Integer low, Integer high) {
+        private void sort(List<Object> toSort, Integer low, Integer high) {
             if(low < high) {
                 Integer newPivot = partition(toSort, low, high);
-                quickSort(toSort, low, newPivot);
-                quickSort(toSort, newPivot + 1, high);
+                sort(toSort, low, newPivot);
+                sort(toSort, newPivot + 1, high);
             }
         }
 
+        @SuppressWarnings('PMD.WhileLoopsMustUseBraces, PMD.EmptyWhileStmt') // low-level algorithm using whiles
         private Integer partition(List<Object> toSort, Integer low, Integer high) {
             Object pivotVal = toSort[low];
             Integer upwards = low - 1;

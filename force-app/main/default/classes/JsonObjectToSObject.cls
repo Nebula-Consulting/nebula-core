@@ -81,10 +81,10 @@ global class JsonObjectToSObject {
         } else if(fieldMap.containsKey(fieldName)) {
             returnVal.put(fieldName, value);
         } else {
-            String fieldName_c = fieldName + '__c';
+            String fieldNameC = fieldName + '__c';
 
-            if(fieldMap.containsKey(fieldName_c)) {
-                returnVal.put(fieldName_c, value);
+            if(fieldMap.containsKey(fieldNameC)) {
+                returnVal.put(fieldNameC, value);
             }
         }
 

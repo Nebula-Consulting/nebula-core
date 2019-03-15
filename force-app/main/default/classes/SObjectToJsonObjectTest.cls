@@ -47,7 +47,7 @@ private class SObjectToJsonObjectTest {
         System.assertEquals(firstName, ((Map<String, Object>)result.get('names')).get('first'));
         System.assertEquals(lastName, ((Map<String, Object>)result.get('names')).get('last'));
 
-        System.debug(Json.serialize(result));
+        System.debug(JSON.serialize(result));
     }
 
     @IsTest public static void deeplyBoxed() {
@@ -59,7 +59,7 @@ private class SObjectToJsonObjectTest {
         System.assertEquals(firstName, ((Map<String, Object>)meta.get('names')).get('first'));
         System.assertEquals(lastName, ((Map<String, Object>)meta.get('names')).get('last'));
 
-        System.debug(Json.serialize(result));
+        System.debug(JSON.serialize(result));
     }
 
     @IsTest public static void mixedBoxed() {
@@ -71,7 +71,7 @@ private class SObjectToJsonObjectTest {
         System.assertEquals(firstName, ((Map<String, Object>)meta.get('names')).get('first'));
         System.assertEquals(lastName, meta.get('last'));
 
-        System.debug(Json.serialize(result));
+        System.debug(JSON.serialize(result));
     }
 
     @IsTest public static void customFieldFunction() {

@@ -103,6 +103,7 @@ private class MetadataTriggerManagerTest {
         System.assert(false, 'Expected a ClassNotFoundException');
     }
 
+    @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts') // Just testing that there is no exception
     @IsTest
     public static void noHandlers() {
 

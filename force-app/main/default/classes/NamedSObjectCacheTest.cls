@@ -6,10 +6,9 @@
 @IsTest
 private class NamedSObjectCacheTest {
 
+    @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts') // Can't know if this actually exists, so nothing to assert
     @IsTest
     static void testBehavior() {
         NamedSObjectCache.getRecordType(Contact.SObjectType, 'Supplier');
-
-        // Can't know if this actually exists, so nothing to assert
     }
 }
