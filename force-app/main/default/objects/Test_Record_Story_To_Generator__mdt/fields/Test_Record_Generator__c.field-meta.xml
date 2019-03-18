@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Test_Record_Generator__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Test Record Generator</label>
+    <referenceTo>Test_Record_Generator__mdt</referenceTo>
+    <relationshipLabel>Test Record Story To Generators</relationshipLabel>
+    <relationshipName>Test_Record_Story_To_Generators</relationshipName>
+    <required>true</required>
+    <type>MetadataRelationship</type>
+    <unique>false</unique>
+</CustomField>
