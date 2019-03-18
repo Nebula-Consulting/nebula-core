@@ -32,6 +32,55 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void now() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'EmailMessage'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'FirstOpenedDate',
+                        Apex_Class__c = TestFieldFunctions.Now.class.getName()
+                )
+        });
+
+        EmailMessage result = (EmailMessage)testRecordSource.getObject(EmailMessage.SObjectType).withoutInsert();
+
+        Datetime target = Datetime.now();
+        System.assert(result.FirstOpenedDate > target.addMinutes(-1) && result.FirstOpenedDate < target.addMinutes(1) );
+    }
+
+    @IsTest
+    static void nowModified() {
+        Integer addDays = 1;
+        Integer addMinutes = 60;
+
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'EmailMessage'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'FirstOpenedDate',
+                        Apex_Class__c = TestFieldFunctions.Now.class.getName(),
+                        Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
+                                'addDays' => addDays,
+                                'addMinutes' => addMinutes
+                        })
+                )
+        });
+
+        EmailMessage result = (EmailMessage)testRecordSource.getObject(EmailMessage.SObjectType).withoutInsert();
+
+        Datetime target = Datetime.now().addMinutes(addMinutes).addDays(addDays);
+        System.assert(result.FirstOpenedDate > target.addMinutes(-1) && result.FirstOpenedDate < target.addMinutes(1) );
+    }
+
+    @IsTest
     static void createRecord() {
         // Create a standard variant of Account
         appendRandomNumber();

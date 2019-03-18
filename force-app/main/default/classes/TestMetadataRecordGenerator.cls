@@ -11,7 +11,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         public String apexClass;
         public Map<String, Object> parameters;
 
-        public  ValueFunction(String apexClass, Map<String, Object> parameters) {
+        public ValueFunction(String apexClass, Map<String, Object> parameters) {
             this.apexClass = apexClass;
             this.parameters = parameters;
         }
@@ -43,10 +43,10 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         private Object getSimpleValue() {
             switch on fieldDescribe.getType() {
                 when DATE {
-                    return JSON.deserialize('"' + fieldMetadata.Value__c + '"', Date.class);
+                    return fieldMetadata.Value__c == null ? null : JSON.deserialize('"' + fieldMetadata.Value__c + '"', Date.class);
                 }
                 when DATETIME {
-                    return JSON.deserialize('"' + fieldMetadata.Value__c + '"', Datetime.class);
+                    return fieldMetadata.Value__c == null ? null : JSON.deserialize('"' + fieldMetadata.Value__c + '"', Datetime.class);
                 }
                 when DOUBLE, CURRENCY, LONG, INTEGER, PERCENT {
                     return Decimal.valueOf(fieldMetadata.Value__c);

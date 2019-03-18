@@ -40,4 +40,20 @@ global class TestFieldFunctions {
         }
     }
 
+    global class Now implements TestFieldFunction {
+
+        global Integer addDays;
+        global Integer addMinutes;
+
+        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+            Datetime returnValue = Datetime.now();
+            if(addDays != null) {
+                returnValue = returnValue.addDays(addDays);
+            }
+            if(addMinutes != null) {
+                returnValue = returnValue.addMinutes(addMinutes);
+            }
+            return returnValue;
+        }
+    }
 }
