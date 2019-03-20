@@ -9,6 +9,7 @@ private class DebugLoggerTest {
     @IsTest
     static void testBehavior() {
         Logger.log(LoggingLevel.DEBUG, DebugLoggerTest.class.getName(), 'A message');
+        Logger.commitLogs();
     }
 
     @IsTest

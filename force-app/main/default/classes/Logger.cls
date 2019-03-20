@@ -8,6 +8,7 @@ global without sharing class Logger {
     global static void log(System.LoggingLevel logLevel, String component, String body) {
         log(logLevel, component, body, null);
     }
+
     global static void log(System.LoggingLevel logLevel, String component, String body, Id relatedTo) {
         Log_Setting__mdt thisSetting = componentToLogSetting.get(component);
         if(thisSetting == null) {
@@ -15,12 +16,27 @@ global without sharing class Logger {
         }
 
         if(logLevel.ordinal() >= logLevelToPriority.get(thisSetting.Level__c)) {
-            Type logMethodType = TypeLoader.getType(thisSetting.LogMethod_Class__c);
-            if(logMethodType == null) {
-                throw new ClassNotFoundException('No log method found matching class name ' + thisSetting.LogMethod_Class__c + '. Is the class global? Does it include any required namespace?');
-            }
-            ((LogMethod) logMethodType.newInstance()).log(logLevel, component, body, relatedTo);
+            getLogMethod(thisSetting.LogMethod_Class__c).log(logLevel, component, body, relatedTo);
         }
+    }
+
+    global static void commitLogs() {
+        for(LogMethod thisActiveMethod : activeLogMethods.values()) {
+            thisActiveMethod.commitLogs();
+        }
+    }
+
+    private static LogMethod getLogMethod(String logMethodName) {
+        LogMethod activeLogMethod = activeLogMethods.get(logMethodName);
+        if(activeLogMethod == null) {
+            Type logMethodType = TypeLoader.getType(logMethodName);
+            if (logMethodType == null) {
+                throw new ClassNotFoundException('No log method found matching class name ' + logMethodName + '. Is the class global? Does it include any required namespace?');
+            }
+            activeLogMethod = ((LogMethod) logMethodType.newInstance());
+            activeLogMethods.put(logMethodName, activeLogMethod);
+        }
+        return activeLogMethod;
     }
 
     @TestVisible
@@ -56,4 +72,6 @@ global without sharing class Logger {
         }
         return logLevelToPriority;
     } set;}
+
+    private static Map<String, LogMethod> activeLogMethods = new Map<String, LogMethod>();
 }

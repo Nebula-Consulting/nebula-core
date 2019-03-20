@@ -5,4 +5,6 @@
 
 global interface LogMethod {
     void log(System.LoggingLevel logLevel, String component, String body, Id relatedTo);
+
+    void commitLogs();
 }
