@@ -24,10 +24,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Logger_Class__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>LogMethod_Class__c</field>
             </layoutItems>
         </layoutColumns>
