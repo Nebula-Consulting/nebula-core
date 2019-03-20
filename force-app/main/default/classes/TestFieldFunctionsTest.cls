@@ -25,7 +25,7 @@ private class TestFieldFunctionsTest {
                 )
         });
 
-        Account result = (Account)testRecordSource.getObject(Account.SObjectType).withoutInsert();
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
         System.assert(result.Name.contains(accountName));
         System.assert(result.Name.length() > accountName.length());
@@ -46,7 +46,7 @@ private class TestFieldFunctionsTest {
                 )
         });
 
-        EmailMessage result = (EmailMessage)testRecordSource.getObject(EmailMessage.SObjectType).withoutInsert();
+        EmailMessage result = (EmailMessage)testRecordSource.getRecord(EmailMessage.SObjectType).withoutInsert();
 
         Datetime target = Datetime.now();
         System.assert(result.FirstOpenedDate > target.addMinutes(-1) && result.FirstOpenedDate < target.addMinutes(1) );
@@ -74,7 +74,7 @@ private class TestFieldFunctionsTest {
                 )
         });
 
-        EmailMessage result = (EmailMessage)testRecordSource.getObject(EmailMessage.SObjectType).withoutInsert();
+        EmailMessage result = (EmailMessage)testRecordSource.getRecord(EmailMessage.SObjectType).withoutInsert();
 
         Datetime target = Datetime.now().addMinutes(addMinutes).addDays(addDays);
         System.assert(result.FirstOpenedDate > target.addMinutes(-1) && result.FirstOpenedDate < target.addMinutes(1) );
@@ -107,7 +107,7 @@ private class TestFieldFunctionsTest {
         });
 
         Account testAccount = (Account)testRecordSource
-                .getObject(Account.SObjectType)
+                .getRecord(Account.SObjectType)
                 .asVariant('With Parent')
                 .withInsert();
 

@@ -10,7 +10,7 @@ private class QueryBuilderTest {
     static {
         testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
     }
-    private static Account testAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
+    private static Account testAccount = (Account) testRecordSource.getRecord(Account.SObjectType).withInsert();
 
     @IsTest
     public static void queryFields() {

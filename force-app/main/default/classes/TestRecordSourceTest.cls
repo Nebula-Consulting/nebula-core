@@ -13,7 +13,7 @@ private class TestRecordSourceTest {
         testRecordSource = new TestRecordSource();
 
         try {
-            testRecordSource.getObject(Account.SObjectType).withInsert();
+            testRecordSource.getRecord(Account.SObjectType).withInsert();
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains('No Test_Record_Generator__mdt found'));
@@ -34,7 +34,7 @@ private class TestRecordSourceTest {
                 ));
 
         try {
-            testRecordSource.getObject(Account.SObjectType).withInsert();
+            testRecordSource.getRecord(Account.SObjectType).withInsert();
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains(className));
@@ -49,7 +49,7 @@ private class TestRecordSourceTest {
 
         testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0);
 
-        Account result = (Account)testRecordSource.getObject(Account.SObjectType).withoutInsert();
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
         System.assertEquals(accountName, result.Name);
     }

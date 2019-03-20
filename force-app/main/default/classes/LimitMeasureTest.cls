@@ -22,7 +22,7 @@ private class LimitMeasureTest {
 
     static {
         testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
-        testRecordSource.getObject(Account.SObjectType).withInsert();
+        testRecordSource.getRecord(Account.SObjectType).withInsert();
     }
 
     @IsTest
@@ -30,7 +30,7 @@ private class LimitMeasureTest {
         LimitMeasure limitMeasure = new LimitMeasure(testLimits);
 
         while(limitMeasure.hasEnoughForAnotherIteration()) {
-            insert testRecordSource.getObject(Account.SObjectType).withoutInsert();
+            insert testRecordSource.getRecord(Account.SObjectType).withoutInsert();
         }
 
         System.assertEquals(Limits.getLimitDmlStatements(), [SELECT COUNT() FROM Account]);
@@ -42,7 +42,7 @@ private class LimitMeasureTest {
         LimitMeasure theLimitMeasure = new LimitMeasure(testLimits);
 
         while(theLimitMeasure.hasEnoughForAnotherIteration()) {
-            insert testRecordSource.getObject(Account.SObjectType).withoutInsert();
+            insert testRecordSource.getRecord(Account.SObjectType).withoutInsert();
         }
 
         System.assertEquals(Limits.getLimitDmlStatements() - headroom, [SELECT COUNT() FROM Account]);

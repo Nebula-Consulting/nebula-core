@@ -15,7 +15,7 @@ private class SObjectIndexTest {
         testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
     }
 
-    private static Account togAccount = (Account) testRecordSource.getObject(Account.SObjectType).withInsert();
+    private static Account togAccount = (Account) testRecordSource.getRecord(Account.SObjectType).withInsert();
 
     @IsTest
     static void emptyIndex() {

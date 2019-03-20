@@ -15,13 +15,13 @@ global inherited sharing abstract class TestRecordGenerator {
         this.metadataFields = metadataFields;
     }
 
-    global abstract SObject getObjectNoInsert(Map<String, Object> params);
+    global abstract SObject getRecordNoInsert(Map<String, Object> params);
 
     private SObject record;
 
-    global virtual SObject getObjectWithInsert(Map<String, Object> params) {
+    global virtual SObject getRecordWithInsert(Map<String, Object> params) {
         if(record == null) {
-            record = getObjectNoInsert(params);
+            record = getRecordNoInsert(params);
             try {
                 insert record;
             } catch (Exception e) {
@@ -35,7 +35,7 @@ global inherited sharing abstract class TestRecordGenerator {
         return record;
     }
 
-    global virtual void setObject(SObject record) {
+    global virtual void setRecord(SObject record) {
         this.record = record;
     }
 }

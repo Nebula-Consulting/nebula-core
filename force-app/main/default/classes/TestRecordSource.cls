@@ -78,15 +78,15 @@ global inherited sharing class TestRecordSource {
         }
     }
 
-    private SObject getObjectWithoutInsert(SObjectType objectType, String variant, Map<String, Object> params) {
-        return getGenerator(objectType, variant).getObjectNoInsert(params);
+    private SObject getRecordWithoutInsert(SObjectType objectType, String variant, Map<String, Object> params) {
+        return getGenerator(objectType, variant).getRecordNoInsert(params);
     }
 
-    private SObject getObjectWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
-        return getGenerator(objectType, variant).getObjectWithInsert(params);
+    private SObject getRecordWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
+        return getGenerator(objectType, variant).getRecordWithInsert(params);
     }
 
-    global GetBuilder getObject(SObjectType sObjectType) {
+    global GetBuilder getRecord(SObjectType sObjectType) {
         return new GetBuilder(this, sObjectType);
     }
 
@@ -112,19 +112,19 @@ global inherited sharing class TestRecordSource {
         }
 
         global SObject withInsert() {
-            return parent.getObjectWithInsert(sObjectType, variant, parameters);
+            return parent.getRecordWithInsert(sObjectType, variant, parameters);
         }
 
         global SObject withoutInsert() {
-            return parent.getObjectWithoutInsert(sObjectType, variant, parameters);
+            return parent.getRecordWithoutInsert(sObjectType, variant, parameters);
         }
     }
 
-    global void setObjectAsVariant(SObject record, String variant) {
-        getGenerator(record.getSObjectType(), variant).setObject(record);
+    global void setRecordAsVariant(SObject record, String variant) {
+        getGenerator(record.getSObjectType(), variant).setRecord(record);
     }
-    global void setObject(SObject record) {
-        setObjectAsVariant(record, null);
+    global void setRecord(SObject record) {
+        setRecordAsVariant(record, null);
     }
 
     private class TestRecordGeneratorPriorityComparator implements Comparator {

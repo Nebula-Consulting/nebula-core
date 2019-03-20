@@ -20,7 +20,7 @@ global class TestFieldFunctions {
         global Object getValue(TestRecordSource parentRecordSource, Object value) {
             SObject targetInstance = (SObject)TypeLoader.getType((String)sObjectType).newInstance();
             return parentRecordSource
-                    .getObject(targetInstance.getSObjectType())
+                    .getRecord(targetInstance.getSObjectType())
                     .asVariant(variant)
                     .withInsert()
                     .Id;
