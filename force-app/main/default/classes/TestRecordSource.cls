@@ -187,7 +187,7 @@ global inherited sharing class TestRecordSource {
      * @param priority
      * @return the created Test_Record_Generator__mdt, with a made-up Id
      */
-    public Test_Record_Generator__mdt addTemporaryMetadataFromInstance(SObject exampleObject, Decimal priority) {
+    global Test_Record_Generator__mdt addTemporaryMetadataFromInstance(SObject exampleObject, Decimal priority) {
         Test_Record_Generator__mdt metadataRecordWithId = addTemporaryMetadata(new Test_Record_Generator__mdt(
                 Priority__c = priority,
                 Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
