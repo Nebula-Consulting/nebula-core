@@ -44,6 +44,18 @@ private class LazyIteratorTest {
         System.assertEquals(1 + 3 + 5, totalEmployees);
     }
 
+    @IsTest static void findOrDefault() {
+        String defaultName = 'Default Result';
+        Account result = (Account)new LazySObjectIterator(accounts.iterator())
+                .findOrDefault(new NumberOfEmployeesIs(10), new Account(Name = defaultName));
+        System.assertEquals(defaultName, result.Name);
+
+        result = (Account)new LazySObjectIterator(accounts.iterator())
+                .findOrDefault(new NumberOfEmployeesIs(3), new Account(Name = defaultName));
+        System.assertEquals(null, result.Name);
+        System.assertEquals(3, result.NumberOfEmployees);
+    }
+
     @IsTest static void triggerContextVersion() {
         List<Account> newAccounts = accounts.deepClone();
         newAccounts[1].NumberOfEmployees += 10;
@@ -55,6 +67,18 @@ private class LazyIteratorTest {
                 .forEach(new SumNumberOfEmployees());
 
         System.assertEquals(12 + 14, totalEmployees);
+    }
+
+    private class NumberOfEmployeesIs implements BooleanFunction {
+        private Integer target;
+
+        public NumberOfEmployeesIs(Integer target) {
+            this.target = target;
+        }
+
+        public Boolean isTrueFor(Object testObject) {
+            return ((Account)testObject).NumberOfEmployees == target;
+        }
     }
 
     private class NumberOfEmployeesIsOdd implements BooleanFunction {

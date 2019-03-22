@@ -28,6 +28,16 @@ global virtual class LazyIterator implements Iterator<Object> {
         }
     }
 
+    global Object findOrDefault(BooleanFunction matchingFunction, Object defaultValue) {
+        while(iterator.hasNext()) {
+            Object value = iterator.next();
+            if(matchingFunction.isTrueFor(value)) {
+                return value;
+            }
+        }
+        return defaultValue;
+    }
+
     global virtual List<Object> toList() {
         List<Object> returnVal = new List<Object>();
 
