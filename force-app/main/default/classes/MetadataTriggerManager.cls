@@ -17,8 +17,8 @@
 
 global with sharing class MetadataTriggerManager {
 
-    @TestVisible
-    public static List<Trigger_Handler__mdt> mockMetadata {public get; private set;}
+    // Don't really want this to be global, but other packages in the nebc namespace need to use it
+    global static List<Trigger_Handler__mdt> mockMetadata;
 
     private SObjectIndex theseTriggers;
     private static SObjectIndex sObjectTypeNameToEventToTriggerList = new SObjectIndex(
