@@ -6,6 +6,10 @@
 
 global class LazyTriggerContextPairIterator extends LazyIterator {
 
+    global LazyTriggerContextPairIterator(List<SObject> oldList, List<SObject> newList) {
+        this(new TriggerContextIterator(oldList, newList));
+    }
+
     global LazyTriggerContextPairIterator(Iterator<TriggerContextPair> iterator) {
         super(new PairIteratorToObjectIterator(iterator));
     }
