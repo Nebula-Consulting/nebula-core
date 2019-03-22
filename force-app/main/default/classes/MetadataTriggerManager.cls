@@ -80,7 +80,7 @@ global with sharing class MetadataTriggerManager {
         handle(Trigger.operationType, Trigger.old, Trigger.new);
     }
 
-    public void handle(TriggerOperation triggerOperation, List<SObject> oldList, List<SObject> newList) {
+    global void handle(TriggerOperation triggerOperation, List<SObject> oldList, List<SObject> newList) {
         if(theseTriggers == null) {
             return;
         }
@@ -92,7 +92,7 @@ global with sharing class MetadataTriggerManager {
             Type handlerType = TypeLoader.getType(thisHandlerDescription.Apex_Class__c);
 
             if(handlerType == null) {
-                throw new ClassNotFoundException('MetadataTriggerManager: handler class not found for ' + thisHandlerDescription);
+                throw new ClassNotFoundException('MetadataTriggerManager: handler class not found for ' + thisHandlerDescription + '. Is it global? Does it need to include a namespace?');
             } else {
                 Object handlerInstance = TypeLoader.getInstance(handlerType, thisHandlerDescription.Parameters__c);
                 handleInstance(handlerInstance, triggerOperation, oldList, newList);
