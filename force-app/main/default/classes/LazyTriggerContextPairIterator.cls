@@ -6,15 +6,15 @@
 
 global class LazyTriggerContextPairIterator extends LazyIterator {
 
-    global LazyTriggerContextPairIterator(Iterator<TriggerContextIterator.Pair> iterator) {
+    global LazyTriggerContextPairIterator(Iterator<TriggerContextPair> iterator) {
         super(new PairIteratorToObjectIterator(iterator));
     }
 
     global override List<Object> toList() {
-        List<SObject> returnVal = new List<SObject>();
+        List<TriggerContextPair> returnVal = new List<TriggerContextPair>();
 
         while(iterator.hasNext()) {
-            returnVal.add((SObject)iterator.next());
+            returnVal.add((TriggerContextPair)iterator.next());
         }
 
         return returnVal;
@@ -28,9 +28,9 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
 
     private class PairIteratorToObjectIterator implements Iterator<Object> {
 
-        private Iterator<TriggerContextIterator.Pair> iterator;
+        private Iterator<TriggerContextPair> iterator;
 
-        public PairIteratorToObjectIterator(Iterator<TriggerContextIterator.Pair> iterator) {
+        public PairIteratorToObjectIterator(Iterator<TriggerContextPair> iterator) {
             this.iterator = iterator;
         }
 

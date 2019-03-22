@@ -4,7 +4,7 @@
  * @description Iterates over the pair of lists that you get from a Trigger context, returning them in Pairs
  */
 
-global class TriggerContextIterator implements Iterator<Pair> {
+global class TriggerContextIterator implements Iterator<TriggerContextPair> {
 
     private Iterator<SObject> newIterator;
     private Iterator<SObject> oldIterator;
@@ -27,33 +27,8 @@ global class TriggerContextIterator implements Iterator<Pair> {
         return newIterator.hasNext() && oldIterator.hasNext();
     }
 
-    global Pair next() {
-        return new Pair(oldIterator.next(), newIterator.next());
-    }
-
-    global class Pair {
-
-        global Pair(SObject oldRecord, SObject newRecord) {
-            this.oldRecord = oldRecord;
-            this.newRecord = newRecord;
-        }
-
-        global SObject newRecord;
-        global SObject oldRecord;
-    }
-
-    global class NewRecordFunction implements Function {
-        global Object call(Object o) {
-            return ((Pair)o).newRecord;
-        }
-
-    }
-
-    global class OldRecordFunction implements Function {
-        global Object call(Object o) {
-            return ((Pair)o).oldRecord;
-        }
-
+    global TriggerContextPair next() {
+        return new TriggerContextPair(oldIterator.next(), newIterator.next());
     }
 
     private class NullIterator implements Iterator<SObject> {

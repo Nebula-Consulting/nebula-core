@@ -51,7 +51,7 @@ private class LazyIteratorTest {
 
         new LazyTriggerContextPairIterator(new TriggerContextIterator(accounts, newAccounts))
                 .filter(new NumberOfEmployeesChanged())
-                .mapValues(new TriggerContextIterator.NewRecordFunction())
+                .mapValues(new TriggerContextPair.NewRecordFunction())
                 .forEach(new SumNumberOfEmployees());
 
         System.assertEquals(12 + 14, totalEmployees);
@@ -80,7 +80,7 @@ private class LazyIteratorTest {
 
     private class NumberOfEmployeesChanged implements BooleanFunction {
         public Boolean isTrueFor(Object o) {
-            TriggerContextIterator.Pair pair = (TriggerContextIterator.Pair)o;
+            TriggerContextPair pair = (TriggerContextPair)o;
 
             return ((Account)pair.oldRecord).NumberOfEmployees != ((Account)pair.newRecord).NumberOfEmployees;
         }
