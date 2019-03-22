@@ -4,11 +4,11 @@
  * @description Iterator-based operations for lazy-evaluation on collections/streams
  */
 
-global class LazyIterator implements Iterator<SObject> {
+global virtual class LazyIterator implements Iterator<Object> {
 
-    private Iterator<SObject> iterator;
+    protected Iterator<Object> iterator;
 
-    global LazyIterator(Iterator<SObject> iterator) {
+    global LazyIterator(Iterator<Object> iterator) {
         this.iterator = iterator;
     }
 
@@ -16,8 +16,8 @@ global class LazyIterator implements Iterator<SObject> {
         return iterator.hasNext();
     }
 
-    global SObject next() {
-        return null;
+    global Object next() {
+        return iterator.next();
     }
 
     global Object firstOrDefault(Object defaultValue) {
@@ -28,8 +28,8 @@ global class LazyIterator implements Iterator<SObject> {
         }
     }
 
-    global List<SObject> toList() {
-        List<SObject> returnVal = new List<SObject>();
+    global virtual List<Object> toList() {
+        List<Object> returnVal = new List<Object>();
 
         while(iterator.hasNext()) {
             returnVal.add(iterator.next());
@@ -39,7 +39,7 @@ global class LazyIterator implements Iterator<SObject> {
     }
 
     global LazyIterator filter(BooleanFunction matchingFunction) {
-        return new LazyIterator(new FilterIterator(iterator, matchingFunction));
+        return newInstance(new FilterIterator(iterator, matchingFunction));
     }
 
     global void forEach(Function callingFunction) {
@@ -50,16 +50,20 @@ global class LazyIterator implements Iterator<SObject> {
 
     //NB Map itself is a reserved keyword
     global LazyIterator mapValues(Function mappingFunction) {
-        return new LazyIterator(new MapIterator(iterator, mappingFunction));
+        return newInstance(new MapIterator(iterator, mappingFunction));
     }
 
-    private class FilterIterator implements Iterator<SObject>{
-        private Iterator<SObject> iterator;
+    protected virtual LazyIterator newInstance(Iterator<Object> iterator) {
+        return new LazyIterator(iterator);
+    }
+
+    private class FilterIterator implements Iterator<Object>{
+        private Iterator<Object> iterator;
         private BooleanFunction matchingFunction;
-        private SObject peek;
+        private Object peek;
         private Boolean peekIsValid;
 
-        public FilterIterator(Iterator<SObject> iterator, BooleanFunction matchingFunction) {
+        public FilterIterator(Iterator<Object> iterator, BooleanFunction matchingFunction) {
             this.iterator = iterator;
             this.matchingFunction = matchingFunction;
             this.peekIsValid = false;
@@ -88,7 +92,7 @@ global class LazyIterator implements Iterator<SObject> {
             return false;
         }
 
-        public SObject next() {
+        public Object next() {
             if(peekIsValid) {
                 peekIsValid = false;
                 return peek;
@@ -108,11 +112,11 @@ global class LazyIterator implements Iterator<SObject> {
         }
     }
     
-    private class MapIterator implements Iterator<SObject> {
-        private Iterator<SObject> iterator;
+    private class MapIterator implements Iterator<Object> {
+        private Iterator<Object> iterator;
         private Function mappingFunction;
 
-        public MapIterator(Iterator<SObject> iterator, Function mappingFunction) {
+        public MapIterator(Iterator<Object> iterator, Function mappingFunction) {
             this.iterator = iterator;
             this.mappingFunction = mappingFunction;
         }
@@ -120,8 +124,8 @@ global class LazyIterator implements Iterator<SObject> {
             return iterator.hasNext();
         }
 
-        public SObject next() {
-            return (SObject)mappingFunction.call(iterator.next());
+        public Object next() {
+            return (Object)mappingFunction.call(iterator.next());
         }
     }
 }

@@ -16,7 +16,7 @@ private class LazyIteratorTest {
 
     @IsTest
     static void filter() {
-        List<Account> result = new LazyIterator(accounts.iterator()).filter(new NumberOfEmployeesIsOdd()).toList();
+        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator()).filter(new NumberOfEmployeesIsOdd()).toList();
 
         System.assertEquals(3, result.size(), result);
         System.assertEquals(1, result[0].NumberOfEmployees);
@@ -25,7 +25,7 @@ private class LazyIteratorTest {
     }
 
     @IsTest static void filterAndMap() {
-        List<Account> result = new LazyIterator(accounts.iterator())
+        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
                 .filter(new NumberOfEmployeesIsOdd())
                 .mapValues(new DoubleNumberOfEmployeesMapping())
                 .toList();
@@ -37,11 +37,24 @@ private class LazyIteratorTest {
     }
 
     @IsTest static void forEach() {
-        new LazyIterator(accounts.iterator())
+        new LazySObjectIterator(accounts.iterator())
                 .filter(new NumberOfEmployeesIsOdd())
                 .forEach(new SumNumberOfEmployees());
 
         System.assertEquals(1 + 3 + 5, totalEmployees);
+    }
+
+    @IsTest static void triggerContextVersion() {
+        List<Account> newAccounts = accounts.deepClone();
+        newAccounts[1].NumberOfEmployees += 10;
+        newAccounts[3].NumberOfEmployees += 10;
+
+        new LazyTriggerContextPairIterator(new TriggerContextIterator(accounts, newAccounts))
+                .filter(new NumberOfEmployeesChanged())
+                .mapValues(new TriggerContextIterator.NewRecordFunction())
+                .forEach(new SumNumberOfEmployees());
+
+        System.assertEquals(12 + 14, totalEmployees);
     }
 
     private class NumberOfEmployeesIsOdd implements BooleanFunction {
@@ -62,6 +75,14 @@ private class LazyIteratorTest {
     private class SumNumberOfEmployees implements Function{
         public Object call(Object o) {
             return totalEmployees += ((Account)o).NumberOfEmployees;
+        }
+    }
+
+    private class NumberOfEmployeesChanged implements BooleanFunction {
+        public Boolean isTrueFor(Object o) {
+            TriggerContextIterator.Pair pair = (TriggerContextIterator.Pair)o;
+
+            return ((Account)pair.oldRecord).NumberOfEmployees != ((Account)pair.newRecord).NumberOfEmployees;
         }
     }
 }
