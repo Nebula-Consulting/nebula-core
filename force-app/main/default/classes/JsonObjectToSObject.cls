@@ -76,19 +76,7 @@ global class JsonObjectToSObject {
 
         if(value instanceof Map<String, Object>) {
             jsonToSobject((Map<String, Object>) value, returnVal, fieldName);
-        } else if(fieldName == 'id') {
-            idValue = (String) value;
-        } else if(fieldMap.containsKey(fieldName)) {
-            returnVal.put(fieldName, value);
-        } else {
-            String fieldNameC = fieldName + '__c';
-
-            if(fieldMap.containsKey(fieldNameC)) {
-                returnVal.put(fieldNameC, value);
-            }
-        }
-
-        if(objectFieldToSObjectField != null) {
+        } else if(objectFieldToSObjectField != null && objectFieldToSObjectField.containsKey(fieldName)) {
             String fieldNameKey = objectFieldToSObjectField.get(fieldName);
 
             if(fieldMap.containsKey(fieldNameKey)) {
@@ -99,6 +87,16 @@ global class JsonObjectToSObject {
                 if(fieldMap.containsKey(fieldNameKey)) {
                     returnVal.put(fieldNameKey, value);
                 }
+            }
+        } else if(fieldName == 'id') {
+            idValue = (String) value;
+        } else if(fieldMap.containsKey(fieldName)) {
+            returnVal.put(fieldName, value);
+        } else {
+            String fieldNameC = fieldName + '__c';
+
+            if(fieldMap.containsKey(fieldNameC)) {
+                returnVal.put(fieldNameC, value);
             }
         }
     }

@@ -27,6 +27,22 @@ private class JsonObjectToSObjectTest {
         System.assertEquals(null, acc.Id);
     }
 
+    @IsTest
+    public static void mapIdElsewhere() {
+        JsonObjectToSObject parser = new JsonObjectToSObject(Account.SObjectType)
+                .setObjectFieldToSObjectField(new Map<String, String>{
+                        'Id' => Account.Description.getDescribe().getName()
+                });
+
+        String accountName = 'ACME';
+        String accountDescription = 'abc';
+        Account acc = (Account)parser.toSObject(new Map<String, Object> {'Name' => accountName, 'Id' => accountDescription});
+
+        System.assertEquals(accountName, acc.Name);
+        System.assertEquals(accountDescription, acc.Description);
+        System.assertEquals(null, acc.Id);
+    }
+
     private class StringToDateConverter implements Function {
         public Object call(Object o) {
             return Datetime.valueOf('' + o);
