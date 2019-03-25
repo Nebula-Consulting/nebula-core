@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>A collection of test records which represent an entire story/scenario</description>
-    <label>Test Record Story</label>
-    <pluralLabel>Test Record Stories</pluralLabel>
-    <visibility>Public</visibility>
-</CustomObject>
