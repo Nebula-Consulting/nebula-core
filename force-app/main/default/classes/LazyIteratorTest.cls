@@ -28,7 +28,7 @@ private class LazyIteratorTest {
         List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
                 .filter(new NumberOfEmployeesIsOdd())
                 .mapValues(new DoubleNumberOfEmployeesMapping())
-                .toList();
+                .toList(new List<Account>());
 
         System.assertEquals(3, result.size(), result);
         System.assertEquals(2, result[0].NumberOfEmployees);
@@ -77,7 +77,7 @@ private class LazyIteratorTest {
         List<Account> result = (List<Account>)new LazyTriggerContextPairIterator(accounts, newAccounts)
                 .filter(new NumberOfEmployeesChanged())
                 .mapValues(new TriggerContextPair.NewRecordFunction())
-                .toList();
+                .toList(new List<Account>());
 
         System.assertEquals(2, result.size());
         System.assertEquals(12, result[0].NumberOfEmployees);
