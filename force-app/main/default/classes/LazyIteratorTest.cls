@@ -69,6 +69,21 @@ private class LazyIteratorTest {
         System.assertEquals(12 + 14, totalEmployees);
     }
 
+    @IsTest static void triggerContextMapping() {
+        List<Account> newAccounts = accounts.deepClone();
+        newAccounts[1].NumberOfEmployees += 10;
+        newAccounts[3].NumberOfEmployees += 10;
+
+        List<Account> result = (List<Account>)new LazyTriggerContextPairIterator(accounts, newAccounts)
+                .filter(new NumberOfEmployeesChanged())
+                .mapValues(new TriggerContextPair.NewRecordFunction())
+                .toList();
+
+        System.assertEquals(2, result.size());
+        System.assertEquals(12, result[0].NumberOfEmployees);
+        System.assertEquals(14, result[1].NumberOfEmployees);
+    }
+
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;
 
@@ -102,11 +117,9 @@ private class LazyIteratorTest {
         }
     }
 
-    private class NumberOfEmployeesChanged implements BooleanFunction {
-        public Boolean isTrueFor(Object o) {
-            TriggerContextPair pair = (TriggerContextPair)o;
-
-            return ((Account)pair.oldRecord).NumberOfEmployees != ((Account)pair.newRecord).NumberOfEmployees;
+    private class NumberOfEmployeesChanged extends TriggerContextBooleanFunction {
+        public override Boolean isTrueFor(SObject oldRecord, SObject newRecord) {
+            return ((Account)oldRecord).NumberOfEmployees != ((Account)newRecord).NumberOfEmployees;
         }
     }
 }

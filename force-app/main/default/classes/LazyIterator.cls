@@ -39,13 +39,13 @@ global virtual class LazyIterator implements Iterator<Object> {
     }
 
     global virtual List<Object> toList() {
-        List<Object> returnVal = new List<Object>();
+        DynamicTypedList returnVal = new DynamicTypedList();
 
         while(iterator.hasNext()) {
             returnVal.add(iterator.next());
         }
 
-        return returnVal;
+        return returnVal.theList;
     }
 
     global LazyIterator filter(BooleanFunction matchingFunction) {
@@ -60,7 +60,7 @@ global virtual class LazyIterator implements Iterator<Object> {
 
     //NB Map itself is a reserved keyword
     global LazyIterator mapValues(Function mappingFunction) {
-        return newInstance(new MapIterator(iterator, mappingFunction));
+        return new LazyIterator(new MapIterator(iterator, mappingFunction));
     }
 
     protected virtual LazyIterator newInstance(Iterator<Object> iterator) {
@@ -136,6 +136,26 @@ global virtual class LazyIterator implements Iterator<Object> {
 
         public Object next() {
             return (Object)mappingFunction.call(iterator.next());
+        }
+    }
+
+    private class DynamicTypedList {
+        public List<Object> theList;
+
+        public DynamicTypedList() {
+        }
+
+        public void add(Object o) {
+            if(theList == null) {
+                if(o instanceof SObject) {
+                    theList = new List<SObject>();
+                } else if(o instanceof TriggerContextPair) {
+                    theList = new List<TriggerContextPair>();
+                } else {
+                    theList = new List<Object>();
+                }
+            }
+            theList.add(o);
         }
     }
 }
