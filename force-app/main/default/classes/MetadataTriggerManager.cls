@@ -45,7 +45,7 @@ global with sharing class MetadataTriggerManager {
                 ]);
             }
 
-            theseTriggers = sObjectTypeNameToEventToTriggerList.getSubIndex(objectType.getDescribe().getName());
+            theseTriggers = sObjectTypeNameToEventToTriggerList.getSubIndex(sObjectName);
         }
     }
 
