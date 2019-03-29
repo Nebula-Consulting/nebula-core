@@ -12,9 +12,6 @@ public class LazyMapIterator extends LazyIterator {
         super(iterator);
         this.mappingFunction = mappingFunction;
     }
-    public override Boolean hasNext() {
-        return iterator.hasNext();
-    }
 
     public override Object next() {
         return (Object)mappingFunction.call(iterator.next());
