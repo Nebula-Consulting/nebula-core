@@ -16,7 +16,33 @@ private class LazyIteratorTest {
 
     @IsTest
     static void filter() {
-        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator()).filter(new NumberOfEmployeesIsOdd()).toList();
+        Account result = (Account)new LazySObjectIterator(accounts.iterator())
+                .filter(new NumberOfEmployeesIsOdd())
+                .next();
+
+        System.assertEquals(1, result.NumberOfEmployees);
+    }
+
+    @IsTest
+    static void filterNoResult() {
+        Iterator<Object> filteredIterator = new LazySObjectIterator(new List<Account>().iterator())
+                .filter(new NumberOfEmployeesIsOdd());
+
+        System.assert(!filteredIterator.hasNext());
+
+        try {
+            filteredIterator.next();
+        } catch (NoSuchElementException e) {
+            return;
+        }
+        System.assert(false, 'Should have thrown NoSuchElementException');
+    }
+
+    @IsTest
+    static void filterToList() {
+        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
+                .filter(new NumberOfEmployeesIsOdd())
+                .toList(new List<Account>());
 
         System.assertEquals(3, result.size(), result);
         System.assertEquals(1, result[0].NumberOfEmployees);
@@ -44,14 +70,18 @@ private class LazyIteratorTest {
         System.assertEquals(1 + 3 + 5, totalEmployees);
     }
 
-    @IsTest static void findOrDefault() {
+    @IsTest static void firstOrDefault() {
         String defaultName = 'Default Result';
         Account result = (Account)new LazySObjectIterator(accounts.iterator())
-                .findOrDefault(new NumberOfEmployeesIs(10), new Account(Name = defaultName));
+                .filter(new NumberOfEmployeesIs(10))
+                .firstOrDefault(new Account(Name = defaultName));
+
         System.assertEquals(defaultName, result.Name);
 
         result = (Account)new LazySObjectIterator(accounts.iterator())
-                .findOrDefault(new NumberOfEmployeesIs(3), new Account(Name = defaultName));
+                .filter(new NumberOfEmployeesIs(3))
+                .firstOrDefault(new Account(Name = defaultName));
+
         System.assertEquals(null, result.Name);
         System.assertEquals(3, result.NumberOfEmployees);
     }
@@ -63,7 +93,7 @@ private class LazyIteratorTest {
 
         new LazyTriggerContextPairIterator(new TriggerContextIterator(accounts, newAccounts))
                 .filter(new NumberOfEmployeesChanged())
-                .mapValues(new TriggerContextPair.NewRecordFunction())
+                .mapValues(new TriggerContextPair.NewRecordFromPair())
                 .forEach(new SumNumberOfEmployees());
 
         System.assertEquals(12 + 14, totalEmployees);
@@ -76,7 +106,7 @@ private class LazyIteratorTest {
 
         List<Account> result = (List<Account>)new LazyTriggerContextPairIterator(accounts, newAccounts)
                 .filter(new NumberOfEmployeesChanged())
-                .mapValues(new TriggerContextPair.NewRecordFunction())
+                .mapValues(new TriggerContextPair.NewRecordFromPair())
                 .toList(new List<Account>());
 
         System.assertEquals(2, result.size());

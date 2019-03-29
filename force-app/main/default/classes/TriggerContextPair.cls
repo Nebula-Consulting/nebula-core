@@ -14,14 +14,14 @@ global class TriggerContextPair {
         this.newRecord = newRecord;
     }
 
-    global class NewRecordFunction implements Function {
+    global class NewRecordFromPair implements Function {
         global Object call(Object o) {
             return ((TriggerContextPair)o).newRecord;
         }
 
     }
 
-    global class OldRecordFunction implements Function {
+    global class OldRecordFromPair implements Function {
         global Object call(Object o) {
             return ((TriggerContextPair)o).oldRecord;
         }

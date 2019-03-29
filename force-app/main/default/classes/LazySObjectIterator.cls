@@ -10,22 +10,6 @@ global class LazySObjectIterator extends LazyIterator {
         super(new SObjectIteratorToObjectIterator(iterator));
     }
 
-    global override List<Object> toList() {
-        List<SObject> returnVal = new List<SObject>();
-
-        while(iterator.hasNext()) {
-            returnVal.add((SObject)iterator.next());
-        }
-
-        return returnVal;
-    }
-
-    protected override LazyIterator newInstance(Iterator<Object> iterator) {
-        LazyIterator returnValue = new LazySObjectIterator(null);
-        returnValue.iterator = iterator;
-        return returnValue;
-    }
-
     private class SObjectIteratorToObjectIterator implements Iterator<Object> {
 
         private Iterator<SObject> iterator;
