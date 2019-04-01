@@ -15,13 +15,43 @@ global inherited sharing abstract class TestRecordGenerator {
         this.metadataFields = metadataFields;
     }
 
-    global abstract SObject getRecordNoInsert(Map<String, Object> params);
+    global virtual SObject getRecordNoInsert(Map<String, Object> params) {
+        throw new UnsupportedOperationException('This method is deprecated and is soft-abstract');
+    }
 
-    private SObject record;
+    global virtual SObject getRecordWithoutInsert(Map<String, Object> params) {
+        throw new UnsupportedOperationException('This method is soft-abstract');
+    }
+
+    global virtual List<SObject> getRecordsWithoutInsert(Integer numberOfRecords, Map<String, Object> params) {
+        List<SObject> returnVal = new List<SObject>();
+        for(Integer i=0; i < numberOfRecords; i++) {
+            returnVal.add(getRecordWithoutInsert(params));
+        }
+        return returnVal;
+    }
+
+    global List<SObject> getRecordsWithInsert(Integer numberOfRecords, Map<String, Object> params) {
+        if(record == null) {
+            record = getRecordsWithoutInsert(numberOfRecords, params);
+            try {
+                insert record;
+            } catch (Exception e) {
+                throw new TestRecordGeneratorException('Exception creating test record '
+                        + metadata.DeveloperName
+                        + '\n'
+                        + e.getMessage());
+            }
+
+        }
+        return record;
+    }
+
+    private List<SObject> record;
 
     global virtual SObject getRecordWithInsert(Map<String, Object> params) {
         if(record == null) {
-            record = getRecordNoInsert(params);
+            record = new List<SObject> { getRecordWithoutInsert(params) };
             try {
                 insert record;
             } catch (Exception e) {
@@ -32,10 +62,13 @@ global inherited sharing abstract class TestRecordGenerator {
             }
 
         }
-        return record;
+        return record[0];
     }
 
     global virtual void setRecord(SObject record) {
-        this.record = record;
+        this.record = new List<SObject>{ record };
+    }
+    global virtual void setRecords(List<SObject> records) {
+        this.record = records;
     }
 }

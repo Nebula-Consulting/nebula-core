@@ -74,7 +74,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         }
     }
 
-    global override SObject getRecordNoInsert(Map<String, Object> params) {
+    global override SObject getRecordWithoutInsert(Map<String, Object> params) {
         Map<String, Object> concreteObjectDescription = new Map<String, Object>();
         Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
         Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();

@@ -78,14 +78,6 @@ global inherited sharing class TestRecordSource {
         }
     }
 
-    private SObject getRecordWithoutInsert(SObjectType objectType, String variant, Map<String, Object> params) {
-        return getGenerator(objectType, variant).getRecordNoInsert(params);
-    }
-
-    private SObject getRecordWithInsert(SObjectType objectType, String variant, Map<String, Object> params) {
-        return getGenerator(objectType, variant).getRecordWithInsert(params);
-    }
-
     global GetBuilder getRecord(SObjectType sObjectType) {
         return new GetBuilder(this, sObjectType);
     }
@@ -111,12 +103,23 @@ global inherited sharing class TestRecordSource {
             return this;
         }
 
+        private TestRecordGenerator getGenerator() {
+            return parent.getGenerator(sObjectType, variant);
+        }
+
         global SObject withInsert() {
-            return parent.getRecordWithInsert(sObjectType, variant, parameters);
+            return getGenerator().getRecordWithInsert(parameters);
         }
 
         global SObject withoutInsert() {
-            return parent.getRecordWithoutInsert(sObjectType, variant, parameters);
+            return getGenerator().getRecordWithoutInsert(parameters);
+        }
+
+        global List<SObject> withoutInsert(Integer numberOfRecords) {
+            return getGenerator().getRecordsWithoutInsert(numberOfRecords, parameters);
+        }
+        global List<SObject> withInsert(Integer numberOfRecords) {
+            return getGenerator().getRecordsWithInsert(numberOfRecords, parameters);
         }
     }
 

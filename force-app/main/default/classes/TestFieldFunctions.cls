@@ -16,14 +16,18 @@ global class TestFieldFunctions {
 
         global String sObjectType;
         global String variant;
+        global Integer numberOfRecords;
 
         global Object getValue(TestRecordSource parentRecordSource, Object value) {
-            SObject targetInstance = (SObject)TypeLoader.getType((String)sObjectType).newInstance();
-            return parentRecordSource
+            SObject targetInstance = (SObject) TypeLoader.getType((String) sObjectType).newInstance();
+            TestRecordSource.GetBuilder builder = parentRecordSource
                     .getRecord(targetInstance.getSObjectType())
-                    .asVariant(variant)
-                    .withInsert()
-                    .Id;
+                    .asVariant(variant);
+            if (numberOfRecords == null) {
+                return builder.withInsert().Id;
+            } else {
+                return builder.withInsert(numberOfRecords);
+            }
         }
     }
 
