@@ -60,4 +60,29 @@ global class TestFieldFunctions {
             return returnValue;
         }
     }
+
+    global class Today implements TestFieldFunction {
+
+        global Integer addDays;
+
+        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+            Date returnValue = Date.today();
+            if(addDays != null) {
+                returnValue = returnValue.addDays(addDays);
+            }
+            return returnValue;
+        }
+    }
+
+    global class Increment implements TestFieldFunction {
+
+        global Decimal accumulator;
+        global Decimal increment;
+
+        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+            Decimal result =  (Decimal)value + accumulator;
+            accumulator += increment;
+            return result;
+        }
+    }
 }

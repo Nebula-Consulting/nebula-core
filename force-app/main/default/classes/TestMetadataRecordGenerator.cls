@@ -7,17 +7,44 @@
 
 global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
-    public class ValueFunction {
-        public String apexClass;
-        public Map<String, Object> parameters;
+    private Map<SObjectField, FieldValueGenerator> fieldValueGenerators = new Map<SObjectField, FieldValueGenerator>();
 
-        public ValueFunction(String apexClass, Map<String, Object> parameters) {
-            this.apexClass = apexClass;
-            this.parameters = parameters;
+    private FieldValueGenerator getGeneratorForField(SObjectField field, Test_Record_Generator_Field__mdt fieldMetadata) {
+        FieldValueGenerator result = fieldValueGenerators.get(field);
+        if(result == null) {
+            result = new FieldValueGenerator(
+                    parentRecordSource,
+                    fieldMetadata,
+                    field.getDescribe()
+            );
+            fieldValueGenerators.put(field, result);
         }
+        return result;
     }
 
-    public class FieldValueGenerator {
+    global override SObject getRecordWithoutInsert(Map<String, Object> params) {
+        Map<String, Object> concreteObjectDescription = new Map<String, Object>();
+        Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
+        Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
+
+        for(Test_Record_Generator_Field__mdt thisFieldMetadata : metadataFields) {
+            SObjectField thisField = fields.get(thisFieldMetadata.Field__c);
+            System.assertNotEquals(
+                    null,
+                    thisField,
+                    String.format(
+                            'Field "{0}" from metadata "{1}" not found on SObject {2}',
+                            new List<String>{thisFieldMetadata.Field__c, metadata.DeveloperName, metadata.SObject__c} )
+            );
+
+            FieldValueGenerator thisFieldValueGenerator = getGeneratorForField(thisField, thisFieldMetadata);
+
+            concreteObjectDescription.put(thisFieldMetadata.Field__c, thisFieldValueGenerator.getValue());
+        }
+
+        return (SObject)JSON.deserialize(JSON.serialize(concreteObjectDescription), sObjectClass);
+    }
+    private class FieldValueGenerator {
 
         private TestRecordSource parentRecordSource;
         private Test_Record_Generator_Field__mdt fieldMetadata;
@@ -36,6 +63,15 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             }
             return fieldFunctionClass;
         }
+
+        private TestFieldFunction testFieldFunction { get {
+            if(testFieldFunction == null) {
+                testFieldFunction = (TestFieldFunction)TypeLoader.getInstance(
+                        getFieldFunctionClass(),
+                        fieldMetadata.Apex_Class_Parameters__c);
+            }
+            return testFieldFunction;
+        } set;}
 
         // PMD seems to be wrongly thinking that the switch cases are variable names, so they shouldn't start with
         // capital letters
@@ -64,40 +100,9 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             Object returnValue = getSimpleValue();
 
             if (fieldMetadata.Apex_Class__c != null) {
-                Type fieldFunctionClass = getFieldFunctionClass();
-                TestFieldFunction testFieldFunction = (TestFieldFunction)TypeLoader.getInstance(
-                        fieldFunctionClass,
-                        fieldMetadata.Apex_Class_Parameters__c);
-                return testFieldFunction.getValue(parentRecordSource, fieldMetadata.Value__c);
+                return testFieldFunction.getValue(parentRecordSource, returnValue);
             }
             return returnValue;
         }
-    }
-
-    global override SObject getRecordWithoutInsert(Map<String, Object> params) {
-        Map<String, Object> concreteObjectDescription = new Map<String, Object>();
-        Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
-        Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
-
-        for(Test_Record_Generator_Field__mdt thisFieldMetadata : metadataFields) {
-            SObjectField thisField = fields.get(thisFieldMetadata.Field__c);
-            System.assertNotEquals(
-                    null,
-                    thisField,
-                    String.format(
-                            'Field "{0}" from metadata "{1}" not found on SObject {2}',
-                            new List<String>{thisFieldMetadata.Field__c, metadata.DeveloperName, metadata.SObject__c} )
-            );
-
-            FieldValueGenerator thisFieldValueGenerator = new FieldValueGenerator(
-                    parentRecordSource,
-                    thisFieldMetadata,
-                    thisField.getDescribe()
-            );
-
-            concreteObjectDescription.put(thisFieldMetadata.Field__c, thisFieldValueGenerator.getValue());
-        }
-
-        return (SObject)JSON.deserialize(JSON.serialize(concreteObjectDescription), sObjectClass);
     }
 }

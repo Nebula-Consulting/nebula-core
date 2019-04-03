@@ -115,4 +115,29 @@ private class TestFieldFunctionsTest {
 
         System.assertEquals(parent.Id, testAccount.ParentId);
     }
+
+    @IsTest
+    static void increment() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'NumberOfEmployees',
+                        Apex_Class__c = TestFieldFunctions.Increment.class.getName(),
+                        Apex_Class_Parameters__c = '{"increment": 1, "accumulator": 0}',
+                        Value__c = '0'
+                )
+        });
+        Integer nAccounts = 5;
+        List<Account> results = testRecordSource.getRecord(Account.SObjectType).withoutInsert(nAccounts);
+
+        System.assertEquals(nAccounts, results.size());
+        for(Integer i=0; i < nAccounts; i++) {
+            System.assertEquals(i, results[i].NumberOfEmployees);
+        }
+    }
 }
