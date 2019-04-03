@@ -7,7 +7,7 @@
 global class TestFieldFunctions {
 
     global class AppendRandomNumber implements TestFieldFunction {
-        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
             return value == null ? value : (value + String.valueOf(Math.random()));
         }
     }
@@ -16,11 +16,16 @@ global class TestFieldFunctions {
 
         global String sObjectType;
         global String variant;
+        global String variantParameter;
         global Integer numberOfRecords;
 
-        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
             SObject targetInstance = (SObject) TypeLoader.getType((String) sObjectType).newInstance();
-            TestRecordSource.GetBuilder builder = parentRecordSource
+            if(variantParameter != null) {
+                variant = (String)parentGenerator.getParameter(variantParameter);
+            }
+
+            TestRecordSource.GetBuilder builder = parentGenerator.parentRecordSource
                     .getRecord(targetInstance.getSObjectType())
                     .asVariant(variant);
             if (numberOfRecords == null) {
@@ -36,7 +41,7 @@ global class TestFieldFunctions {
         global String sObjectType;
         global String developerName;
 
-        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
             return NamedSObjectCache.getRecordType(
                     sObjectType,
                     developerName
@@ -49,7 +54,7 @@ global class TestFieldFunctions {
         global Integer addDays;
         global Integer addMinutes;
 
-        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
             Datetime returnValue = Datetime.now();
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
@@ -65,7 +70,7 @@ global class TestFieldFunctions {
 
         global Integer addDays;
 
-        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
             Date returnValue = Date.today();
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
@@ -79,7 +84,7 @@ global class TestFieldFunctions {
         global Decimal accumulator;
         global Decimal increment;
 
-        global Object getValue(TestRecordSource parentRecordSource, Object value) {
+        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
             Decimal result =  (Decimal)value + accumulator;
             accumulator += increment;
             return result;

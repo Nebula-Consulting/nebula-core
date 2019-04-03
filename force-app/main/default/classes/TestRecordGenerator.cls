@@ -8,6 +8,11 @@ global inherited sharing abstract class TestRecordGenerator {
     global TestRecordSource parentRecordSource {get; private set;}
     global Test_Record_Generator__mdt metadata {get; private set;}
     global List<Test_Record_Generator_Field__mdt> metadataFields {get; private set;}
+    private Map<String, Object> parameters;
+
+    global Object getParameter(String name) {
+        return parameters == null ? null : parameters.get(name);
+    }
 
     public void setup(TestRecordSource parentRecordSource, Test_Record_Generator__mdt metadata, List<Test_Record_Generator_Field__mdt> metadataFields) {
         this.parentRecordSource = parentRecordSource;
@@ -15,13 +20,12 @@ global inherited sharing abstract class TestRecordGenerator {
         this.metadataFields = metadataFields;
     }
 
-    global virtual SObject getRecordNoInsert(Map<String, Object> params) {
-        throw new UnsupportedOperationException('This method is deprecated and is soft-abstract');
+    global SObject getRecordWithoutInsert(Map<String, Object> parameters) {
+        this.parameters = parameters;
+        return getRecordWithoutInsert();
     }
 
-    global virtual SObject getRecordWithoutInsert(Map<String, Object> params) {
-        throw new UnsupportedOperationException('This method is soft-abstract');
-    }
+    global abstract SObject getRecordWithoutInsert();
 
     global virtual List<SObject> getRecordsWithoutInsert(Integer numberOfRecords, Map<String, Object> params) {
         List<SObject> returnVal = new List<SObject>();

@@ -13,7 +13,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         FieldValueGenerator result = fieldValueGenerators.get(field);
         if(result == null) {
             result = new FieldValueGenerator(
-                    parentRecordSource,
+                    this,
                     fieldMetadata,
                     field.getDescribe()
             );
@@ -22,7 +22,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         return result;
     }
 
-    global override SObject getRecordWithoutInsert(Map<String, Object> params) {
+    global override SObject getRecordWithoutInsert() {
         Map<String, Object> concreteObjectDescription = new Map<String, Object>();
         Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
         Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
@@ -46,12 +46,12 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
     }
     private class FieldValueGenerator {
 
-        private TestRecordSource parentRecordSource;
+        private TestRecordGenerator parentGenerator;
         private Test_Record_Generator_Field__mdt fieldMetadata;
         private DescribeFieldResult fieldDescribe;
 
-        public FieldValueGenerator(TestRecordSource parentRecordSource, Test_Record_Generator_Field__mdt fieldMetadata, DescribeFieldResult fieldDescribe) {
-            this.parentRecordSource = parentRecordSource;
+        public FieldValueGenerator(TestRecordGenerator parentGenerator, Test_Record_Generator_Field__mdt fieldMetadata, DescribeFieldResult fieldDescribe) {
+            this.parentGenerator = parentGenerator;
             this.fieldMetadata = fieldMetadata;
             this.fieldDescribe = fieldDescribe;
         }
@@ -100,7 +100,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             Object returnValue = getSimpleValue();
 
             if (fieldMetadata.Apex_Class__c != null) {
-                return testFieldFunction.getValue(parentRecordSource, returnValue);
+                return testFieldFunction.getValue(parentGenerator, returnValue);
             }
             return returnValue;
         }

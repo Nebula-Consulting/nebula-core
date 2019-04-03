@@ -117,6 +117,57 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void createRecordWithParameterVariant() {
+        // Create a standard variant of Account
+        appendRandomNumber();
+
+        Test_Record_Generator__mdt metadataWithParent = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account',
+                        Variant__c = 'With Parent'
+                ));
+        Test_Record_Generator__mdt metadataAsAcme = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account',
+                        Variant__c = 'ACME'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadataWithParent.Id,
+                        Field__c = 'Name',
+                        Apex_Class__c = TestFieldFunctions.AppendRandomNumber.class.getName(),
+                        Value__c = accountName
+                ),
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadataWithParent.Id,
+                        Field__c = 'ParentId',
+                        Apex_Class__c = TestFieldFunctions.CreateRecord.class.getName(),
+                        Apex_Class_Parameters__c = '{"sObjectType": "Account", "variantParameter": "parentVariant"}'
+                )
+        });
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadataAsAcme.Id,
+                        Field__c = 'Name',
+                        Value__c = 'ACME'
+                )
+        });
+
+        Account testAccount = (Account)testRecordSource
+                .getRecord(Account.SObjectType)
+                .asVariant('With Parent')
+                .useParameters(new Map<String, Object>{'parentVariant' => 'ACME'})
+                .withInsert();
+
+        Account parent = [SELECT Id, Name FROM Account WHERE Id != :testAccount.Id];
+
+        System.assertEquals(parent.Id, testAccount.ParentId);
+        System.assertEquals('ACME', parent.Name);
+    }
+
+    @IsTest
     static void increment() {
         Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
