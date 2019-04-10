@@ -93,6 +93,23 @@ private class SObjectIndexTest {
     }
 
     @IsTest
+    static void keyList() {
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{
+                ACCOUNT_ID, LAST_NAME
+        });
+
+        Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
+        theIndex.put(togContact);
+
+        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        System.assert(!theIndex.isEmpty());
+
+        List<Id> accountIdKeyList = (List<Id>)theIndex.keyList(new List<Id>());
+        System.assertEquals(1, accountIdKeyList.size());
+        System.assert(accountIdKeyList.contains(togAccount.Id));
+    }
+
+    @IsTest
     static void caseInsensitive() {
         SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, LAST_NAME})
                 .setIsCaseInsensitive(true);

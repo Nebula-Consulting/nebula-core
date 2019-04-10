@@ -160,6 +160,11 @@ global class SObjectIndex implements SObjectIndexI {
         return children.keySet();
     }
 
+    global List<Object> keyList(List<Object> toFill) {
+        toFill.addAll(children.keySet());
+        return toFill;
+    }
+
     global Set<Object> keySet(String field) {
         if(thisIndexField == field) {
             return children.keySet();
