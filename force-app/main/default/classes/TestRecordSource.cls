@@ -48,10 +48,19 @@ global inherited sharing class TestRecordSource {
                         GENERATOR_VARIANT_FIELD => variant
                 });
         if(thisGeneratorMetadata == null) {
-            throw new ClassNotFoundException(
-                    'No Test_Record_Generator__mdt found for '
+            List<Test_Record_Generator__mdt> metadataForThisSObject = generatorMetadata.getAll(new Map<String, Object>{GENERATOR_SOBJECT_FIELD => objectType.getDescribe().getName()});
+            String message = 'No Test_Record_Generator__mdt found for '
                             + objectType.getDescribe().getName()
-                            + (variant != null ? ', variant: ' + variant : ''));
+                            + (variant != null ? ', variant: ' + variant : '');
+            if(!metadataForThisSObject.isEmpty()) {
+                List<String> variants = (List<String>)new LazySObjectIterator(metadataForThisSObject.iterator())
+                        .mapValues(new FieldFromSObject(Test_Record_Generator__mdt.Variant__c))
+                        .toList(new List<String>());
+                message += '. Existing variants are: '
+                        + String.join(variants, ', ');
+
+            }
+            throw new ClassNotFoundException(message);
         } else {
             return getGenerator(thisGeneratorMetadata);
         }

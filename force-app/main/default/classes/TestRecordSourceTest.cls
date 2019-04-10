@@ -23,6 +23,28 @@ private class TestRecordSourceTest {
     }
 
     @IsTest
+    static void noMatchingVariant() {
+        String variantName = 'My Variant';
+        testRecordSource = new TestRecordSource();
+        testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Priority__c = 0,
+                        SObject__c = 'Account',
+                        Variant__c = variantName
+                ));
+
+        try {
+            testRecordSource.getRecord(Account.SObjectType).withInsert();
+        } catch (ClassNotFoundException e) {
+            String message = e.getMessage();
+            System.assert(message.contains('No Test_Record_Generator__mdt found'));
+            System.assert(message.contains('variantName'));
+            return;
+        }
+        System.assert(false, 'Should have thrown exception');
+    }
+
+    @IsTest
     static void noApexClassImplementation() {
         String className = 'noSuchClass';
 
