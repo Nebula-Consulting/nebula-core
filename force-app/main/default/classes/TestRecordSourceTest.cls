@@ -38,7 +38,7 @@ private class TestRecordSourceTest {
         } catch (ClassNotFoundException e) {
             String message = e.getMessage();
             System.assert(message.contains('No Test_Record_Generator__mdt found'));
-            System.assert(message.contains('variantName'));
+            System.assert(message.contains(variantName));
             return;
         }
         System.assert(false, 'Should have thrown exception');
