@@ -89,6 +89,20 @@ private class TestRecordSourceTest {
     }
 
     @IsTest
+    static void recordInsertFailure() {
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(), -1000);
+
+        Test.startTest();
+        try {
+            testRecordSource.getRecord(Account.SObjectType).withInsert();
+        } catch (TestRecordGeneratorException e) {
+            return;
+        }
+        Test.stopTest();
+        System.assert(false, 'Should have thrown exception');
+    }
+
+    @IsTest
     static void withoutInsertMultiple() {
         String accountName = 'Test Account';
         Test_Record_Generator__mdt recordGeneratorMetadata = testRecordSource.addTemporaryMetadata(
