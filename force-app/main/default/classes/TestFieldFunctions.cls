@@ -6,20 +6,29 @@
 
 global class TestFieldFunctions {
 
-    global class AppendRandomNumber implements TestFieldFunction {
-        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
+    global abstract class TestFieldFunctionWithParent implements TestFieldFunction {
+        global TestRecordGenerator parentGenerator;
+
+        global TestFieldFunction setParentGenerator(TestRecordGenerator parentGenerator) {
+            this.parentGenerator = parentGenerator;
+            return this;
+        }
+    }
+
+    global class AppendRandomNumber extends TestFieldFunctionWithParent {
+        global Object getValue(String fieldName, Object value) {
             return value == null ? value : (value + String.valueOf(Math.random()));
         }
     }
 
-    global class CreateRecord implements TestFieldFunction {
+    global class CreateRecord extends TestFieldFunctionWithParent {
 
         global String sObjectType;
         global String variant;
         global String variantParameter;
         global Integer numberOfRecords;
 
-        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
+        global Object getValue(String fieldName, Object value) {
             SObject targetInstance = (SObject) TypeLoader.getType((String) sObjectType).newInstance();
             if(variantParameter != null) {
                 variant = (String)parentGenerator.getParameter(variantParameter);
@@ -36,12 +45,12 @@ global class TestFieldFunctions {
         }
     }
 
-    global class GetRecordTypeId implements TestFieldFunction {
+    global class GetRecordTypeId extends TestFieldFunctionWithParent {
 
         global String sObjectType;
         global String developerName;
 
-        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
+        global Object getValue(String fieldName, Object value) {
             return NamedSObjectCache.getRecordType(
                     sObjectType,
                     developerName
@@ -49,12 +58,12 @@ global class TestFieldFunctions {
         }
     }
 
-    global class Now implements TestFieldFunction {
+    global class Now extends TestFieldFunctionWithParent {
 
         global Integer addDays;
         global Integer addMinutes;
 
-        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
+        global Object getValue(String fieldName, Object value) {
             Datetime returnValue = Datetime.now();
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
@@ -66,11 +75,11 @@ global class TestFieldFunctions {
         }
     }
 
-    global class Today implements TestFieldFunction {
+    global class Today extends TestFieldFunctionWithParent {
 
         global Integer addDays;
 
-        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
+        global Object getValue(String fieldName, Object value) {
             Date returnValue = Date.today();
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
@@ -79,15 +88,24 @@ global class TestFieldFunctions {
         }
     }
 
-    global class Increment implements TestFieldFunction {
+    global class Increment extends TestFieldFunctionWithParent {
 
         global Decimal accumulator;
         global Decimal increment;
 
-        global Object getValue(TestRecordGenerator parentGenerator, Object value) {
+        global Object getValue(String fieldName, Object value) {
             Decimal result =  (Decimal)value + accumulator;
             accumulator += increment;
             return result;
+        }
+    }
+
+    global class ReadParameter extends TestFieldFunctionWithParent {
+
+        global String parameterName;
+
+        global Object getValue(String fieldName, Object value) {
+            return parentGenerator.getParameter(parameterName == null ? fieldName : parameterName);
         }
     }
 }

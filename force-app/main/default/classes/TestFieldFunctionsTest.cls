@@ -191,4 +191,51 @@ private class TestFieldFunctionsTest {
             System.assertEquals(i, results[i].NumberOfEmployees);
         }
     }
+
+    @IsTest
+    static void readParameterByName() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Name',
+                        Apex_Class__c = TestFieldFunctions.ReadParameter.class.getName()
+                )
+        });
+
+        Account result = (Account)testRecordSource
+                .getRecord(Account.SObjectType)
+                .useParameters(new Map<String, Object>{'Name' => accountName})
+                .withoutInsert();
+
+        System.assertEquals(accountName, result.Name);
+    }
+
+    @IsTest
+    static void readParameterByCustomName() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Name',
+                        Apex_Class__c = TestFieldFunctions.ReadParameter.class.getName(),
+                        Apex_Class_Parameters__c = '{"parameterName": "AccountName"}'
+                )
+        });
+
+        Account result = (Account)testRecordSource
+                .getRecord(Account.SObjectType)
+                .useParameters(new Map<String, Object>{'AccountName' => accountName})
+                .withoutInsert();
+
+        System.assertEquals(accountName, result.Name);
+    }
 }

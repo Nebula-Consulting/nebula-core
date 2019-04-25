@@ -6,5 +6,6 @@
 
 global interface TestFieldFunction {
 
-    Object getValue(TestRecordGenerator parentGenerator, Object value);
+    TestFieldFunction setParentGenerator(TestRecordGenerator parentGenerator);
+    Object getValue(String fieldName, Object value);
 }

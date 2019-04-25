@@ -100,7 +100,9 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             Object returnValue = getSimpleValue();
 
             if (fieldMetadata.Apex_Class__c != null) {
-                return testFieldFunction.getValue(parentGenerator, returnValue);
+                return testFieldFunction
+                        .setParentGenerator(parentGenerator)
+                        .getValue(fieldDescribe.getName(), returnValue);
             }
             return returnValue;
         }
