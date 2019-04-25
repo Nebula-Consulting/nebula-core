@@ -85,10 +85,10 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
                     return fieldMetadata.Value__c == null ? null : JSON.deserialize('"' + fieldMetadata.Value__c + '"', Datetime.class);
                 }
                 when DOUBLE, CURRENCY, LONG, INTEGER, PERCENT {
-                    return Decimal.valueOf(fieldMetadata.Value__c);
+                    return fieldMetadata.Value__c == null ? null : Decimal.valueOf(fieldMetadata.Value__c);
                 }
                 when BOOLEAN {
-                    return Boolean.valueOf(fieldMetadata.Value__c);
+                    return fieldMetadata.Value__c == null ? null : Boolean.valueOf(fieldMetadata.Value__c);
                 }
                 when else {
                     return fieldMetadata.Value__c;
