@@ -8,6 +8,10 @@ global virtual class LazyIterator implements Iterator<Object> {
 
     protected Iterator<Object> iterator;
 
+    global LazyIterator(Iterable<Object> iterable) {
+        this.iterator = iterable.iterator();
+    }
+
     global LazyIterator(Iterator<Object> iterator) {
         this.iterator = iterator;
     }

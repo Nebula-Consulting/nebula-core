@@ -115,7 +115,7 @@ private class LazyIteratorTest {
     }
 
     @IsTest static void fieldFromSObject() {
-        List<Decimal> numberOfEmployeesList = (List<Decimal>)new LazySObjectIterator(accounts.iterator())
+        List<Decimal> numberOfEmployeesList = (List<Decimal>)new LazySObjectIterator(accounts)
                 .mapValues(new FieldFromSObject(Account.NumberOfEmployees))
                 .toList(new List<Decimal>());
 
@@ -133,6 +133,13 @@ private class LazyIteratorTest {
             System.assertEquals(accounts[i].NumberOfEmployees, numberOfEmployeesList[i]);
         }
     }
+
+//    @IsTest static void forking() {
+//        List<Object> results = new LazySObjectIterator(accounts.iterator())
+//        for(Integer i=0; i < accounts.size(); i++) {
+//            System.assertEquals(accounts[i].NumberOfEmployees, numberOfEmployeesList[i]);
+//        }
+//    }
 
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;
