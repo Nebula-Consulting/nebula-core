@@ -6,12 +6,14 @@
 @IsTest
 private class LazyIteratorTest {
 
+    private static TestIdGenerator accountIdGenerator = new TestIdGenerator(Account.SObjectType);
+
     private static List<Account> accounts = new List<Account>{
-            new Account(NumberOfEmployees = 1),
-            new Account(NumberOfEmployees = 2),
-            new Account(NumberOfEmployees = 3),
-            new Account(NumberOfEmployees = 4),
-            new Account(NumberOfEmployees = 5)
+            new Account(NumberOfEmployees = 1, ParentId = accountIdGenerator.next()),
+            new Account(NumberOfEmployees = 2, ParentId = accountIdGenerator.next()),
+            new Account(NumberOfEmployees = 3, ParentId = accountIdGenerator.next()),
+            new Account(NumberOfEmployees = 4, ParentId = accountIdGenerator.next()),
+            new Account(NumberOfEmployees = 5, ParentId = accountIdGenerator.next())
     };
 
     @IsTest
@@ -131,6 +133,16 @@ private class LazyIteratorTest {
 
         for(Integer i=0; i < accounts.size(); i++) {
             System.assertEquals(accounts[i].NumberOfEmployees, numberOfEmployeesList[i]);
+        }
+    }
+
+    @IsTest static void fieldFromSObjectSetId() {
+        Set<Id> parentIdSet = (Set<Id>)new LazySObjectIterator(accounts)
+                .mapValues(new FieldFromSObject(Account.ParentId))
+                .toSet(new Set<Id>());
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(parentIdSet.contains(accounts[i].ParentId));
         }
     }
 
