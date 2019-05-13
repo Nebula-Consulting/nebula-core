@@ -153,12 +153,10 @@ global inherited sharing class TestRecordSource {
         }
     }
 
-    private static Integer metadataIdNumber = 1;
+    private static TestIdGenerator idGenerator = new TestIdGenerator(Test_Record_Generator__mdt.SObjectType);
 
     private Id getNextMetadataId() {
-        return Test_Record_Generator__mdt.SObjectType.getDescribe().getKeyPrefix()
-                + String.valueOf(metadataIdNumber++).leftPad(4, '0')
-                + '0'.repeat(8);
+        return idGenerator.next();
     }
 
     /**
