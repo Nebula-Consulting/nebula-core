@@ -32,6 +32,11 @@ global virtual class LazyIterator implements Iterator<Object> {
         }
     }
 
+    @Deprecated
+    global Object findOrDefault(BooleanFunction matchingFunction, Object defaultValue) {
+        return filter(matchingFunction).firstOrDefault(defaultValue);
+    }
+
     global virtual List<Object> toList(List<Object> toFill) {
         while(hasNext()) {
             toFill.add(next());
