@@ -21,32 +21,29 @@ global with sharing class MetadataTriggerManager {
     global static List<Trigger_Handler__mdt> mockMetadata;
 
     private SObjectIndex theseTriggers;
-    private static SObjectIndex sObjectTypeNameToEventToTriggerList = new SObjectIndex(
-            new List<String> {
-                    Trigger_Handler__mdt.SObject__c.getDescribe().getName(),
-                    Trigger_Handler__mdt.Event__c.getDescribe().getName()
-            });
+    private static SObjectIndex sObjectTypeNameToEventToTriggerList { get {
+        if (sObjectTypeNameToEventToTriggerList == null) {
+            sObjectTypeNameToEventToTriggerList = new SObjectIndex(
+                    new List<String>{
+                            Trigger_Handler__mdt.SObject__c.getDescribe().getName(),
+                            Trigger_Handler__mdt.Event__c.getDescribe().getName()
+                    })
+                    .putAll(mockMetadata != null ? mockMetadata :
+                            [
+                                    SELECT DeveloperName, NamespacePrefix, Event__c, SObject__c, Apex_Class__c, Order__c,
+                                            Parameters__c
+                                    FROM Trigger_Handler__mdt
+                                    WHERE Active__c = TRUE
+                                    ORDER BY Order__c ASC
+                            ]);
+        }
+        return sObjectTypeNameToEventToTriggerList;
+    } set;}
 
     global MetadataTriggerManager(SObjectType objectType) {
         String sObjectName = objectType.getDescribe().getName();
 
         theseTriggers = sObjectTypeNameToEventToTriggerList.getSubIndex(sObjectName);
-
-        if(theseTriggers == null) {
-            if(Test.isRunningTest() && mockMetadata != null) {
-                sObjectTypeNameToEventToTriggerList.putAll(mockMetadata);
-            } else {
-                sObjectTypeNameToEventToTriggerList.putAll([
-                        SELECT DeveloperName, NamespacePrefix, Event__c, SObject__c, Apex_Class__c, Order__c,
-                                Parameters__c
-                        FROM Trigger_Handler__mdt
-                        WHERE SObject__c = :sObjectName AND Active__c = TRUE
-                        ORDER BY Order__c ASC
-                ]);
-            }
-
-            theseTriggers = sObjectTypeNameToEventToTriggerList.getSubIndex(sObjectName);
-        }
     }
 
     @SuppressWarnings('PMD.ExcessiveParameterList')
