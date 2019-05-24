@@ -72,6 +72,14 @@ private class LazyIteratorTest {
         System.assertEquals(1 + 3 + 5, totalEmployees);
     }
 
+    @IsTest static void reduce() {
+        Decimal reduceTotal = (Decimal)new LazySObjectIterator(accounts.iterator())
+                .filter(new NumberOfEmployeesIsOdd())
+                .reduce(new SumNumberOfEmployeesAccumulator(), 0);
+
+        System.assertEquals(1 + 3 + 5, reduceTotal);
+    }
+
     @IsTest static void firstOrDefault() {
         String defaultName = 'Default Result';
         Account result = (Account)new LazySObjectIterator(accounts.iterator())
@@ -180,9 +188,15 @@ private class LazyIteratorTest {
 
     private static Integer totalEmployees = 0;
 
-    private class SumNumberOfEmployees implements Function{
+    private class SumNumberOfEmployees implements Function {
         public Object call(Object o) {
             return totalEmployees += ((Account)o).NumberOfEmployees;
+        }
+    }
+
+    private class SumNumberOfEmployeesAccumulator implements AccumulatorFunction {
+        public Object nextValue(Object accumulatorValue, Object currentValue) {
+            return (Decimal)accumulatorValue + ((Account)currentValue).NumberOfEmployees;
         }
     }
 
