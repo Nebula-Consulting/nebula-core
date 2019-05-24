@@ -11,14 +11,17 @@ global class StackTraces {
      * inside it by calling getCause() until there are no more.
      *
      * @param e an Exception
-     * @return the messages and stack traces from e and all nested Exceptions inside it
+     * @return the type, messages, and stack traces from e and all nested Exceptions inside it
      */
     global static List<String> getErrorMessage(Exception e) {
         List<String> returnVal = new List<String>();
+        Integer exceptionCount = 0;
         do {
-            returnVal.add(e.getMessage());
-            returnVal.add(e.getStackTraceString());
+            returnVal.add(String.format('type[{0}]: {1}', new List<Object>{ exceptionCount, e.getTypeName()}));
+            returnVal.add(String.format('message[{0}]: {1}', new List<Object>{ exceptionCount, e.getMessage()}));
+            returnVal.add(String.format('stack trace[{0}]:\n{1}', new List<Object>{ exceptionCount, e.getStackTraceString()}));
             e = e.getCause();
+            ++exceptionCount;
         } while(e != null);
         return returnVal;
     }

@@ -3,6 +3,6 @@
  * @date 15/11/2018
  */
 
-global class IllegalStateException extends Exception {
+global class IllegalStateException extends StackTraceException {
 
 }

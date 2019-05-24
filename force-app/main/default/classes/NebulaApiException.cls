@@ -3,7 +3,7 @@
  * @date 2019-03-06
  */
 
-global virtual class NebulaApiException extends Exception {
+global virtual class NebulaApiException extends StackTraceException {
 
     global HttpResponse response {get; private set;}
 
