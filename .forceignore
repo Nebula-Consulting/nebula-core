@@ -4,3 +4,5 @@
 
 package.xml
 **profile-meta.xml
+
+force-app/main/default/appMenus/AppSwitcher.appMenu-meta.xml
