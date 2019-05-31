@@ -66,10 +66,10 @@ private class LazyIteratorTest {
 
     @IsTest static void forEach() {
         new LazySObjectIterator(accounts.iterator())
-                .filter(new NumberOfEmployeesIsOdd())
+                .filter(new BooleanFunctions.IsNot(new NumberOfEmployeesIsOdd()))
                 .forEach(new SumNumberOfEmployees());
 
-        System.assertEquals(1 + 3 + 5, totalEmployees);
+        System.assertEquals(2 + 4, totalEmployees);
     }
 
     @IsTest static void reduce() {
