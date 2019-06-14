@@ -6,20 +6,6 @@
 
 global class BooleanFunctions {
 
-    global IsNull isNull {get {
-        if (isNull == null) {
-            isNull = new IsNull();
-        }
-        return isNull;
-    } private set; }
-
-    global IsNotNull isNotNull {get {
-        if (isNotNull == null) {
-            isNotNull = new IsNotNull();
-        }
-        return isNotNull;
-    } private set; }
-
     global class IsNull implements BooleanFunction {
         global Boolean isTrueFor(Object o) {
             return o == null;
@@ -45,33 +31,52 @@ global class BooleanFunctions {
         }
     }
 
-    global class IsBoth implements BooleanFunction {
+    global class IsAll implements BooleanFunction {
 
-        private BooleanFunction booleanFunction1;
-        private BooleanFunction booleanFunction2;
+        private List<BooleanFunction> booleanFunctions;
 
-        global IsBoth(BooleanFunction booleanFunction1, BooleanFunction booleanFunction2) {
-            this.booleanFunction1 = booleanFunction1;
-            this.booleanFunction2 = booleanFunction2;
+        global IsAll(List<BooleanFunction> booleanFunctions) {
+            this.booleanFunctions = booleanFunctions;
         }
 
         global Boolean isTrueFor(Object o) {
-            return booleanFunction1.isTrueFor(o) && booleanFunction2.isTrueFor(o);
+            for(BooleanFunction thisBooleanFunction : booleanFunctions) {
+                if(!thisBooleanFunction.isTrueFor(o)) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
-    global class IsEither implements BooleanFunction {
+    global class IsAny implements BooleanFunction {
 
-        private BooleanFunction booleanFunction1;
-        private BooleanFunction booleanFunction2;
+        private List<BooleanFunction> booleanFunctions;
 
-        global IsEither(BooleanFunction booleanFunction1, BooleanFunction booleanFunction2) {
-            this.booleanFunction1 = booleanFunction1;
-            this.booleanFunction2 = booleanFunction2;
+        global IsAny(List<BooleanFunction> booleanFunctions) {
+            this.booleanFunctions = booleanFunctions;
         }
 
         global Boolean isTrueFor(Object o) {
-            return booleanFunction1.isTrueFor(o) || booleanFunction2.isTrueFor(o);
+            for(BooleanFunction thisBooleanFunction : booleanFunctions) {
+                if(thisBooleanFunction.isTrueFor(o)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
+
+    global class IsInSObjectIndex implements BooleanFunction {
+        private SObjectIndex theIndex;
+
+        global IsInSObjectIndex(SObjectIndex theIndex) {
+            this.theIndex = theIndex;
+        }
+
+        global Boolean isTrueFor(Object o) {
+            return theIndex.get((SObject)o) != null;
+        }
+    }
+
 }
