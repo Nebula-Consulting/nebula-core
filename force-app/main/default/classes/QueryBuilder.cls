@@ -14,6 +14,10 @@ global inherited sharing class QueryBuilder {
     private String orderByClause;
     private String paginationClause;
 
+    global QueryBuilder(SObjectType sObjectType) {
+        this(sObjectType.getDescribe().getName());
+    }
+
     global QueryBuilder(String typeName) {
         this.typeName = typeName;
         this.fieldsLowerCase = new Set<String>{'id'};
