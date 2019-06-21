@@ -79,4 +79,31 @@ global class BooleanFunctions {
         }
     }
 
+    global class IsTriggerChanged extends TriggerContextBooleanFunction {
+
+        private SObjectField field;
+
+        global IsTriggerChanged(SObjectField field) {
+            this.field = field;
+        }
+
+        global override Boolean isTrueFor(SObject oldRecord, SObject newRecord) {
+            return oldRecord == null || oldRecord.get(field) != newRecord.get(field);
+        }
+    }
+
+    global class IsSObjectFieldEqual implements BooleanFunction{
+
+        private SObjectField field;
+        private Object value;
+
+        global IsSObjectFieldEqual(SObjectField field, Object value) {
+            this.field = field;
+            this.value = value;
+        }
+
+        global Boolean isTrueFor(Object o) {
+            return ((SObject)o).get(field) == value;
+        }
+    }
 }

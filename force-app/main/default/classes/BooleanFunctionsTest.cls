@@ -79,4 +79,21 @@ private class BooleanFunctionsTest {
         System.assert(!isInIndex.isTrueFor(new Account(Name = accountName + '!')));
     }
 
+    @IsTest
+    static void isTriggerChanged() {
+        TriggerContextBooleanFunction isTriggerChanged = new BooleanFunctions.IsTriggerChanged(Account.Name);
+
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        System.assert(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
+        System.assert(!isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'a')));
+    }
+
+    @IsTest
+    static void isSObjectFieldEqual() {
+        BooleanFunction isSObjectFieldEqual = new BooleanFunctions.IsSObjectFieldEqual(Account.Name, 'a');
+
+        System.assert(isSObjectFieldEqual.isTrueFor(new Account(Name = 'a')));
+        System.assert(!isSObjectFieldEqual.isTrueFor(new Account(Name = 'b')));
+    }
+
 }
