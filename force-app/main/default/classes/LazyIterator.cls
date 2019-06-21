@@ -45,6 +45,14 @@ global virtual class LazyIterator implements Iterator<Object> {
         return toFill;
     }
 
+    global virtual List<SObject> toList(List<SObject> toFill) {
+        while(hasNext()) {
+            toFill.add((SObject)next());
+        }
+
+        return toFill;
+    }
+
     global virtual Set<Id> toSet(Set<Id> toFill) {
         while(hasNext()) {
             toFill.add((Id)next());

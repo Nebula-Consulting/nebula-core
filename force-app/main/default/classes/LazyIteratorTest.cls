@@ -42,7 +42,7 @@ private class LazyIteratorTest {
 
     @IsTest
     static void filterToList() {
-        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
+        List<Account> result = new LazySObjectIterator(accounts.iterator())
                 .filter(new NumberOfEmployeesIsOdd())
                 .toList(new List<Account>());
 
