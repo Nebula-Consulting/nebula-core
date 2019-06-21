@@ -8,7 +8,7 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isNull() {
-        BooleanFunction isNull = new BooleanFunctions.IsNull();
+        BooleanFunction isNull = new IsNull();
 
         System.assert(isNull.isTrueFor(null));
         System.assert(!isNull.isTrueFor(1));
@@ -16,7 +16,7 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isNotNull() {
-        BooleanFunction isNotNull = new BooleanFunctions.IsNotNull();
+        BooleanFunction isNotNull = new IsNotNull();
 
         System.assert(isNotNull.isTrueFor(1));
         System.assert(!isNotNull.isTrueFor(null));
@@ -24,7 +24,7 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isNotNotNull() {
-        BooleanFunction isNotNotNull = new BooleanFunctions.IsNot(new BooleanFunctions.IsNotNull());
+        BooleanFunction isNotNotNull = new IsNot(new IsNotNull());
 
         System.assert(isNotNotNull.isTrueFor(null));
         System.assert(!isNotNotNull.isTrueFor(1));
@@ -32,17 +32,17 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isAll() {
-        BooleanFunction isAllAgree = new BooleanFunctions.IsAll(new List<BooleanFunction>{
-                new BooleanFunctions.IsNotNull(),
-                new BooleanFunctions.IsNotNull()
+        BooleanFunction isAllAgree = new IsAll(new List<BooleanFunction>{
+                new IsNotNull(),
+                new IsNotNull()
         });
 
         System.assert(isAllAgree.isTrueFor(1));
         System.assert(!isAllAgree.isTrueFor(null));
 
-        BooleanFunction isAllDisagree = new BooleanFunctions.IsAll(new List<BooleanFunction>{
-                new BooleanFunctions.IsNotNull(),
-                new BooleanFunctions.IsNull()
+        BooleanFunction isAllDisagree = new IsAll(new List<BooleanFunction>{
+                new IsNotNull(),
+                new IsNull()
         });
 
         System.assert(!isAllDisagree.isTrueFor(1));
@@ -50,17 +50,17 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isAny() {
-        BooleanFunction isAnyAgree = new BooleanFunctions.IsAny(new List<BooleanFunction>{
-                new BooleanFunctions.IsNotNull(),
-                new BooleanFunctions.IsNotNull()
+        BooleanFunction isAnyAgree = new IsAny(new List<BooleanFunction>{
+                new IsNotNull(),
+                new IsNotNull()
         });
 
         System.assert(isAnyAgree.isTrueFor(1));
         System.assert(!isAnyAgree.isTrueFor(null));
 
-        BooleanFunction isAnyDisagree = new BooleanFunctions.IsAny(new List<BooleanFunction>{
-                new BooleanFunctions.IsNotNull(),
-                new BooleanFunctions.IsNull()
+        BooleanFunction isAnyDisagree = new IsAny(new List<BooleanFunction>{
+                new IsNotNull(),
+                new IsNull()
         });
 
         System.assert(isAnyDisagree.isTrueFor(1));
@@ -70,7 +70,7 @@ private class BooleanFunctionsTest {
     @IsTest
     static void isInSObjectIndex() {
         String accountName = 'foo';
-        BooleanFunction isInIndex = new BooleanFunctions.IsInSObjectIndex(
+        BooleanFunction isInIndex = new IsInSObjectIndex(
                 new SObjectIndex('Name')
                         .putAll(new List<Account>{new Account(Name = accountName)})
         );
@@ -81,7 +81,7 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isTriggerChanged() {
-        TriggerContextBooleanFunction isTriggerChanged = new BooleanFunctions.IsTriggerChanged(Account.Name);
+        TriggerContextBooleanFunction isTriggerChanged = new IsFieldChangedInTrigger(Account.Name);
 
         System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
         System.assert(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
@@ -90,7 +90,7 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isSObjectFieldEqual() {
-        BooleanFunction isSObjectFieldEqual = new BooleanFunctions.IsSObjectFieldEqual(Account.Name, 'a');
+        BooleanFunction isSObjectFieldEqual = new IsSObjectFieldEqual(Account.Name, 'a');
 
         System.assert(isSObjectFieldEqual.isTrueFor(new Account(Name = 'a')));
         System.assert(!isSObjectFieldEqual.isTrueFor(new Account(Name = 'b')));

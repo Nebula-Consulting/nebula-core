@@ -66,7 +66,7 @@ private class LazyIteratorTest {
 
     @IsTest static void forEach() {
         new LazySObjectIterator(accounts.iterator())
-                .filter(new BooleanFunctions.IsNot(new NumberOfEmployeesIsOdd()))
+                .filter(new IsNot(new NumberOfEmployeesIsOdd()))
                 .forEach(new SumNumberOfEmployees());
 
         System.assertEquals(2 + 4, totalEmployees);
@@ -103,7 +103,7 @@ private class LazyIteratorTest {
 
         new LazyTriggerContextPairIterator(new TriggerContextIterator(accounts, newAccounts))
                 .filter(new NumberOfEmployeesChanged())
-                .mapValues(new TriggerContextPair.NewRecordFromPair())
+                .mapValues(new NewFromTriggerContextPair())
                 .forEach(new SumNumberOfEmployees());
 
         System.assertEquals(12 + 14, totalEmployees);
@@ -116,7 +116,7 @@ private class LazyIteratorTest {
 
         List<Account> result = (List<Account>)new LazyTriggerContextPairIterator(accounts, newAccounts)
                 .filter(new NumberOfEmployeesChanged())
-                .mapValues(new TriggerContextPair.NewRecordFromPair())
+                .mapValues(new NewFromTriggerContextPair())
                 .toList(new List<Account>());
 
         System.assertEquals(2, result.size());

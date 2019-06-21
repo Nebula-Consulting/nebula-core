@@ -13,18 +13,4 @@ global class TriggerContextPair {
         this.oldRecord = oldRecord;
         this.newRecord = newRecord;
     }
-
-    global class NewRecordFromPair implements Function {
-        global Object call(Object o) {
-            return ((TriggerContextPair)o).newRecord;
-        }
-
-    }
-
-    global class OldRecordFromPair implements Function {
-        global Object call(Object o) {
-            return ((TriggerContextPair)o).oldRecord;
-        }
-
-    }
 }
