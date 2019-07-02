@@ -188,9 +188,9 @@ private class LazyIteratorTest {
 
     private static Integer totalEmployees = 0;
 
-    private class SumNumberOfEmployees implements Function {
-        public Object call(Object o) {
-            return totalEmployees += ((Account)o).NumberOfEmployees;
+    private class SumNumberOfEmployees implements VoidFunction {
+        public void call(Object o) {
+            totalEmployees += ((Account)o).NumberOfEmployees;
         }
     }
 

@@ -85,7 +85,7 @@ global virtual class LazyIterator implements Iterator<Object> {
         return new LazyMapIterator(this, mappingFunction);
     }
 
-    global void forEach(Function callingFunction) {
+    global void forEach(VoidFunction callingFunction) {
         while(hasNext()) {
             callingFunction.call(next());
         }
