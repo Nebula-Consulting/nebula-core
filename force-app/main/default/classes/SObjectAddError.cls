@@ -3,11 +3,11 @@
  * @date 2019-07-05
  */
 
-global class AddError implements nebc.VoidFunction {
+global class SObjectAddError implements nebc.VoidFunction {
 
     private String errorLabel;
 
-    global AddError(String errorLabel) {
+    global SObjectAddError(String errorLabel) {
         this.errorLabel = errorLabel;
     }
 
