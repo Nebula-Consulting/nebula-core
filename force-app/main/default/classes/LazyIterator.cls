@@ -81,6 +81,13 @@ global virtual class LazyIterator implements Iterator<Object> {
         return result;
     }
 
+    global Object reduce(VoidFunction accumulatorObject) {
+        while(hasNext()) {
+            accumulatorObject.call(next());
+        }
+        return accumulatorObject;
+    }
+
     global LazyIterator mapValues(Function mappingFunction) {
         return new LazyMapIterator(this, mappingFunction);
     }
