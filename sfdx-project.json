@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "Nebula Core",
-            "versionName": "0.47",
-            "versionNumber": "0.47.0.NEXT"
+            "versionName": "0.48",
+            "versionNumber": "0.48.0.NEXT"
         }
     ],
     "namespace": "nebc",

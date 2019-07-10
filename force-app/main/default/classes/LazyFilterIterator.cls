@@ -8,6 +8,7 @@ public class LazyFilterIterator extends LazyIterator {
     private BooleanFunction matchingFunction;
     private Object peek;
     private Boolean peekIsValid;
+    private Boolean peekMatches;
 
     public LazyFilterIterator(Iterator<Object> iterator, BooleanFunction matchingFunction) {
         super(iterator);
@@ -18,6 +19,7 @@ public class LazyFilterIterator extends LazyIterator {
     private void peek() {
         if(iterator.hasNext()) {
             peek = iterator.next();
+            peekMatches = matchingFunction.isTrueFor(peek);
             peekIsValid = true;
         } else {
             peekIsValid = false;
@@ -29,7 +31,7 @@ public class LazyFilterIterator extends LazyIterator {
             peek();
         }
         while(peekIsValid) {
-            if(matchingFunction.isTrueFor(peek)) {
+            if(peekMatches) {
                 return true;
             } else {
                 peek();

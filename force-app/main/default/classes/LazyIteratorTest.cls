@@ -64,6 +64,16 @@ private class LazyIteratorTest {
         System.assertEquals(10, result[2].NumberOfEmployees);
     }
 
+    @IsTest static void doubleFilter() {
+        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
+                .filter(new NumberOfEmployeesIsOdd())
+                .filter(new IsUniqueOn(new FieldFromSObject(Account.Name)))
+                .toList(new List<Account>());
+
+        System.assertEquals(1, result.size(), result);
+        System.assertEquals(accounts[0].ParentId, result[0].ParentId);
+    }
+
     @IsTest static void forEach() {
         new LazySObjectIterator(accounts.iterator())
                 .filter(new IsNot(new NumberOfEmployeesIsOdd()))
