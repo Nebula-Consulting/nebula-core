@@ -12,8 +12,8 @@ global without sharing class ContactNumberOfContactsRollUpDeclarative implements
 
     public void handleAfterUpdate(List<Contact> oldList, List<Contact> newList) {
         updateAccountRollUps(new LazyTriggerContextPairIterator(oldList, newList)
-                        .filter(new IsFieldChangedInTrigger(Contact.AccountId))
-                        .expand(new TriggerContextPairExpandToBoth()));
+                .filter(new IsFieldChangedInTrigger(Contact.AccountId))
+                .expand(new TriggerContextPairExpandToBoth()));
     }
 
     public void handleAfterDelete(List<Contact> oldList) {
@@ -32,24 +32,24 @@ global without sharing class ContactNumberOfContactsRollUpDeclarative implements
 
         if(!accountIds.isEmpty()) {
             update new LazyIdIterator(accountIds.iterator())
-                    .mapValues(new AccountIdToAccountWithNumberOfContacts(accountIds))
+                    .mapValues(new AccountWithNumberOfContactsFromAccountId(accountIds))
                     .toList(new List<Account>());
         }
     }
 
-    private class AccountIdToAccountWithNumberOfContacts implements Function {
+    private class AccountWithNumberOfContactsFromAccountId implements Function {
 
         private SObjectIndex accountIdToContactCount;
 
-        public AccountIdToAccountWithNumberOfContacts(Set<Id> accountIds) {
+        public AccountWithNumberOfContactsFromAccountId(Set<Id> accountIds) {
             accountIdToContactCount = new SObjectIndex('AccountId')
-            .putAll([
-            SELECT COUNT(Id) contactCount,
-            AccountId
-            FROM Contact
-            WHERE AccountId IN :accountIds
-            GROUP BY AccountId
-            ]);
+                    .putAll([
+                            SELECT COUNT(Id) contactCount,
+                                    AccountId
+                            FROM Contact
+                            WHERE AccountId IN :accountIds
+                            GROUP BY AccountId
+                    ]);
         }
         public Object call(Object o) {
             Account thisAccountToUpdate = new Account(Id = (Id)o, Number_of_Contacts_Declarative__c = 0);
