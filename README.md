@@ -22,20 +22,16 @@ The base set of classes used by Nebula Consulting. Topics covered:
 
 ## Trigger Handlers
 
-A trigger handler requires three things:
+A trigger implemented in the framework requires three things:
 
  1. A trigger on the relevant object, invoking the framework's handler class [MetadataTriggerManager](force-app/main/default/classes/MetadataTriggerManager.cls) e.g.
-    ```
-    trigger Contact on Contact (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
-        new MetadataTriggerManager(Contact.SObjectType).handle();
-    }
-    ```
-    The trigger here should handle all events, and pass in the `SObjectType`
- 1. A class implementing some of the trigger handler interfaces ([AfterInsert](force-app/main/default/classes/AfterInsert.cls), 
- [BeforeUpdate](force-app/main/default/classes/BeforeUpdate.cls), etc.). See [ContactNumberOfContactsRollUp](examples/main/default/classes/ContactNumberOfContactsRollUp.cls) for an example.
- 1. A metadata record telling the framework about your class
+    [ContactTrigger](examples/main/default/triggers/ContactTrigger.trigger)    
+ 1. A class implementing some of the trigger handler interfaces   e.g. [ContactNumberOfContactsRollUp](examples/main/default/classes/ContactNumberOfContactsRollUp.cls)
+ 1. A metadata record telling the framework about your class e.g. [ContactNumberOfContactsRollUpAI](examples/main/default/customMetadata/Trigger_Handler.ContactNumberOfContactsRollUpAI.md-meta.xml)
  
 ### Notes
+
+The actual trigger invoking the framework should handle all events, and pass in the `SObjectType`.
 
 If you have multiple triggers on the same object, they should reside in separate classes to keep concerns separate.
 
@@ -44,4 +40,4 @@ probably also be `without sharing` so that it runs in system mode.
 
 Your metadata record includes an Order field. Triggers are run in ascending order on that field. When you don't care 
 about order, you can leave this as 0. Negative numbers are acceptable, so if you have some triggers at 0 and need to add
-one which runs before them, you could make it -10.  
+one which runs before them, you can make it -10.  
