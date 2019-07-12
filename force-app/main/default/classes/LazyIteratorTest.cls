@@ -172,6 +172,41 @@ private class LazyIteratorTest {
         }
     }
 
+    @IsTest static void expand() {
+        List<List<Integer>> data = new List<List<Integer>>{
+                new List<Integer> {0},
+                new List<Integer> {1, 2},
+                new List<Integer> {3, 4},
+                new List<Integer> {5}
+        };
+
+        List<Integer> flattened = (List<Integer>)new LazyIterator((List<Object>)data)
+                .expand(new ListExpander())
+                .toList(new List<Integer>());
+
+        System.assertEquals(6, flattened.size());
+        for (Integer i = 0; i < 6; i++) {
+            System.assertEquals(i, flattened[i]);
+        }
+    }
+
+
+    private class ListExpander implements ExpansionFunction {
+
+        private Iterator<Integer> iterator;
+
+        public void setValue(Object value) {
+            iterator = ((List<Integer>)value).iterator();
+        }
+
+        public Boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        public Object next() {
+            return iterator.next();
+        }
+    }
 //    @IsTest static void forking() {
 //        List<Object> results = new LazySObjectIterator(accounts.iterator())
 //        for(Integer i=0; i < accounts.size(); i++) {
