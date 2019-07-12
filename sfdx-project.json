@@ -6,7 +6,10 @@
             "package": "Nebula Core",
             "versionName": "0.48",
             "versionNumber": "0.48.0.NEXT"
-        }
+        },
+      {
+        "path": "examples-imperative"
+      }
     ],
     "namespace": "nebc",
     "sfdcLoginUrl": "https://login.salesforce.com",
