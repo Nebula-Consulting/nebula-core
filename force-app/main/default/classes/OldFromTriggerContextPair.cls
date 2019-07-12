@@ -3,7 +3,7 @@
  * @date 2019-06-21
  */
 
-global class OldFromTriggerContextPair {
+global class OldFromTriggerContextPair implements Function {
 
     global Object call(Object o) {
         return ((TriggerContextPair)o).oldRecord;
