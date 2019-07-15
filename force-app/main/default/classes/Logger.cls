@@ -82,10 +82,7 @@ global without sharing class Logger {
 
     private static SObjectIndex componentToLogSetting {get {
         if(componentToLogSetting == null) {
-            componentToLogSetting = new SObjectIndex(Log_Setting__mdt.Component__c);
-            for(Log_Setting__mdt thisSetting : logSettings) {
-                componentToLogSetting.put(thisSetting);
-            }
+            componentToLogSetting = new SObjectIndex(Log_Setting__mdt.Component__c).putAll(logSettings);
         }
         return componentToLogSetting;
     } set;}
