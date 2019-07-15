@@ -14,6 +14,6 @@ public class LazyMapIterator extends LazyIterator {
     }
 
     public override Object next() {
-        return (Object)mappingFunction.call(iterator.next());
+        return (Object)mappingFunction.call(internalNext());
     }
 }

@@ -190,6 +190,30 @@ private class LazyIteratorTest {
         }
     }
 
+    @IsTest static void defaultIfEmptyNotEmpty() {
+        List<Integer> data = new List<Integer>{45, 89};
+        Integer defaultValue = 99;
+
+        List<Integer> result = (List<Integer>)new LazyIterator((List<Object>)data)
+                .setDefaultIfEmpty(defaultValue)
+                .toList(new List<Integer>());
+
+        System.assertEquals(data.size(), result.size());
+        for(Integer i=0; i < data.size(); i++) {
+            System.assertEquals(data[i], result[i]);
+        }
+    }
+
+    @IsTest static void defaultIfEmptyEmpty() {
+        Integer defaultValue = 99;
+
+        List<Integer> result = (List<Integer>)new LazyIterator((List<Object>)new List<Integer>())
+                .setDefaultIfEmpty(defaultValue)
+                .toList(new List<Integer>());
+
+        System.assertEquals(1, result.size());
+        System.assertEquals(defaultValue, result[0]);
+    }
 
     private class ListExpander implements ExpansionFunction {
 

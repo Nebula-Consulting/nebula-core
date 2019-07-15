@@ -6,7 +6,22 @@
 
 global virtual class LazyIterator implements Iterator<Object> {
 
-    protected Iterator<Object> iterator;
+    private Iterator<Object> iterator;
+    private Iterator<Object> defaultIterator;
+
+    protected Boolean internalHasNext() {
+        Boolean result = iterator.hasNext();
+        if(!result && defaultIterator != null) {
+            iterator = defaultIterator;
+            result = iterator.hasNext();
+        }
+        defaultIterator = null;
+        return result;
+    }
+
+    protected Object internalNext() {
+        return iterator.next();
+    }
 
     global LazyIterator(Iterable<Object> iterable) {
         this.iterator = iterable.iterator();
@@ -17,11 +32,11 @@ global virtual class LazyIterator implements Iterator<Object> {
     }
 
     global virtual Boolean hasNext() {
-        return iterator.hasNext();
+        return internalHasNext();
     }
 
     global virtual Object next() {
-        return iterator.next();
+        return internalNext();
     }
 
     global Object firstOrDefault(Object defaultValue) {
@@ -100,5 +115,13 @@ global virtual class LazyIterator implements Iterator<Object> {
         while(hasNext()) {
             callingFunction.call(next());
         }
+    }
+
+    global LazyIterator setDefaultIfEmpty(Object defaultValue) {
+        return setDefaultIfEmpty(new List<Object> {defaultValue}.iterator());
+    }
+    global LazyIterator setDefaultIfEmpty(Iterator<Object> defaultValues) {
+        defaultIterator = defaultValues;
+        return this;
     }
 }

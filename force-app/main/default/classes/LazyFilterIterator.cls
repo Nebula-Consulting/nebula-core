@@ -17,8 +17,8 @@ public class LazyFilterIterator extends LazyIterator {
     }
 
     private void peek() {
-        if(iterator.hasNext()) {
-            peek = iterator.next();
+        if(internalHasNext()) {
+            peek = internalNext();
             peekMatches = matchingFunction.isTrueFor(peek);
             peekIsValid = true;
         } else {
