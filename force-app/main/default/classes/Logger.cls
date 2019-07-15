@@ -10,12 +10,42 @@ global without sharing class Logger {
     }
 
     global static void log(System.LoggingLevel logLevel, String component, String body, Id relatedTo) {
-        Log_Setting__mdt thisSetting = componentToLogSetting.get(component);
-        if(thisSetting == null) {
-            thisSetting = new Log_Setting__mdt(LogMethod_Class__c = DebugLogger.class.getName(), Level__c = logLevel.name());
+        new LazySObjectIterator(componentToLogSetting.getAll(component))
+                .setDefaultIfEmpty(new Log_Setting__mdt(LogMethod_Class__c = DebugLogger.class.getName(), Level__c = logLevel.name()))
+                .filter(new IsActiveLogLevel(logLevel))
+                .forEach(new WriteLog(logLevel, component, body, relatedTo));
+    }
+
+    private class IsActiveLogLevel implements BooleanFunction {
+
+        private LoggingLevel logLevel;
+
+        public IsActiveLogLevel(LoggingLevel logLevel) {
+            this.logLevel = logLevel;
         }
 
-        if(logLevel.ordinal() >= logLevelToPriority.get(thisSetting.Level__c)) {
+        public Boolean isTrueFor(Object o) {
+            Log_Setting__mdt thisSetting = (Log_Setting__mdt)o;
+            return logLevel.ordinal() >= Logger.logLevelToPriority.get(thisSetting.Level__c);
+        }
+    }
+
+    private class WriteLog implements VoidFunction {
+
+        private System.LoggingLevel logLevel;
+        private String component;
+        private String body;
+        private Id relatedTo;
+
+        public WriteLog(System.LoggingLevel logLevel, String component, String body, Id relatedTo) {
+            this.logLevel = logLevel;
+            this.component = component;
+            this.body = body;
+            this.relatedTo = relatedTo;
+        }
+
+        public void call(Object o) {
+            Log_Setting__mdt thisSetting = (Log_Setting__mdt)o;
             getLogMethod(thisSetting.LogMethod_Class__c).log(logLevel, component, body, relatedTo);
         }
     }
@@ -50,11 +80,11 @@ global without sharing class Logger {
         return logSettings;
     } set;}
 
-    private static Map<String, Log_Setting__mdt> componentToLogSetting {get {
+    private static SObjectIndex componentToLogSetting {get {
         if(componentToLogSetting == null) {
-            componentToLogSetting = new Map<String, Log_Setting__mdt>();
+            componentToLogSetting = new SObjectIndex(Log_Setting__mdt.Component__c);
             for(Log_Setting__mdt thisSetting : logSettings) {
-                componentToLogSetting.put(thisSetting.Component__c, thisSetting);
+                componentToLogSetting.put(thisSetting);
             }
         }
         return componentToLogSetting;
