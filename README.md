@@ -1,7 +1,7 @@
 # Nebula Core
 
- - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VTVQA2)
- - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VTVQA2)
+ - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VTkQAM)
+ - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VTkQAM)
 
 The base set of classes used by Nebula Consulting. Topics covered:
 
