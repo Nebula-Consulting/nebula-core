@@ -10,6 +10,11 @@ global class SObjectIndex implements SObjectIndexI {
     global SObjectIndex(String fieldName)  {
         this(new List<String>{fieldName}, 0);
     }
+
+    global SObjectIndex(SObjectField field)  {
+        this(new List<String>{field.getDescribe().getName()}, 0);
+    }
+
     global SObjectIndex(List<String> indexFields)  {
         this(indexFields, 0);
     }
