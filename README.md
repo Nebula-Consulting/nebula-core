@@ -3,12 +3,14 @@
  - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VTkQAM)
  - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VTkQAM)
 
-The base set of classes used by Nebula Consulting. Topics covered:
+The base set of classes used by Nebula Consulting. The licence for this code is MIT, see [LICENSE](LICENSE). 
+
+Areas covered by the library:
 
   - [Metadata-configured trigger handler framework](MetadataTriggerManager.md)
-  - Metadata-configured logging framework
+  - [Metadata-configured logging framework](Logger.md)
   - Conversions between SObjects and JSON structures
-  - A dependency-injection framework for building test data
+  - [A dependency-injection framework for building test data](TestRecordGenerator.md)
   - Support for declarative programming style
   - SObjectIndex for storing/retrieving lists of SObjects based on 1 or more criteria
   - Interfaces to help with common uses of the Strategy Pattern 
