@@ -1,8 +1,8 @@
 ## Logging with the Logger class
 
-The [Logger](force-app/main/default/classes/Logger.cls) provides a single entry point for writing logs, and uses Custom Metadata records to configure how/when logs are written.
+The [Logger](force-app/main/default/classes/Logger.cls) provides a single entry point for writing logs, and uses custom metadata records to configure how/when logs are written.
 
-Each log is written with one of the following two methods:
+Each log is written with one of the following two methods from `Logger`:
 
 ```
 void log(System.LoggingLevel logLevel, String component, String body)
