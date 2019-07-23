@@ -46,12 +46,10 @@ global abstract class NebulaApi {
     global static String urlEncode(Map<String, String> values) {
         String returnVal = '';
         for(String thisKey : values.keySet()) {
-            returnVal += '&' + EncodingUtil.urlEncode(thisKey, 'UTF-8') + '=' + EncodingUtil.urlEncode(values.get(thisKey), 'UTF-8');
+            String thisValue = values.get(thisKey);
+            returnVal += '&' + EncodingUtil.urlEncode(thisKey, 'UTF-8') + '=' + EncodingUtil.urlEncode(thisValue == null ? '' : thisValue, 'UTF-8');
         }
-        if(returnVal.length() > 0) {
-            returnVal = returnVal.substring(1);
-        }
-        return returnVal;
+        return returnVal.removeStart('&');
     }
 
     global static void setMock(HttpCalloutMock theMock) {
