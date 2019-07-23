@@ -11,7 +11,7 @@ Areas covered by the library:
   - [Metadata-configured logging framework](Logger.md)
   - Conversions between SObjects and JSON structures
   - [A dependency-injection framework for building test data](TestRecordGenerator.md)
-  - Support for declarative programming style
+  - [Support for declarative programming style](LazyIterator.md)
   - SObjectIndex for storing/retrieving lists of SObjects based on 1 or more criteria
   - Interfaces to help with common uses of the Strategy Pattern 
   - Caching class for retrieving objects by Name e.g. configuration data stored in SObjects
