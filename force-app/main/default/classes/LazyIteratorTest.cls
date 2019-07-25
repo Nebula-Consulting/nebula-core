@@ -231,12 +231,6 @@ private class LazyIteratorTest {
             return iterator.next();
         }
     }
-//    @IsTest static void forking() {
-//        List<Object> results = new LazySObjectIterator(accounts.iterator())
-//        for(Integer i=0; i < accounts.size(); i++) {
-//            System.assertEquals(accounts[i].NumberOfEmployees, numberOfEmployeesList[i]);
-//        }
-//    }
 
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;

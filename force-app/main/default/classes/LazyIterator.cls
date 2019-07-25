@@ -6,7 +6,7 @@
 
 global virtual class LazyIterator implements Iterator<Object> {
 
-    private Iterator<Object> iterator;
+    protected Iterator<Object> iterator {private get; set;}
     private Iterator<Object> defaultIterator;
 
     protected Boolean internalHasNext() {
@@ -120,8 +120,17 @@ global virtual class LazyIterator implements Iterator<Object> {
     global LazyIterator setDefaultIfEmpty(Object defaultValue) {
         return setDefaultIfEmpty(new List<Object> {defaultValue}.iterator());
     }
+
     global LazyIterator setDefaultIfEmpty(Iterator<Object> defaultValues) {
         defaultIterator = defaultValues;
         return this;
+    }
+
+    global List<Object> fork(List<TerminatorFunction> forks) {
+        return new ForkManager(this, forks).getResults();
+    }
+
+    global TerminatorFunction postpone(TerminatorFunction terminatorFunction) {
+        return terminatorFunction.setIterator(this);
     }
 }
