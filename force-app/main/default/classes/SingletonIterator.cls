@@ -13,15 +13,11 @@ public class SingletonIterator implements Iterator<Object> {
     }
 
     public Boolean hasNext() {
-        if(hasNext) {
-            hasNext = false;
-            return true;
-        } else {
-            return false;
-        }
+        return hasNext;
     }
 
     public Object next() {
+        hasNext = false;
         return value;
     }
 
