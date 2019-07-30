@@ -1,7 +1,6 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 2019-07-25
- * @description (if required)
  */
 
 global class ToList implements TerminatorFunction {
@@ -14,9 +13,7 @@ global class ToList implements TerminatorFunction {
     }
 
     global void call() {
-        while(iterator.hasNext()) {
-            toFill.add(iterator.next());
-        }
+        iterator.toList(toFill);
     }
 
     global TerminatorFunction setIterator(LazyIterator iterator) {

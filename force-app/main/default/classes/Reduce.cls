@@ -1,7 +1,6 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 2019-07-25
- * @description (if required)
  */
 
 global class Reduce implements TerminatorFunction {
@@ -21,12 +20,10 @@ global class Reduce implements TerminatorFunction {
     }
 
     global void call() {
-        while(iterator.hasNext()) {
-            if(accumulatorObject != null) {
-                accumulatorObject.call(iterator.next());
-            } else {
-                currentValue = accumulatorFunction.nextValue(currentValue, iterator.next());
-            }
+        if(accumulatorObject != null) {
+            iterator.reduce(accumulatorObject);
+        } else {
+            currentValue = iterator.reduce(accumulatorFunction, currentValue);
         }
     }
 
