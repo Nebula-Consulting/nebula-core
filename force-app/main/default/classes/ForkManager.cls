@@ -17,7 +17,7 @@ public class ForkManager {
         this.terminatorFunctions = terminatorFunctions;
     }
 
-    public List<Object> getResults() {
+    public LazyIterator getResults() {
         System.assertEquals(terminatorFunctions.size(), forkIterators.size(), Label.LazyIterator_Nested_Forking_Error);
 
         iterator.forEach(new IterateTerminatorFunctions(terminatorFunctions));
@@ -25,8 +25,7 @@ public class ForkManager {
         forkIterators.clear();
 
         return new LazyIterator((List<Object>)terminatorFunctions)
-                .mapValues(new GetResultFromTerminatorFunction())
-                .toList(new List<Object>());
+                .mapValues(new GetResultFromTerminatorFunction());
     }
 
     private class IterateTerminatorFunctions implements VoidFunction {

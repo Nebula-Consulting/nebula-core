@@ -42,16 +42,17 @@ private class LazyIteratorForkingTest {
     }
 
     @IsTest static void forkingToList() {
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
-                new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>()))
-        );
+        List<List<Integer>> results = (List<List<Integer>>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
+                        new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>())))
+                .toList(new List<List<Integer>>());
 
         System.assertEquals(2, results.size());
         System.assert(ForkManager.forkIterators.isEmpty());
 
-        List<Integer> odds = (List<Integer>)results[0];
-        List<Integer> evens = (List<Integer>)results[1];
+        List<Integer> odds = results[0];
+        List<Integer> evens = results[1];
 
         System.assertEquals(1, odds[0]);
         System.assertEquals(3, odds[1]);
@@ -62,10 +63,11 @@ private class LazyIteratorForkingTest {
 
     @IsTest static void sequentialForks() {
         forkingToList();
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
-                new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>()))
-        );
+        List<List<Integer>> results = (List<List<Integer>>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
+                        new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>())))
+                .toList(new List<List<Integer>>());
 
         System.assertEquals(2, results.size());
         System.assert(ForkManager.forkIterators.isEmpty());
@@ -81,10 +83,11 @@ private class LazyIteratorForkingTest {
     }
 
     @IsTest static void forkingToListUneven() {
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
-                new ForkIterator().filter(new IsAlwaysTrue()).postpone(new ToList(new List<Integer>()))
-        );
+        List<List<Integer>> results = (List<List<Integer>>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
+                        new ForkIterator().filter(new IsAlwaysTrue()).postpone(new ToList(new List<Integer>())))
+                .toList(new List<List<Integer>>());
 
         List<Integer> odds = (List<Integer>)results[0];
         List<Integer> all = (List<Integer>)results[1];
@@ -98,40 +101,44 @@ private class LazyIteratorForkingTest {
     }
 
     @IsTest static void forkingReduce() {
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegers(), 0)),
-                new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new Reduce(new SumIntegers(), 0))
-        );
+        List<Integer> results = (List<Integer>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegers(), 0)),
+                        new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new Reduce(new SumIntegers(), 0)))
+                .toList(new List<Integer>());
 
         System.assertEquals(1 + 3 + 5, results[0]);
         System.assertEquals(2 + 4, results[1]);
     }
 
     @IsTest static void forkingReduceUneven() {
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegers(), 0)),
-                new ForkIterator().filter(new IsAlwaysTrue()).postpone(new Reduce(new SumIntegers(), 0))
-        );
+        List<Integer> results = (List<Integer>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegers(), 0)),
+                        new ForkIterator().filter(new IsAlwaysTrue()).postpone(new Reduce(new SumIntegers(), 0)))
+                .toList(new List<Integer>());
 
         System.assertEquals(1 + 3 + 5, results[0]);
         System.assertEquals(1 + 2 + 3 + 4 + 5, results[1]);
     }
 
     @IsTest static void forkingReduceObject() {
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegersToSelf())),
-                new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new Reduce(new SumIntegersToSelf()))
-        );
+        List<SumIntegersToSelf> results = (List<SumIntegersToSelf>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegersToSelf())),
+                        new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new Reduce(new SumIntegersToSelf())))
+                .toList(new List<SumIntegersToSelf>());
 
         System.assertEquals(1 + 3 + 5, ((SumIntegersToSelf)results[0]).total);
         System.assertEquals(2 + 4, ((SumIntegersToSelf)results[1]).total);
     }
 
     @IsTest static void forkingReduceObjectUneven() {
-        List<Object> results = new LazyIterator((List<Object>)data).fork(
-                new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegersToSelf())),
-                new ForkIterator().filter(new IsAlwaysTrue()).postpone(new Reduce(new SumIntegersToSelf()))
-        );
+        List<SumIntegersToSelf> results = (List<SumIntegersToSelf>)new LazyIterator((List<Object>)data)
+                .fork(
+                        new ForkIterator().filter(new IsOdd()).postpone(new Reduce(new SumIntegersToSelf())),
+                        new ForkIterator().filter(new IsAlwaysTrue()).postpone(new Reduce(new SumIntegersToSelf())))
+                .toList(new List<SumIntegersToSelf>());
 
         System.assertEquals(1 + 3 + 5, ((SumIntegersToSelf)results[0]).total);
         System.assertEquals(1 + 2 + 3 + 4 + 5, ((SumIntegersToSelf)results[1]).total);
@@ -174,15 +181,6 @@ private class LazyIteratorForkingTest {
 
         public void call(Object o) {
             total += (Integer)o;
-        }
-    }
-
-    private class NestedFork implements VoidFunction {
-        public void call(Object o) {
-            new LazyIterator(new SingletonIterator(o)).fork(
-                    new ForkIterator().postpone(new ForEach(new SumIntegersToSelf())),
-                    new ForkIterator().postpone(new ForEach(new SumIntegersToSelf()))
-            );
         }
     }
 }
