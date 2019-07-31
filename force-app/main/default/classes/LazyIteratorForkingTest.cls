@@ -45,7 +45,28 @@ private class LazyIteratorForkingTest {
         List<List<Integer>> results = (List<List<Integer>>)new LazyIterator((List<Object>)data)
                 .fork(
                         new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())),
-                        new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>())))
+                        new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>()))
+                )
+                .toList(new List<List<Integer>>());
+
+        System.assertEquals(2, results.size());
+        System.assert(ForkManager.forkIterators.isEmpty());
+
+        List<Integer> odds = results[0];
+        List<Integer> evens = results[1];
+
+        System.assertEquals(1, odds[0]);
+        System.assertEquals(3, odds[1]);
+        System.assertEquals(5, odds[2]);
+        System.assertEquals(2, evens[0]);
+        System.assertEquals(4, evens[1]);
+    }
+
+    @IsTest static void forkingToListBuilder() {
+        List<List<Integer>> results = (List<List<Integer>>)new LazyIterator((List<Object>)data)
+                .fork()
+                .addFork(new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())))
+                .addFork(new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>())))
                 .toList(new List<List<Integer>>());
 
         System.assertEquals(2, results.size());

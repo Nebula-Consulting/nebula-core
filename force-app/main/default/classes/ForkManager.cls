@@ -5,12 +5,26 @@
  * each of the forks via a ForkIterator, and calling each of the terminator functions
  */
 
-public class ForkManager {
+global class ForkManager {
 
     private LazyIterator iterator;
     public static List<ForkIterator> forkIterators = new List<ForkIterator>();
     @TestVisible
     private List<TerminatorFunction> terminatorFunctions;
+
+    public ForkManager(LazyIterator iterator) {
+        this.iterator = iterator;
+        this.terminatorFunctions = new List<TerminatorFunction>();
+    }
+
+    global ForkManager addFork(TerminatorFunction terminatorFunction) {
+        terminatorFunctions.add(terminatorFunction);
+        return this;
+    }
+
+    global List<Object> toList(List<Object> toFill) {
+        return getResults().toList(toFill);
+    }
 
     public ForkManager(LazyIterator iterator, List<TerminatorFunction> terminatorFunctions) {
         this.iterator = iterator;

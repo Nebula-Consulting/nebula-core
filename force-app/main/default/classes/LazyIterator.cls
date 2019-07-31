@@ -126,6 +126,10 @@ global virtual class LazyIterator implements Iterator<Object> {
         return this;
     }
 
+    global ForkManager fork() {
+        return new ForkManager(this);
+    }
+
     global LazyIterator fork(List<TerminatorFunction> forks) {
         return new ForkManager(this, forks).getResults();
     }
