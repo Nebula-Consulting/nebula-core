@@ -23,7 +23,7 @@ global class ForkManager {
     }
 
     global List<Object> toList(List<Object> toFill) {
-        return getResults().toList(toFill);
+        return evaluateForks().toList(toFill);
     }
 
     public ForkManager(LazyIterator iterator, List<TerminatorFunction> terminatorFunctions) {
@@ -31,7 +31,7 @@ global class ForkManager {
         this.terminatorFunctions = terminatorFunctions;
     }
 
-    public LazyIterator getResults() {
+    global LazyIterator evaluateForks() {
         System.assertEquals(terminatorFunctions.size(), forkIterators.size(), Label.LazyIterator_Nested_Forking_Error);
 
         iterator.forEach(new IterateTerminatorFunctions(terminatorFunctions));
