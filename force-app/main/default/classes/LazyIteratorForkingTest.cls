@@ -82,6 +82,26 @@ private class LazyIteratorForkingTest {
         System.assertEquals(4, evens[1]);
     }
 
+    @IsTest static void namedForks() {
+        Map<String, Object> results = (Map<String, Object>)new LazyIterator((List<Object>)data)
+                .fork()
+                .addFork('odds', new ForkIterator().filter(new IsOdd()).postpone(new ToList(new List<Integer>())))
+                .addFork('evens', new ForkIterator().filter(new IsNot(new IsOdd())).postpone(new ToList(new List<Integer>())))
+                .toMap();
+
+        System.assertEquals(2, results.size());
+        System.assert(ForkManager.forkIterators.isEmpty());
+
+        List<Integer> odds = (List<Integer>)results.get('odds');
+        List<Integer> evens = (List<Integer>)results.get('evens');
+
+        System.assertEquals(1, odds[0]);
+        System.assertEquals(3, odds[1]);
+        System.assertEquals(5, odds[2]);
+        System.assertEquals(2, evens[0]);
+        System.assertEquals(4, evens[1]);
+    }
+
     @IsTest static void sequentialForks() {
         forkingToList();
         List<List<Integer>> results = (List<List<Integer>>)new LazyIterator((List<Object>)data)

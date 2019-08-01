@@ -11,10 +11,12 @@ global class ForkManager {
     public static List<ForkIterator> forkIterators = new List<ForkIterator>();
     @TestVisible
     private List<TerminatorFunction> terminatorFunctions;
+    private List<String> forkNames;
 
     public ForkManager(LazyIterator iterator) {
         this.iterator = iterator;
         this.terminatorFunctions = new List<TerminatorFunction>();
+        this.forkNames = new List<String>();
     }
 
     global ForkManager addFork(TerminatorFunction terminatorFunction) {
@@ -22,8 +24,25 @@ global class ForkManager {
         return this;
     }
 
+    global ForkManager addFork(String forkName, TerminatorFunction terminatorFunction) {
+        forkNames.add(forkName);
+        terminatorFunctions.add(terminatorFunction);
+        return this;
+    }
+
     global List<Object> toList(List<Object> toFill) {
         return evaluateForks().toList(toFill);
+    }
+
+    global Map<String, Object> toMap() {
+        Map<String, Object> returnVal = new Map<String, Object>();
+        LazyIterator forkResultIterator = evaluateForks();
+
+        for(String thisForkName : forkNames) {
+            returnVal.put(thisForkName, forkResultIterator.next());
+        }
+
+        return returnVal;
     }
 
     public ForkManager(LazyIterator iterator, List<TerminatorFunction> terminatorFunctions) {
