@@ -11,6 +11,14 @@ global class IsAny implements BooleanFunction {
         this.booleanFunctions = booleanFunctions;
     }
 
+    global IsAny(BooleanFunction booleanFunction1, BooleanFunction booleanFunction2) {
+        this(new List<BooleanFunction>{booleanFunction1, booleanFunction2});
+    }
+
+    global IsAny(BooleanFunction booleanFunction1, BooleanFunction booleanFunction2, BooleanFunction booleanFunction3) {
+        this(new List<BooleanFunction>{booleanFunction1, booleanFunction2, booleanFunction3});
+    }
+
     global Boolean isTrueFor(Object o) {
         for(BooleanFunction thisBooleanFunction : booleanFunctions) {
             if(thisBooleanFunction.isTrueFor(o)) {
