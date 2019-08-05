@@ -1,7 +1,7 @@
 # Nebula Core
 
- - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VUYQA2)
- - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VUYQA2)
+ - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VVRQA2)
+ - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t0J0000002VVRQA2)
 
 The base set of classes used by Nebula Consulting. The licence for this code is MIT, see [LICENSE](LICENSE). 
 
