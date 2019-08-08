@@ -4,5 +4,5 @@
  */
 
 global interface AccumulatorFunction {
-    Object nextValue(Object accumulatorValue, Object currentValue);
+    Object nextValue(Object valueSoFar, Object thisValue);
 }
