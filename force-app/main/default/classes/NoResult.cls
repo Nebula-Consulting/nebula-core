@@ -6,4 +6,7 @@
 
 global class NoResult {
 
+    global final static NoResult NO_RESULT = new NoResult();
+
+    private NoResult() {}
 }

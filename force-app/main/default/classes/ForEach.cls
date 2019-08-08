@@ -22,6 +22,6 @@ global class ForEach implements TerminatorFunction {
     }
 
     global Object getResult() {
-        return new NoResult();
+        return NoResult.NO_RESULT;
     }
 }
