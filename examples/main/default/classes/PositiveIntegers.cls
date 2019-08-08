@@ -4,15 +4,19 @@
  * @description Example of an Iterator as a data-source function
  */
 
-public class PositiveIntegers implements Iterator<Integer> {
+public class PositiveIntegers implements Iterator<Object> {
 
     private Integer x = 0;
+
+    public PositiveIntegers(Integer startValue) {
+        x = startValue;
+    }
 
     public Boolean hasNext() {
         return true;
     }
 
-    public Integer next() {
-        return ++x;
+    public Object next() {
+        return x++;
     }
 }

@@ -1,4 +1,4 @@
-## Iterator operations LazyIterator
+## Iterator operations with LazyIterator
 
 A number of languages support neat operations for working with lists/streams/iterators by providing a set of powerful 
 operations on them. These operations hide the details of having to write lower-level constructs such a for-loops, and 
@@ -14,7 +14,7 @@ write this as:
             .mapValues(new FieldFromSObject(Contact.AccountId))
             .toSet(new Set<Id>());
 
-As you can see, Nebula Core includes some filter and map functions for common use-cases. These include trigger-related use-cases.
+As you can see, Nebula Core includes some filtering and mapping functions for common use-cases. These also include trigger-related use-cases.
 For example, if we want to get the list of contacts in a trigger where the FirstName has changed, we can do it like this:
 
     List<Contact> contactsWithChangedFirstName = new LazyTriggerContextPairIterator(oldContacts, newContacts)
@@ -24,7 +24,7 @@ For example, if we want to get the list of contacts in a trigger where the First
 
 The "lazy" in the name refers to the fact this implementation is lazily evaluated i.e. it does the minimum amount of work possible and 
 doesn't build any intermediate lists. So, even though the examples above chain together filter() and mapValues(), the 
-input list is only iterated over one time. Each item passes through all of the functions individually. 
+input list is only iterated over once - each item passes through all of the functions individually. 
 
 ### What's in LazyIterator
 
@@ -33,15 +33,15 @@ classes are Iterable). When the source is an Iterator, the data need not even ne
 could be a function that generates an unbounded amount of data e.g. [PositiveIntegers](examples/main/default/classes/PositiveIntegers.cls) 
 is an iterator that will generate Integers forever. 
 
-In this section, we will talk about the content behind the LazyIterator being a list. It can always be any 
+In this section, we will talk about the data source for the LazyIterator being a list. It can always be any 
 iterator or iterable, but it's easier to give concrete examples with lists. 
 
 The LazyIterator operations returning another LazyIterator are:
 
- - `filter(BooleanFunction matchingFunction)` this allows you to filter to just items accepted by the matchingFunction. e.g. we could filter a list of Integers to just the odd ones.
+ - `filter(BooleanFunction matchingFunction)` this allows you to filter to just items accepted by the matchingFunction. e.g. we could filter a list of Integers to just the odd ones
  - `mapValues(Function mappingFunction)` this maps each value in the list to a new value e.g. we could double each item in a list of Integers, or even map it to a different type    
  - `expand(ExpansionFunction expansionFunction)` this allows each value in the list to be mapped to multiple values, and then iterates over all the results e.g. to flatten a list of lists [[1],[2,3],[4]] could be expanded to [1, 2, 3, 4] with an appropriate expansion function
- - `setDefaultIfEmpty(Object defaultValue)` when you don't know whether the underlying list will have any data, you can supply a default in case it is empty. This saves a typical pattern of getting the data, checking if it is empty and explicitly assigning a default e.g. if you are querying metadata for settings, and have a reasonable default if no setting is found 
+ - `setDefaultIfEmpty(Object defaultValue)` when you don't know whether the underlying list will have any data, you can supply a default in case it is empty. This saves a typical pattern of getting the data, checking if it is empty and explicitly assigning a default e.g. if you are querying metadata for settings, and have a reasonable default for when no setting is found 
 
 There are also terminator functions, which do not return a LazyIterator. These are typically called at the end of 
 expression, to obtain a final result. 
@@ -50,10 +50,10 @@ expression, to obtain a final result.
  - `reduce(VoidFunction accumulatorObject)` a form of reduce where the accumulation goes into the object that provides the accumulator function
  - `firstOrDefault(Object defaultValue)` get the first value, or the provided defaultValue if the iterator is empty
  - `List<Object> toList(List<Object> toFill)` iterate until there are no more items, putting them into the provided list
- - `Set<Id> toSet(Set<Id> toFill)` iterate until there are no more items, putting them into the provided set
+ - `Set<Object> toSet(Set<Object> toFill)` iterate until there are no more items, putting them into the provided set
  - `forEach(VoidFunction callingFunction)` call the supplied function on all items
  
-Finally, there is an option to fork the iterator into multiple results. This allows you to filter into two different 
+Finally, there is an option to fork the iterator into multiple results. This allows you to filter into different 
 streams which can then be handled differently; or obtain multiple results from the same iterator e.g.
 
     Map<String, Object> accountIds = new LazySObjectIterator(allContacts)
@@ -71,11 +71,16 @@ streams which can then be handled differently; or obtain multiple results from t
     Set<Id> accountIdsNoFirstName = (Set<Id>)accountIds.get('noFirstName');
     Set<Id> accountIdsWithFirstName = (Set<Id>)accountIds.get('withFirstName');
 
+### Mapping and Boolean Functions
+
+There are some functions included in the package for common scenarios. Boolean functions are all named `Is*` and mapping 
+functions are all named `*From*`. The boolean functions include the standard logical operations: `IsNot`, `IsAny`, and `IsAll`.
+
 ### More examples
 
-You can find the complete examples from here in [LazyIteratorExamples](examples/main/default/classes/LazyIteratorExamples.cls).
+The code examples above are written in whole tests in [LazyIteratorExamples](examples/main/default/classes/LazyIteratorExamples.cls).
 
-You can find a trigger handler example in [ContactNumberOfContactsRollUpDeclarative](examples/main/default/classes/ContactNumberOfContactsRollUpDeclarative.cls) 
+There is a trigger handler example in [ContactNumberOfContactsRollUpDeclarative](examples/main/default/classes/ContactNumberOfContactsRollUpDeclarative.cls) 
 
 ###Why?
 

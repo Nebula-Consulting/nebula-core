@@ -81,4 +81,30 @@ private class LazyIteratorExamples {
         System.assert(accountIdsWithFirstName.contains(testRecordSource3.getRecord(Account.SObjectType).withInsert().Id));
     }
 
+    @IsTest
+    static void primes() {
+        System.assertEquals(5, new LazyIterator(new PositiveIntegers(4)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(7, new LazyIterator(new PositiveIntegers(6)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(11, new LazyIterator(new PositiveIntegers(8)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(13, new LazyIterator(new PositiveIntegers(12)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(17, new LazyIterator(new PositiveIntegers(14)).filter(new IsPrime()).firstOrDefault(null));
+    }
+
+    private class IsPrime implements BooleanFunction {
+        public Boolean isTrueFor(Object o) {
+            Integer n = (Integer)o;
+            if(n <= 3) {
+                return n > 1;
+            }
+            if (Math.mod(n, 2) == 0 || Math.mod(n, 3) == 0) {
+                return false;
+            }
+            for(Integer i = 5; i * i <= n; i += 6) {
+                if(Math.mod(n, i) == 0 || Math.mod(n, (i + 2)) == 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 }
