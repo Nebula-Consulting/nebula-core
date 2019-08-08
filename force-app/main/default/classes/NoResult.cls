@@ -4,6 +4,6 @@
  * @description Represents no result from a function (rather than null which could be a database value)
  */
 
-public class NoResult {
+global class NoResult {
 
 }
