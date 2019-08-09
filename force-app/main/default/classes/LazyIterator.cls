@@ -126,6 +126,14 @@ global virtual class LazyIterator implements Iterator<Object> {
         return this;
     }
 
+    global LazyIterator take(Integer nItemsToTake) {
+        return new LazyTakeIterator(this, nItemsToTake);
+    }
+
+    global LazyIterator append(LazyIterator other) {
+        return new LazyAppendIterator(this, other);
+    }
+
     global ForkManager fork() {
         return new ForkManager(this);
     }

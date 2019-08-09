@@ -215,6 +215,34 @@ private class LazyIteratorTest {
         System.assertEquals(defaultValue, result[0]);
     }
 
+    @IsTest static void take() {
+        LazySObjectIterator accountIterator = new LazySObjectIterator(accounts);
+        List<Account> result = (List<Account>)accountIterator
+                .take(3)
+                .toList(new List<Account>());
+
+        System.assertEquals(3, result.size());
+        for(Integer i=0; i < 3; i++) {
+            System.assertEquals(accounts[i], result[i]);
+        }
+        List<Account> result2 = (List<Account>)accountIterator
+                .toList(new List<Account>());
+
+        System.assertEquals(accounts.size()-3, result2.size());
+        for(Integer i=0; i < result2.size(); i++) {
+            System.assertEquals(accounts[result.size() + i], result2[i]);
+        }
+    }
+
+    @IsTest static void append() {
+        List<Integer> result = (List<Integer>)new LazyIterator(new List<Object>{0, 1, 2})
+                .append(new LazyIterator(new List<Object>{3, 4, 5}))
+                .toList( new List<Integer>());
+
+        for(Integer i=0; i < 6; i++) {
+            System.assertEquals(i, result[i]);
+        }
+    }
     private class ListExpander implements ExpansionFunction {
 
         private Iterator<Integer> iterator;
