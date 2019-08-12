@@ -41,6 +41,8 @@ The LazyIterator operations returning another LazyIterator are:
  - `filter(BooleanFunction matchingFunction)` this allows you to filter to just items accepted by the matchingFunction. e.g. we could filter a list of Integers to just the odd ones
  - `mapValues(Function mappingFunction)` this maps each value in the list to a new value e.g. we could double each item in a list of Integers, or even map it to a different type    
  - `expand(ExpansionFunction expansionFunction)` this allows each value in the list to be mapped to multiple values, and then iterates over all the results e.g. to flatten a list of lists [[1],[2,3],[4]] could be expanded to [1, 2, 3, 4] with an appropriate expansion function
+ - `take(Integer nItemsToTake)` takes a given number of items from the iterator e.g. can be called before toList() to make a list of at most n items 
+ - `append(LazyIterator other)` when the results are being pulled out, returns the given iterator's results after its own. In terms of lists, appends one to another 
  - `setDefaultIfEmpty(Object defaultValue)` when you don't know whether the underlying list will have any data, you can supply a default in case it is empty. This saves a typical pattern of getting the data, checking if it is empty and explicitly assigning a default e.g. if you are querying metadata for settings, and have a reasonable default for when no setting is found 
 
 There are also terminator functions, which do not return a LazyIterator. These are typically called at the end of 
@@ -83,6 +85,9 @@ The code examples above are written in whole tests in [LazyIteratorExamples](exa
 There is a trigger handler example in [ContactNumberOfContactsRollUpDeclarative](examples/main/default/classes/ContactNumberOfContactsRollUpDeclarative.cls) 
 
 ###Why?
+
+For some things, like getting a set of ids from a list of SObjects, the motivation for using LazyIterator is clear. It's 
+concise and expressive. Using it for more complex cases is a matter of style.
 
 The style of programming that you can do with LazyIterator is called [Declarative programming](https://en.wikipedia.org/wiki/Declarative_programming). It is a way of writing code where 
 the program is expressed in terms of applying functions. It hides control logic, and emphasises the high-level intent.
