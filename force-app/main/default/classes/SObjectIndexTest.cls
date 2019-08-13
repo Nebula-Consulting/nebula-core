@@ -90,6 +90,10 @@ private class SObjectIndexTest {
         List<Contact> values = (List<Contact>)theIndex.values();
         System.assertEquals(1, values.size());
         System.assertEquals(togContact, values[0]);
+
+        List<Contact> valuesIterator = theIndex.valueIterator().toList(new List<Contact>());
+        System.assertEquals(1, valuesIterator.size());
+        System.assertEquals(togContact, valuesIterator[0]);
     }
 
     @IsTest
@@ -107,6 +111,40 @@ private class SObjectIndexTest {
         List<Id> accountIdKeyList = (List<Id>)theIndex.keyList(new List<Id>());
         System.assertEquals(1, accountIdKeyList.size());
         System.assert(accountIdKeyList.contains(togAccount.Id));
+    }
+
+    @IsTest
+    static void keyIterator() {
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{
+                ACCOUNT_ID, LAST_NAME
+        });
+
+        Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
+        theIndex.put(togContact);
+
+        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        System.assert(!theIndex.isEmpty());
+
+        Set<Id> accountIds = theIndex.keyIterator().toSet(new Set<Id>());
+        System.assertEquals(1, accountIds.size());
+        System.assert(accountIds.contains(togAccount.Id));
+    }
+
+    @IsTest
+    static void keySetId() {
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{
+                ACCOUNT_ID, LAST_NAME
+        });
+
+        Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
+        theIndex.put(togContact);
+
+        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        System.assert(!theIndex.isEmpty());
+
+        Set<Id> accountIds = theIndex.keySet(new Set<Id>());
+        System.assertEquals(1, accountIds.size());
+        System.assert(accountIds.contains(togAccount.Id));
     }
 
     @IsTest

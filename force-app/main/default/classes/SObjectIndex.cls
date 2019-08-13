@@ -165,6 +165,17 @@ global class SObjectIndex implements SObjectIndexI {
         return children.keySet();
     }
 
+    global Set<Id> keySet(Set<Id> toFill) {
+        for(Object key : children.keySet()) {
+            toFill.add((Id)key);
+        }
+        return toFill;
+    }
+
+    global LazyIterator keyIterator() {
+        return new LazyIterator(children.keySet().iterator());
+    }
+
     global List<Object> keyList(List<Object> toFill) {
         toFill.addAll(children.keySet());
         return toFill;
@@ -194,6 +205,10 @@ global class SObjectIndex implements SObjectIndexI {
         }
 
         return values;
+    }
+
+    global LazyIterator valueIterator() {
+        return new LazySObjectIterator(values());
     }
 
     /**
