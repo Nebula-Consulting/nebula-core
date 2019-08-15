@@ -74,6 +74,17 @@ private class LazyIteratorTest {
         System.assertEquals(accounts[0].ParentId, result[0].ParentId);
     }
 
+    @IsTest static void uniquePrimitives() {
+        List<Integer> result = (List<Integer>)new LazyIterator(new List<Object>{1, 2, 1, 3, 3})
+                .filter(new IsUnique())
+                .toList(new List<Integer>());
+
+        System.assertEquals(3, result.size(), result);
+        System.assertEquals(1, result[0]);
+        System.assertEquals(2, result[1]);
+        System.assertEquals(3, result[2]);
+    }
+
     @IsTest static void forEach() {
         new LazySObjectIterator(accounts.iterator())
                 .filter(new IsNot(new NumberOfEmployeesIsOdd()))
