@@ -158,7 +158,7 @@ private class TestFieldFunctionsTest {
         Account testAccount = (Account)testRecordSource
                 .getRecord(Account.SObjectType)
                 .asVariant('With Parent')
-                .useParameters(new Map<String, Object>{'parentVariant' => 'ACME'})
+                .useParameter('parentVariant', 'ACME')
                 .withInsert();
 
         Account parent = [SELECT Id, Name FROM Account WHERE Id != :testAccount.Id];

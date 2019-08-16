@@ -112,6 +112,15 @@ global inherited sharing class TestRecordSource {
             return this;
         }
 
+        global GetBuilder useParameter(String parameterName, Object value) {
+            if(parameters == null) {
+                parameters = new Map<String, Object> {parameterName => value};
+            } else {
+                parameters.put(parameterName, value);
+            }
+            return this;
+        }
+
         private TestRecordGenerator getGenerator() {
             return parent.getGenerator(sObjectType, variant);
         }
