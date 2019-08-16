@@ -145,10 +145,12 @@ global inherited sharing class TestRecordSource {
             Decimal priority2 = ((Test_Record_Generator__mdt)object2).Priority__c;
             if(priority1 == null && priority2 == null) {
                 return 0;
+            } else if(priority1 == null && priority2 < 0) {
+                return -1;
             } else if(priority1 == null || priority2 == null) {
                 return priority1 == null ? 1 : -1;
             } else {
-                return (Integer)(priority1 - priority2);
+                return (Integer)(priority2 - priority1);
             }
         }
     }

@@ -28,7 +28,7 @@ private class TestFieldFunctionsTest {
         Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
         System.assert(result.Name.contains(accountName));
-        System.assert(result.Name.length() > accountName.length());
+        System.assert(result.Name.length() > accountName.length(), result.Name);
     }
 
     @IsTest
