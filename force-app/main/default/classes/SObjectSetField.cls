@@ -8,7 +8,7 @@ global class SObjectSetField implements Function {
     private SObjectField field;
     private Object value;
 
-    public SObjectSetField(SObjectField field, Object value) {
+    global SObjectSetField(SObjectField field, Object value) {
         this.field = field;
         this.value = value;
     }
