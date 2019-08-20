@@ -22,9 +22,9 @@ private class LazyIteratorExamples {
 
         allContacts.addAll(contacts3);
 
-        Set<Id> accountIdsNoFirstName = new LazySObjectIterator(allContacts)
-                .filter(new IsSObjectFieldEqual(Contact.FirstName, null))
-                .mapValues(new FieldFromSObject(Contact.AccountId))
+        Set<Id> accountIdsNoFirstName = new nebc.LazySObjectIterator(allContacts)
+                .filter(new nebc.IsSObjectFieldEqual(Contact.FirstName, null))
+                .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
                 .toSet(new Set<Id>());
 
         System.assertEquals(2, accountIdsNoFirstName.size());
@@ -38,9 +38,9 @@ private class LazyIteratorExamples {
         List<Contact> oldContacts = newContacts.deepClone(true);
         newContacts[0].FirstName = 'Test First Name';
 
-        List<Contact> contactsWithChangedFirstName = new LazyTriggerContextPairIterator(oldContacts, newContacts)
-                .filter(new IsFieldChangedInTrigger(Contact.FirstName))
-                .mapValues(new NewFromTriggerContextPair())
+        List<Contact> contactsWithChangedFirstName = new nebc.LazyTriggerContextPairIterator(oldContacts, newContacts)
+                .filter(new nebc.IsFieldChangedInTrigger(Contact.FirstName))
+                .mapValues(new nebc.NewFromTriggerContextPair())
                 .toList(new List<Contact>());
 
         System.assertEquals(1, contactsWithChangedFirstName.size());
@@ -59,16 +59,16 @@ private class LazyIteratorExamples {
 
         allContacts.addAll(contacts3);
 
-        Map<String, Object> accountIds = new LazySObjectIterator(allContacts)
+        Map<String, Object> accountIds = new nebc.LazySObjectIterator(allContacts)
                 .fork()
-                .addFork('noFirstName', new ForkIterator()
-                        .filter(new IsSObjectFieldEqual(Contact.FirstName, null))
-                        .mapValues(new FieldFromSObject(Contact.AccountId))
-                        .postpone(new ToSet(new Set<Id>())))
-                .addFork('withFirstName', new ForkIterator()
-                        .filter(new IsNot(new IsSObjectFieldEqual(Contact.FirstName, null)))
-                        .mapValues(new FieldFromSObject(Contact.AccountId))
-                        .postpone(new ToSet(new Set<Id>())))
+                .addFork('noFirstName', new nebc.ForkIterator()
+                        .filter(new nebc.IsSObjectFieldEqual(Contact.FirstName, null))
+                        .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
+                        .postpone(new nebc.ToSet(new Set<Id>())))
+                .addFork('withFirstName', new nebc.ForkIterator()
+                        .filter(new nebc.IsNot(new nebc.IsSObjectFieldEqual(Contact.FirstName, null)))
+                        .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
+                        .postpone(new nebc.ToSet(new Set<Id>())))
                 .toMap();
 
         Set<Id> accountIdsNoFirstName = (Set<Id>)accountIds.get('noFirstName');
@@ -83,14 +83,14 @@ private class LazyIteratorExamples {
 
     @IsTest
     static void primes() {
-        System.assertEquals(5, new LazyIterator(new PositiveIntegers(4)).filter(new IsPrime()).firstOrDefault(null));
-        System.assertEquals(7, new LazyIterator(new PositiveIntegers(6)).filter(new IsPrime()).firstOrDefault(null));
-        System.assertEquals(11, new LazyIterator(new PositiveIntegers(8)).filter(new IsPrime()).firstOrDefault(null));
-        System.assertEquals(13, new LazyIterator(new PositiveIntegers(12)).filter(new IsPrime()).firstOrDefault(null));
-        System.assertEquals(17, new LazyIterator(new PositiveIntegers(14)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(5, new nebc.LazyIterator(new PositiveIntegers(4)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(7, new nebc.LazyIterator(new PositiveIntegers(6)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(11, new nebc.LazyIterator(new PositiveIntegers(8)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(13, new nebc.LazyIterator(new PositiveIntegers(12)).filter(new IsPrime()).firstOrDefault(null));
+        System.assertEquals(17, new nebc.LazyIterator(new PositiveIntegers(14)).filter(new IsPrime()).firstOrDefault(null));
     }
 
-    private class IsPrime implements BooleanFunction {
+    private class IsPrime implements nebc.BooleanFunction {
         public Boolean isTrueFor(Object o) {
             Integer n = (Integer)o;
             if(n <= 3) {

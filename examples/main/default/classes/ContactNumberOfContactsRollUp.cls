@@ -4,7 +4,7 @@
  * @description Counts the number of Contacts and rolls up to Account.Number_Of_Contacts__c
  */
 
-global without sharing class ContactNumberOfContactsRollUp implements AfterInsert, AfterUpdate, AfterDelete, AfterUndelete {
+global without sharing class ContactNumberOfContactsRollUp implements nebc.AfterInsert, nebc.AfterUpdate, nebc.AfterDelete, nebc.AfterUndelete {
 
     public void handleAfterInsert(List<Contact> newList) {
         handleAllContacts(newList);
@@ -44,7 +44,7 @@ global without sharing class ContactNumberOfContactsRollUp implements AfterInser
         accountIds.remove(null);
 
         if(!accountIds.isEmpty()) {
-            SObjectIndex accountIdToContactCount = new SObjectIndex('AccountId')
+            nebc.SObjectIndex accountIdToContactCount = new nebc.SObjectIndex('AccountId')
                     .putAll([
                             SELECT COUNT(Id) contactCount,
                                     AccountId

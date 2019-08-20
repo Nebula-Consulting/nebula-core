@@ -4,45 +4,45 @@
  * @description Counts the number of Contacts and rolls up to Account.Number_Of_Contacts_Declarative__c
  */
 
-global without sharing class ContactNumberOfContactsRollUpDeclarative implements AfterInsert, AfterUpdate, AfterDelete, AfterUndelete {
+global without sharing class ContactNumberOfContactsRollUpDeclarative implements nebc.AfterInsert, nebc.AfterUpdate, nebc.AfterDelete, nebc.AfterUndelete {
 
     public void handleAfterInsert(List<Contact> newList) {
-        updateAccountRollUps(new LazySObjectIterator(newList));
+        updateAccountRollUps(new nebc.LazySObjectIterator(newList));
     }
 
     public void handleAfterUpdate(List<Contact> oldList, List<Contact> newList) {
-        updateAccountRollUps(new LazyTriggerContextPairIterator(oldList, newList)
-                .filter(new IsFieldChangedInTrigger(Contact.AccountId))
-                .expand(new TriggerContextPairExpandToBoth()));
+        updateAccountRollUps(new nebc.LazyTriggerContextPairIterator(oldList, newList)
+                .filter(new nebc.IsFieldChangedInTrigger(Contact.AccountId))
+                .expand(new nebc.TriggerContextPairExpandToBoth()));
     }
 
     public void handleAfterDelete(List<Contact> oldList) {
-        updateAccountRollUps(new LazySObjectIterator(oldList));
+        updateAccountRollUps(new nebc.LazySObjectIterator(oldList));
     }
 
     public void handleAfterUndelete(List<Contact> newList) {
-        updateAccountRollUps(new LazySObjectIterator(newList));
+        updateAccountRollUps(new nebc.LazySObjectIterator(newList));
     }
 
-    private void updateAccountRollUps(LazyIterator contacts) {
+    private void updateAccountRollUps(nebc.LazyIterator contacts) {
         Set<Id> accountIds = contacts
-                .mapValues(new FieldFromSObject(Contact.AccountId))
-                .filter(new IsNotNull())
+                .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
+                .filter(new nebc.IsNotNull())
                 .toSet(new Set<Id>());
 
         if(!accountIds.isEmpty()) {
-            update new LazyIdIterator(accountIds.iterator())
+            update new nebc.LazyIdIterator(accountIds.iterator())
                     .mapValues(new AccountWithNumberOfContactsFromAccountId(accountIds))
                     .toList(new List<Account>());
         }
     }
 
-    private class AccountWithNumberOfContactsFromAccountId implements Function {
+    private class AccountWithNumberOfContactsFromAccountId implements nebc.Function {
 
-        private SObjectIndex accountIdToContactCount;
+        private nebc.SObjectIndex accountIdToContactCount;
 
         public AccountWithNumberOfContactsFromAccountId(Set<Id> accountIds) {
-            accountIdToContactCount = new SObjectIndex('AccountId')
+            accountIdToContactCount = new nebc.SObjectIndex('AccountId')
                     .putAll([
                             SELECT COUNT(Id) contactCount,
                                     AccountId
