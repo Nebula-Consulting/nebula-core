@@ -33,6 +33,25 @@ private class LazyIteratorExamples {
     }
 
     @IsTest
+    static void createSObjectsFromOtherSObjects() {
+        List<Contact> allContacts = testRecordSource.getRecord(Contact.SObjectType).withInsert(2);
+
+        List<Task> tasks = new nebc.LazySObjectIterator(allContacts)
+                .mapValues(new nebc.SObjectFromPrototype(new Task(Subject = 'Follow Up'))
+                        .put(new nebc.SObjectPutField(Task.WhoId, new nebc.FieldFromSObject(Contact.Id)))
+                        .put(new nebc.SObjectPutField(Task.Description, new nebc.FieldFromSObject(Contact.LastName)))
+                )
+                .toList(new List<Task>());
+
+        System.assertEquals(allContacts.size(), tasks.size());
+        for(Integer i=0; i < allContacts.size(); i++) {
+            System.assertEquals('Follow Up', tasks[i].Subject);
+            System.assertEquals(allContacts[i].Id, tasks[i].WhoId);
+            System.assertEquals(allContacts[i].LastName, tasks[i].Description);
+        }
+    }
+
+    @IsTest
     static void changedObjectsFromTrigger() {
         List<Contact> newContacts = testRecordSource.getRecord(Contact.SObjectType).withInsert(2);
         List<Contact> oldContacts = newContacts.deepClone(true);
