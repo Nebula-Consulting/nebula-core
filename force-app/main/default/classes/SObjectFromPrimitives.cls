@@ -5,7 +5,7 @@
  * the given field to the value coming from the iterator
  */
 
-global with sharing class SObjectFromPrimitives implements Function {
+global class SObjectFromPrimitives implements Function {
 
     private SObject prototype;
     private SObjectField field;
