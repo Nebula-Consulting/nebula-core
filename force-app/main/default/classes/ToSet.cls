@@ -8,6 +8,7 @@ global with sharing class ToSet implements TerminatorFunction {
     private LazyIterator iterator;
     private Set<Object> toFill;
     private Set<Id> toFillId;
+    private Set<String> toFillString;
 
     global ToSet(Set<Object> toFill) {
         this.toFill = toFill;
@@ -17,9 +18,15 @@ global with sharing class ToSet implements TerminatorFunction {
         this.toFillId = toFill;
     }
 
+    global ToSet(Set<String> toFill) {
+        this.toFillString = toFill;
+    }
+
     global void call() {
         if(toFillId != null) {
             iterator.toSet(toFillId);
+        } else if(toFillString != null) {
+            iterator.toSet(toFillString);
         } else {
             iterator.toSet(toFill);
         }
@@ -31,6 +38,6 @@ global with sharing class ToSet implements TerminatorFunction {
     }
 
     global Object getResult() {
-        return toFillId != null ? (Object)toFillId : (Object)toFill;
+        return toFillId != null ? (Object)toFillId : (toFillString != null ? (Object)toFillString : (Object)toFill);
     }
 }

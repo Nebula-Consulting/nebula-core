@@ -6,19 +6,28 @@
 
 public class LazyFilterIterator extends LazyIterator {
     private BooleanFunction matchingFunction;
+    private Function mappingFunction;
     private Object peek;
     private Boolean peekIsValid;
     private Boolean peekMatches;
 
     public LazyFilterIterator(Iterator<Object> iterator, BooleanFunction matchingFunction) {
+        this(iterator, null, matchingFunction);
+    }
+
+    public LazyFilterIterator(Iterator<Object> iterator, Function mappingFunction, BooleanFunction matchingFunction) {
         super(iterator);
         this.matchingFunction = matchingFunction;
+        this.mappingFunction = mappingFunction;
         this.peekIsValid = false;
     }
 
     private void peek() {
         if(internalHasNext()) {
             peek = internalNext();
+            if(mappingFunction != null) {
+                peek = mappingFunction.call(peek);
+            }
             peekMatches = matchingFunction.isTrueFor(peek);
             peekIsValid = true;
         } else {

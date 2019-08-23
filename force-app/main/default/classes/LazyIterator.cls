@@ -76,6 +76,14 @@ global virtual class LazyIterator implements Iterator<Object> {
         return toFill;
     }
 
+    global virtual Set<String> toSet(Set<String> toFill) {
+        while(hasNext()) {
+            toFill.add((String)next());
+        }
+
+        return toFill;
+    }
+
     global virtual Set<Object> toSet(Set<Object> toFill) {
         while(hasNext()) {
             toFill.add(next());
@@ -86,6 +94,10 @@ global virtual class LazyIterator implements Iterator<Object> {
 
     global LazyIterator filter(BooleanFunction matchingFunction) {
         return new LazyFilterIterator(this, matchingFunction);
+    }
+
+    global LazyIterator filter(Function mappingFunction, BooleanFunction matchingFunction) {
+        return new LazyFilterIterator(this, mappingFunction, matchingFunction);
     }
 
     global LazyIterator expand(ExpansionFunction expansionFunction) {
