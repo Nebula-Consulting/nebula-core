@@ -11,13 +11,30 @@ global class SObjectIndex implements SObjectIndexI {
         this(new List<String>{fieldName}, 0);
     }
 
+    global SObjectIndex(String fieldName1, String fieldName2)  {
+        this(new List<String>{fieldName1, fieldName2}, 0);
+    }
+
+    global SObjectIndex(String fieldName1, String fieldName2, String fieldName3)  {
+        this(new List<String>{fieldName1, fieldName2, fieldName3}, 0);
+    }
+
     global SObjectIndex(SObjectField field)  {
         this(new List<String>{field.getDescribe().getName()}, 0);
+    }
+
+    global SObjectIndex(SObjectField field1, SObjectField field2)  {
+        this(new List<String>{field1.getDescribe().getName(), field2.getDescribe().getName()}, 0);
+    }
+
+    global SObjectIndex(SObjectField field1, SObjectField field2, SObjectField field3)  {
+        this(new List<String>{field1.getDescribe().getName(), field2.getDescribe().getName(), field3.getDescribe().getName()}, 0);
     }
 
     global SObjectIndex(List<String> indexFields)  {
         this(indexFields, 0);
     }
+
     global SObjectIndex setIsCaseInsensitive(Boolean isCaseInsensitive)  {
         if(isCaseInsensitive) {
             return setKeyFunction(new StringLowerCaseFunction());
