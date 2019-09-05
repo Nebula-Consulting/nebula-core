@@ -20,7 +20,7 @@ global virtual class SObjectPutField extends BinaryFunctionWithConversion {
 
     global override Object call(Object o1, Object o2) {
         SObject result = (SObject)o1;
-        result.put(field, function.call(o2));
+        result.put(field, function.call(o2 == NoResult.NO_RESULT ? o1 : o2));
         return result;
     }
 }

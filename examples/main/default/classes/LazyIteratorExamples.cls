@@ -32,6 +32,16 @@ private class LazyIteratorExamples {
     }
 
     @IsTest
+    static void copyFieldInListOfSObjects() {
+        new nebc.LazySObjectIterator(contacts)
+                .forEach(new SObjectPutField(Contact.FirstName, new nebc.FieldFromSObject(Contact.LastName)));
+
+        for(Contact thisContact : contacts) {
+            System.assertEquals(thisContact.LastName, thisContact.FirstName);
+        }
+    }
+
+    @IsTest
     static void find() {
         Contact foundContact = (Contact)new nebc.LazySObjectIterator(contacts)
                 .filter(new nebc.IsSObjectFieldEqual(Contact.LastName, contacts[1].LastName))
