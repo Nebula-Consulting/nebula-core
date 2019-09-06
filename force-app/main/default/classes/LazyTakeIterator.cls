@@ -4,7 +4,7 @@
  * @description A LazyIterator that will allow a limited number of items to be taken from the underlying iterator
  */
 
-global class LazyTakeIterator extends LazyIterator {
+public class LazyTakeIterator extends LazyIterator {
 
     private Integer nItemsToTake;
 
