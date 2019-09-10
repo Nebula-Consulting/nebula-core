@@ -16,14 +16,25 @@ public class LazyExpansionIterator extends LazyIterator {
     }
 
     public override Boolean hasNext() {
-        return  internalHasNext() || expansionFunction.hasNext();
+        while(!expansionFunctionInitialised || !expansionFunction.hasNext()) {
+            if(internalHasNext()) {
+                initialiseExpansionFunction();
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     public override Object next() {
         if(!expansionFunctionInitialised || !expansionFunction.hasNext()) {
-            expansionFunction.setValue(internalNext());
-            expansionFunctionInitialised = true;
+            initialiseExpansionFunction();
         }
         return expansionFunction.next();
+    }
+
+    private void initialiseExpansionFunction() {
+        expansionFunction.setValue(internalNext());
+        expansionFunctionInitialised = true;
     }
 }
