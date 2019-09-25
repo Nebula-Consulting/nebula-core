@@ -9,15 +9,15 @@ global class IsLessThan implements BooleanFunction {
 
     private FunctionList functions;
 
-    public IsLessThan(Object left, Object right) {
+    global IsLessThan(Object left, Object right) {
         functions = new FunctionList(left, right);
     }
 
-    public IsLessThan(Object right) {
+    global IsLessThan(Object right) {
         functions = new FunctionList(new IdentityFunction(), right);
     }
 
-    public Boolean isTrueFor(Object o) {
+    global Boolean isTrueFor(Object o) {
         Object leftValue = functions.functions[0].call(o);
         Object rightValue = functions.functions[1].call(o);
 
@@ -31,5 +31,4 @@ global class IsLessThan implements BooleanFunction {
 
         throw new TypeException('Cannot convert ' + leftValue + ' to a suitable type for ' + IsLessThan.class.getName());
     }
-
 }

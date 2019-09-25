@@ -9,15 +9,15 @@ global class IsEqual implements BooleanFunction {
 
     private FunctionList functions;
 
-    public IsEqual(Object left, Object right) {
+    global IsEqual(Object left, Object right) {
         functions = new FunctionList(left, right);
     }
 
-    public IsEqual(Object right) {
+    global IsEqual(Object right) {
         functions = new FunctionList(new IdentityFunction(), right);
     }
 
-    public Boolean isTrueFor(Object o) {
+    global Boolean isTrueFor(Object o) {
         Object leftValue = functions.functions[0].call(o);
         Object rightValue = functions.functions[1].call(o);
 
