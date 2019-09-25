@@ -5,7 +5,17 @@
 
 global class IsNotNull implements BooleanFunction {
 
+    private Function mappingFunction;
+
+    global IsNotNull(Function mappingFunction) {
+        this.mappingFunction = mappingFunction;
+    }
+
+    global IsNotNull() {
+        this(new IdentityFunction());
+    }
+
     global Boolean isTrueFor(Object o) {
-        return o != null;
+        return mappingFunction.call(o) != null;
     }
 }
