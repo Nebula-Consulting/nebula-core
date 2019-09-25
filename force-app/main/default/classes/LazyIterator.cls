@@ -4,7 +4,7 @@
  * @description Iterator-based operations for lazy-evaluation on collections/streams
  */
 
-global virtual class LazyIterator implements Iterator<Object> {
+global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
 
     protected Iterator<Object> iterator {private get; set;}
     private Iterator<Object> defaultIterator;
@@ -180,5 +180,13 @@ global virtual class LazyIterator implements Iterator<Object> {
 
     global TerminatorFunction postpone(TerminatorFunction terminatorFunction) {
         return terminatorFunction.setIterator(this);
+    }
+
+    global Object call() {
+        return next();
+    }
+
+    global Object call(Object o) {
+        return call();
     }
 }
