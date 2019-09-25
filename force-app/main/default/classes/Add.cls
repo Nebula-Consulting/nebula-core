@@ -6,31 +6,21 @@
 
 global class Add implements Function {
 
-    private Function left;
-    private Function right;
+    private FunctionList functions;
 
     global Add(Object left, Object right) {
-        if(left instanceof Function) {
-            this.left = (Function)left;
-        } else {
-            this.left = new ConstantFunction(left);
-        }
-        if(right instanceof Function) {
-            this.right = (Function)right;
-        } else {
-            this.right = new ConstantFunction(right);
-        }
+        functions = new FunctionList(left, right);
     }
 
     global Object call(Object o) {
-        Object leftValue = left.call(o);
-        Object rightValue = right.call(o);
+        Object leftValue = functions.functions[0].call(o);
+        Object rightValue = functions.functions[1].call(o);
 
         if(leftValue instanceof String) {
             return (String)leftValue + rightValue;
         } else if (leftValue instanceof Integer) {
             return (Integer)leftValue + (Integer)rightValue;
         }
-        throw new TypeException('Cannot convert ' + leftValue + ' to a suitable type for nebc.Add');
+        throw new TypeException('Cannot convert ' + leftValue + ' to a suitable type for ' + Add.class.getName());
     }
 }
