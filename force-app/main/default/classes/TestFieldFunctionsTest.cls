@@ -53,6 +53,26 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void getStandardPriceBookId() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Opportunity'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = Opportunity.Pricebook2Id.getDescribe().getName(),
+                        Apex_Class__c = TestFieldFunctions.GetStandardPriceBookId.class.getName()
+                )
+        });
+
+        Opportunity result = (Opportunity)testRecordSource.getRecord(Opportunity.SObjectType).withoutInsert();
+
+        System.assertEquals(Test.getStandardPriceBookId(), result.Pricebook2Id);
+    }
+
+    @IsTest
     static void nowModified() {
         Integer addDays = 1;
         Integer addMinutes = 60;

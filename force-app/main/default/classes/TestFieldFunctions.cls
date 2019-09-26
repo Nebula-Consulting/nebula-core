@@ -21,6 +21,12 @@ global class TestFieldFunctions {
         }
     }
 
+    global class GetStandardPriceBookId extends TestFieldFunctionWithParent {
+        global Object getValue(String fieldName, Object value) {
+            return Test.getStandardPricebookId();
+        }
+    }
+
     global class CreateRecord extends TestFieldFunctionWithParent {
 
         global String sObjectType;
