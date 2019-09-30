@@ -148,16 +148,14 @@ global inherited sharing class TestRecordSource {
         setRecordAsVariant(record, null);
     }
 
-    private class TestRecordGeneratorPriorityComparator implements Comparator {
+    private class TestRecordGeneratorPriorityDescendingNullsFirst implements Comparator {
         public Integer compare(Object object1, Object object2) {
             Decimal priority1 = ((Test_Record_Generator__mdt)object1).Priority__c;
             Decimal priority2 = ((Test_Record_Generator__mdt)object2).Priority__c;
             if(priority1 == null && priority2 == null) {
                 return 0;
-            } else if(priority1 == null && priority2 < 0) {
-                return -1;
             } else if(priority1 == null || priority2 == null) {
-                return priority1 == null ? 1 : -1;
+                return priority1 == null ? -1 : 1;
             } else {
                 return (Integer)(priority2 - priority1);
             }
@@ -186,7 +184,7 @@ global inherited sharing class TestRecordSource {
             generatorMetadata.put(metadataRecord);
         } else {
             existingMatches.add(metadataRecord);
-            Lists.sort(existingMatches, new TestRecordGeneratorPriorityComparator());
+            Lists.sort(existingMatches, new TestRecordGeneratorPriorityDescendingNullsFirst());
         }
         return metadataRecord;
     }
