@@ -100,9 +100,11 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
             Object returnValue = getSimpleValue();
 
             if (fieldMetadata.Apex_Class__c != null) {
-                return testFieldFunction
-                        .setParentGenerator(parentGenerator)
-                        .getValue(fieldDescribe.getName(), returnValue);
+                TestFieldFunction thisTestFieldFunction = testFieldFunction
+                        .setParentGenerator(parentGenerator);
+
+                System.assertNotEquals(null, thisTestFieldFunction, 'Incorrect implementation of ' + getFieldFunctionClass() + '.setParentGenerator(). Either extend nebc.TestFieldFunctionWithParent, or make sure your implementation returns "this"');
+                return testFieldFunction.getValue(fieldDescribe.getName(), returnValue);
             }
             return returnValue;
         }
