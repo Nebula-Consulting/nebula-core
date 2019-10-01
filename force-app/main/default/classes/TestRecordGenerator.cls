@@ -8,7 +8,7 @@ global inherited sharing abstract class TestRecordGenerator {
     global TestRecordSource parentRecordSource {get; private set;}
     global Test_Record_Generator__mdt metadata {get; private set;}
     global List<Test_Record_Generator_Field__mdt> metadataFields {get; private set;}
-    private Map<String, Object> parameters;
+    protected Map<String, Object> parameters;
 
     global Object getParameter(String name) {
         return parameters == null ? null : parameters.get(name);

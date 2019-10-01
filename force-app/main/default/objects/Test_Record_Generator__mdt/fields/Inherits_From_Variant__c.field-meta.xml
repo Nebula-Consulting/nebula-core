@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inherits_From_Variant__c</fullName>
+    <description>Variant to create before applying this one. Leave blank to use the un-named variant first (if it exists). Multiple layers of inheritance are supported</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Variant to create before applying this one. Leave blank to use the un-named variant first (if it exists). Multiple layers of inheritance are supported</inlineHelpText>
+    <label>Inherits From Variant</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -13,7 +13,7 @@ global inherited sharing class TestRecordSource {
                     new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
                     .putAll(
                     [
-                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c, DeveloperName
+                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c, DeveloperName, Inherits_From_Variant__c
                             FROM Test_Record_Generator__mdt
                             ORDER BY Priority__c DESC
                     ]);
@@ -56,9 +56,7 @@ global inherited sharing class TestRecordSource {
                 List<String> variants = (List<String>)new LazySObjectIterator(metadataForThisSObject.iterator())
                         .mapValues(new FieldFromSObject(Test_Record_Generator__mdt.Variant__c))
                         .toList(new List<String>());
-                message += '. Existing variants are: '
-                        + String.join(variants, ', ');
-
+                message += '. Existing variants are: ' + String.join(variants, ', ');
             }
             throw new ClassNotFoundException(message);
         } else {
@@ -74,6 +72,10 @@ global inherited sharing class TestRecordSource {
         return returnGenerator;
     }
 
+    private SObjectType getSObjectTypeFromString(String SObjectTypeName) {
+        return ((SObject)Type.forName(SObjectTypeName).newInstance()).getSObjectType();
+    }
+
     private TestRecordGenerator createGenerator(Test_Record_Generator__mdt thisGeneratorMetadata) {
         Type generatorType = TypeLoader.getType(thisGeneratorMetadata.Apex_Class__c);
         if (generatorType == null) {
@@ -82,8 +84,19 @@ global inherited sharing class TestRecordSource {
         } else {
             TestRecordGenerator newGenerator = (TestRecordGenerator)TypeLoader.getInstance(generatorType, thisGeneratorMetadata.Parameters__c);
             newGenerator.setup(this, thisGeneratorMetadata, generatorFieldMetadata.getAll(thisGeneratorMetadata.Id));
-            generators.put(thisGeneratorMetadata.Id, newGenerator);
-            return newGenerator;
+            CompositeTestRecordGenerator compositeTestRecordGenerator = new CompositeTestRecordGenerator(newGenerator);
+
+            if(thisGeneratorMetadata.Variant__c != thisGeneratorMetadata.Inherits_From_Variant__c) {
+                try {
+                    TestRecordGenerator inheritanceParent = getGenerator(getSObjectTypeFromString(thisGeneratorMetadata.SObject__c), thisGeneratorMetadata.Inherits_From_Variant__c);
+                    compositeTestRecordGenerator.pushFront(inheritanceParent);
+                } catch (ClassNotFoundException e) {
+                    System.assertEquals(thisGeneratorMetadata.Variant__c,  null, 'Inherited variant not found on metadata ' + thisGeneratorMetadata);
+                }
+            }
+
+            generators.put(thisGeneratorMetadata.Id, compositeTestRecordGenerator);
+            return compositeTestRecordGenerator;
         }
     }
 

@@ -77,6 +77,104 @@ private class TestRecordSourceTest {
     }
 
     @IsTest
+    static void inheritanceFromNoVariant() {
+        String accountName = 'Some wacky thing not in the metadata';
+        String accountDescription = 'A description';
+        String variantName = 'Derived Account';
+
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0);
+        Test_Record_Generator__mdt recordGeneratorMetadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        Priority__c = 0,
+                        SObject__c = 'Account',
+                        Variant__c = variantName
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = recordGeneratorMetadata.Id,
+                        Field__c = 'Description',
+                        Value__c = accountDescription
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).asVariant(variantName).withoutInsert();
+
+        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountDescription, result.Description);
+    }
+    @IsTest
+    static void inheritanceTwoLevels() {
+        String accountName = 'Some wacky thing not in the metadata';
+        String accountDescription = 'A description';
+        String accountWebsite = 'https://www.salesforce.com';
+        String variantName = 'Derived Account';
+        String variantName2 = 'Derived Account 2';
+
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0);
+        Test_Record_Generator__mdt recordGeneratorMetadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        Priority__c = 0,
+                        SObject__c = 'Account',
+                        Variant__c = variantName
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = recordGeneratorMetadata.Id,
+                        Field__c = 'Description',
+                        Value__c = accountDescription
+                )
+        });
+        Test_Record_Generator__mdt recordGeneratorMetadata2 = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        Priority__c = 0,
+                        SObject__c = 'Account',
+                        Variant__c = variantName2,
+                        Inherits_From_Variant__c = variantName
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = recordGeneratorMetadata2.Id,
+                        Field__c = 'Website',
+                        Value__c = accountWebsite
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).asVariant(variantName2).withoutInsert();
+
+        System.assertEquals(accountWebsite, result.Website);
+        System.assertEquals(accountDescription, result.Description);
+        System.assertEquals(accountName, result.Name);
+    }
+
+    @IsTest
+    static void variantNoBase() {
+        String accountDescription = 'A description';
+        String variantName = 'Derived Account';
+
+        Test_Record_Generator__mdt recordGeneratorMetadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        Priority__c = 0,
+                        SObject__c = 'Account',
+                        Variant__c = variantName
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = recordGeneratorMetadata.Id,
+                        Field__c = 'Description',
+                        Value__c = accountDescription
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).asVariant(variantName).withoutInsert();
+
+        System.assertEquals(accountDescription, result.Description);
+    }
+
+    @IsTest
     static void withoutInsert() {
         String accountName = 'Test Account';
         testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), -1000);
