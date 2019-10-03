@@ -8,14 +8,13 @@ global virtual class SObjectPutField extends BinaryFunctionWithConversion {
     private SObjectField field;
     private Function function;
 
-    global SObjectPutField(SObjectField field, Object value) {
+    global SObjectPutField(SObjectField field, Object valueOrFunction) {
         this.field = field;
-        this.function = new ConstantFunction(value);
-    }
-
-    global SObjectPutField(SObjectField field, Function function) {
-        this.field = field;
-        this.function = function;
+        if(valueOrFunction instanceof Function) {
+            this.function =(Function)valueOrFunction;
+        } else {
+            this.function = new ConstantFunction(valueOrFunction);
+        }
     }
 
     global override Object call(Object o1, Object o2) {
