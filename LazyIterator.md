@@ -2,36 +2,36 @@
 
 A number of languages support neat operations for working with lists/streams/iterators by providing a set of powerful 
 operations on them. These operations hide the details of having to write lower-level constructs such a for-loops, and 
-can be composed together to provide a succinct way of working with data. 
+they can be composed together to provide a succinct way of working with data. 
 
 [LazyIterator](force-app/main/default/classes/LazyIterator.cls) provides this functionality in Apex. 
 
 For example, if we had a list of contacts and we wanted to get the accounts ids of those with no `FirstName`, we can 
 write this as:
 
-    Set<Id> accountIdsNoFirstName = new LazySObjectIterator(allContacts)
-            .filter(new IsSObjectFieldEqual(Contact.FirstName, null))
+    Set<Id> accountIdsNoFirstName = new nebc.LazySObjectIterator(allContacts)
+            .filter(new nebc.IsNull(new FieldFromSObject(Contact.FirstName)))
             .mapValues(new FieldFromSObject(Contact.AccountId))
             .toSet(new Set<Id>());
 
-As you can see, Nebula Core includes some filtering and mapping functions for common use-cases. These also include trigger-related use-cases.
-For example, if we want to get the list of contacts in a trigger where the FirstName has changed, we can do it like this:
+As you can see, Nebula Core includes some filtering and mapping functions for common use-cases. There are also functions 
+for trigger-related use-cases. For example, if we want to get the list of contacts in a trigger where the FirstName 
+has changed, we can do it like this:
 
-    List<Contact> contactsWithChangedFirstName = new LazyTriggerContextPairIterator(oldContacts, newContacts)
-            .filter(new IsFieldChangedInTrigger(Contact.FirstName))
-            .mapValues(new NewFromTriggerContextPair())
+    List<Contact> contactsWithChangedFirstName = new nebc.LazyTriggerContextPairIterator(oldContacts, newContacts)
+            .filter(new nebc.IsFieldChangedInTrigger(Contact.FirstName))
+            .mapValues(new nebc.NewFromTriggerContextPair())
             .toList(new List<Contact>());
 
 The "lazy" in the name refers to the fact this implementation is lazily evaluated i.e. it does the minimum amount of work possible and 
 doesn't build any intermediate lists. So, even though the examples above chain together filter() and mapValues(), the 
-input list is only iterated over once - each item passes through all of the functions individually. 
+input list is only iterated once - each item passes through all of the functions individually. 
 
 ### What's in LazyIterator
 
 You can construct a LazyIterator from either an Iterator, or an Iterable (the standard List and Set 
 classes are Iterable). When the source is an Iterator, the data need not even necessarily come from a data structure, it 
-could be a function that generates an unbounded amount of data e.g. [PositiveIntegers](examples/main/default/classes/PositiveIntegers.cls) 
-is an iterator that will generate Integers forever. 
+could be a function that generates an unbounded amount of data.
 
 In this section, we will talk about the data source for the LazyIterator being a list. It can always be any 
 iterator or iterable, but it's easier to give concrete examples with lists. 

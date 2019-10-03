@@ -45,7 +45,7 @@ private class LazyIteratorExamples {
     static void find() {
         Contact foundContact = (Contact)new nebc.LazySObjectIterator(contacts)
                 .filter(new nebc.IsSObjectFieldEqual(Contact.LastName, contacts[1].LastName))
-                .firstOrDefault(new Contact());
+                .firstOrDefault(nebc.NoResult.NO_RESULT);
 
         System.assertEquals(contacts[1].Id, foundContact.Id);
     }
@@ -53,29 +53,12 @@ private class LazyIteratorExamples {
     @IsTest
     static void getFieldFromListOfSObjectsFilter() {
         Set<Id> accountsIds = new nebc.LazySObjectIterator(contacts)
-                .filter(new IsSObjectFieldEqual(Contact.FirstName, null))
+                .filter(new nebc.IsNull(new FieldFromSObject(Contact.FirstName)))
                 .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
                 .toSet(new Set<Id>());
 
         System.assertEquals(1, accountsIds.size());
         System.assert(accountsIds.contains(accounts[0].Id));
-    }
-
-    @IsTest
-    static void mapSObjectsToOtherSObjects() {
-        List<Task> tasks = new nebc.LazySObjectIterator(contacts)
-                .mapValues(new nebc.SObjectFromPrototype(new Task(ActivityDate = Date.today().addDays(7)))
-                        .put(new nebc.SObjectPutField(Task.WhoId, new nebc.FieldFromSObject(Contact.Id)))
-                        .put(new nebc.SObjectPutField(Task.Subject, new nebc.Add('Follow up with ', new nebc.FieldFromSObject(Contact.LastName))))
-                )
-                .toList(new List<Task>());
-
-        System.assertEquals(contacts.size(), tasks.size());
-        for(Integer i=0; i < contacts.size(); i++) {
-            System.assertEquals( Date.today().addDays(7), tasks[i].ActivityDate);
-            System.assertEquals(contacts[i].Id, tasks[i].WhoId);
-            System.assertEquals('Follow up with ' + contacts[i].LastName, tasks[i].Subject);
-        }
     }
 
     @IsTest
@@ -89,10 +72,27 @@ private class LazyIteratorExamples {
     }
 
     @IsTest
+    static void mapSObjectsToOtherSObjects() {
+        List<Task> tasks = new nebc.LazySObjectIterator(contacts)
+                .mapValues(new nebc.SObjectFromPrototype(new Task(ActivityDate = Date.today().addDays(7)))
+                        .put(new nebc.SObjectPutField(Task.WhoId, new nebc.FieldFromSObject(Contact.Id)))
+                        .put(new nebc.SObjectPutField(Task.Subject, new nebc.Add('Follow up with ', new nebc.FieldFromSObject(Contact.LastName))))
+                )
+                .toList(new List<Task>());
+
+        System.assertEquals(contacts.size(), tasks.size());
+        for(Integer i=0; i < contacts.size(); i++) {
+            System.assertEquals(Date.today().addDays(7), tasks[i].ActivityDate);
+            System.assertEquals(contacts[i].Id, tasks[i].WhoId);
+            System.assertEquals('Follow up with ' + contacts[i].LastName, tasks[i].Subject);
+        }
+    }
+
+    @IsTest
     static void modifySObjectsConditionally() {
         new nebc.LazySObjectIterator(contacts)
-                .mapValues(new IsSObjectFieldEqual(Contact.AccountId, accounts[0].Id), new nebc.SObjectPutField(Contact.LeadSource, 'Web'))
-                .mapValues(new IsSObjectFieldEqual(Contact.AccountId, accounts[1].Id), new nebc.SObjectPutField(Contact.LeadSource, 'Other'))
+                .mapValues(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[0].Id), new nebc.SObjectPutField(Contact.LeadSource, 'Web'))
+                .mapValues(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[1].Id), new nebc.SObjectPutField(Contact.LeadSource, 'Other'))
                 .forEach();
 
         for(Contact thisContact : contacts) {
@@ -143,31 +143,4 @@ private class LazyIteratorExamples {
         System.assertEquals(1, secondAccount.size());
         System.assert(secondAccount.contains(contacts[2].Id));
     }
-//
-//    @IsTest
-//    static void primes() {
-//        System.assertEquals(5, new nebc.LazyIterator(new PositiveIntegers(4)).filter(new IsPrime()).firstOrDefault(null));
-//        System.assertEquals(7, new nebc.LazyIterator(new PositiveIntegers(6)).filter(new IsPrime()).firstOrDefault(null));
-//        System.assertEquals(11, new nebc.LazyIterator(new PositiveIntegers(8)).filter(new IsPrime()).firstOrDefault(null));
-//        System.assertEquals(13, new nebc.LazyIterator(new PositiveIntegers(12)).filter(new IsPrime()).firstOrDefault(null));
-//        System.assertEquals(17, new nebc.LazyIterator(new PositiveIntegers(14)).filter(new IsPrime()).firstOrDefault(null));
-//    }
-//
-//    private class IsPrime implements nebc.BooleanFunction {
-//        public Boolean isTrueFor(Object o) {
-//            Integer n = (Integer)o;
-//            if(n <= 3) {
-//                return n > 1;
-//            }
-//            if (Math.mod(n, 2) == 0 || Math.mod(n, 3) == 0) {
-//                return false;
-//            }
-//            for(Integer i = 5; i * i <= n; i += 6) {
-//                if(Math.mod(n, i) == 0 || Math.mod(n, (i + 2)) == 0) {
-//                    return false;
-//                }
-//            }
-//            return true;
-//        }
-//    }
 }
