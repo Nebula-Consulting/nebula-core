@@ -47,7 +47,6 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         }
     }
 
-    @Deprecated // Just use filter(matchingFunction).firstOrDefault(defaultValue);
     global Object findOrDefault(BooleanFunction matchingFunction, Object defaultValue) {
         return filter(matchingFunction).firstOrDefault(defaultValue);
     }
