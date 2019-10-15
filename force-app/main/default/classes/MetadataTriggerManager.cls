@@ -24,10 +24,9 @@ global with sharing class MetadataTriggerManager {
     private static SObjectIndex sObjectTypeNameToEventToTriggerList { get {
         if (sObjectTypeNameToEventToTriggerList == null) {
             sObjectTypeNameToEventToTriggerList = new SObjectIndex(
-                    new List<String>{
-                            Trigger_Handler__mdt.SObject__c.getDescribe().getName(),
-                            Trigger_Handler__mdt.Event__c.getDescribe().getName()
-                    })
+                    Trigger_Handler__mdt.SObject__c.getDescribe().getName(),
+                    Trigger_Handler__mdt.Event__c.getDescribe().getName()
+            )
                     .putAll(mockMetadata != null ? mockMetadata :
                             [
                                     SELECT DeveloperName, NamespacePrefix, Event__c, SObject__c, Apex_Class__c, Order__c,
@@ -95,6 +94,5 @@ global with sharing class MetadataTriggerManager {
                 handleInstance(handlerInstance, triggerOperation, oldList, newList);
             }
         }
-
     }
 }
