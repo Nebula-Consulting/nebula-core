@@ -91,7 +91,7 @@ global inherited sharing class TestRecordSource {
                     TestRecordGenerator inheritanceParent = getGenerator(getSObjectTypeFromString(thisGeneratorMetadata.SObject__c), thisGeneratorMetadata.Inherits_From_Variant__c);
                     compositeTestRecordGenerator.pushFront(inheritanceParent);
                 } catch (ClassNotFoundException e) {
-                    System.assertEquals(thisGeneratorMetadata.Variant__c,  null, 'Inherited variant not found on metadata ' + thisGeneratorMetadata);
+                    System.assertEquals(thisGeneratorMetadata.Inherits_From_Variant__c,  null, 'Inherited variant not found on metadata ' + thisGeneratorMetadata);
                 }
             }
 
