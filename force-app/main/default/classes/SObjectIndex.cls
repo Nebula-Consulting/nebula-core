@@ -43,7 +43,7 @@ global class SObjectIndex implements SObjectIndexI {
         }
     }
 
-    private SObjectIndex setKeyFunction(Function keyFunction) {
+    global SObjectIndex setKeyFunction(Function keyFunction) {
         if(!isEmpty()) {
             throw new IllegalStateException(Label.SObjectIndex_Case_Insensitive_Error);
         } else {
