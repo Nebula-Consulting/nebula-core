@@ -18,7 +18,7 @@ private class GetTest {
     @IsTest
     static void sObjectIndex() {
         SObjectIndex theIndex = new SObjectIndex(Account.Name).putAll(accounts);
-        Get sObjectIndexGet = new Get(theIndex);
+        GetFrom sObjectIndexGet = new GetFrom(theIndex);
 
         for(Integer i=0; i < accounts.size(); i++) {
             System.assertEquals(accounts[i].Id, ((Account)sObjectIndexGet.call(accounts[i].Name)).Id);
@@ -28,7 +28,7 @@ private class GetTest {
     @IsTest
     static void mapGet() {
         Map<Id, Account> theMap = new Map<Id, Account>(accounts);
-        Get sObjectIndexGet = new Get(theMap);
+        GetFrom sObjectIndexGet = new GetFrom(theMap);
 
         for(Integer i=0; i < accounts.size(); i++) {
             System.assertEquals(accounts[i].Name, ((Account)sObjectIndexGet.call(accounts[i].Id)).Name);
@@ -37,7 +37,7 @@ private class GetTest {
 
     @IsTest
     static void sObjectGet() {
-        Get sObjectGet = new Get(accounts[0]);
+        GetFrom sObjectGet = new GetFrom(accounts[0]);
 
         System.assertEquals(accounts[0].Name, sObjectGet.call('Name'));
         System.assertEquals(accounts[0].Id, sObjectGet.call('Id'));

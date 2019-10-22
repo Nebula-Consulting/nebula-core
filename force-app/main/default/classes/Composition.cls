@@ -8,8 +8,16 @@ global virtual class Composition implements Function {
 
     private List<Function> functions;
 
+    global Composition(Function function1) {
+        functions = new List<Function> { function1 };
+    }
+
     global Composition(Function function1, Function function2) {
         functions = new List<Function> { function1, function2 };
+    }
+
+    global Composition(Function function1, Function function2, Function function3) {
+        functions = new List<Function> { function1, function2, function3 };
     }
 
     global Composition add(Function function) {

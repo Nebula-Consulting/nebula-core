@@ -4,23 +4,23 @@
  * @description Get values from map-like objects e.g. Map, SObjectIndex, SObject
  */
 
-global class Get implements Function {
+global class GetFrom implements Function {
 
     private Gettable theGettable;
 
-    global Get(SObjectIndex theIndex) {
-        theGettable = new SObjectIndexGet(theIndex);
+    global GetFrom(SObjectIndex theIndex) {
+        theGettable = new GetFromSObjectIndex(theIndex);
     }
 
-    global Get(Map<Id, SObject> sObjectMap) {
-        theGettable = new SObjectMapGet(sObjectMap);
+    global GetFrom(Map<Id, SObject> sObjectMap) {
+        theGettable = new GetFromSObjectMap(sObjectMap);
     }
 
-    global Get(SObject anSObject) {
-        this.theGettable = new SObjectGet(anSObject);
+    global GetFrom(SObject anSObject) {
+        this.theGettable = new GetFromSObject(anSObject);
     }
 
-    global Get(Gettable customGettable) {
+    global GetFrom(Gettable customGettable) {
         this.theGettable = customGettable;
     }
 
@@ -28,11 +28,11 @@ global class Get implements Function {
         return theGettable.get(o);
     }
 
-    private class SObjectIndexGet implements Gettable {
+    private class GetFromSObjectIndex implements Gettable {
 
         private SObjectIndex theIndex;
 
-        public SObjectIndexGet(SObjectIndex theIndex) {
+        public GetFromSObjectIndex(SObjectIndex theIndex) {
             this.theIndex = theIndex;
         }
 
@@ -41,11 +41,11 @@ global class Get implements Function {
         }
     }
 
-    private class SObjectMapGet implements Gettable {
+    private class GetFromSObjectMap implements Gettable {
 
         private Map<Id, SObject> theMap;
 
-        public SObjectMapGet(Map<Id, SObject> theMap) {
+        public GetFromSObjectMap(Map<Id, SObject> theMap) {
             this.theMap = theMap;
         }
 
@@ -54,11 +54,11 @@ global class Get implements Function {
         }
     }
 
-    private class SObjectGet implements Gettable {
+    private class GetFromSObject implements Gettable {
 
         private SObject theSObject;
 
-        public SObjectGet(SObject theSObject) {
+        public GetFromSObject(SObject theSObject) {
             this.theSObject = theSObject;
         }
 
