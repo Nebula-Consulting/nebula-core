@@ -10,8 +10,8 @@ private class LazyIteratorExamples {
     static nebc.TestIdGenerator contactIdGenerator = new nebc.TestIdGenerator(Contact.SObjectType);
 
     static List<Account> accounts = new List<Account> {
-            new Account(Id = accountIdGenerator.next(), Name = 'Account One'),
-            new Account(Id = accountIdGenerator.next(), Name = 'Account Two')
+            new Account(Id = accountIdGenerator.next(), Name = 'Account One', BillingStreet = 'Billing Street 1'),
+            new Account(Id = accountIdGenerator.next(), Name = 'Account Two', BillingStreet = 'Billing Street 2')
     };
 
     static List<Contact> contacts = new List<Contact> {
@@ -100,6 +100,23 @@ private class LazyIteratorExamples {
                 System.assertEquals('Web', thisContact.LeadSource);
             } else {
                 System.assertEquals('Other', thisContact.LeadSource);
+            }
+        }
+    }
+
+    @IsTest
+    static void useMapValuesToWriteBack() {
+        Map<Id, Account> accountMap = new Map<Id, Account>(accounts);
+
+        List<Contact> result = new nebc.LazySObjectIterator(contacts)
+                .mapValues(new nebc.SObjectPutField(Contact.MailingStreet, new nebc.Composition(new nebc.FieldFromSObject(Contact.AccountId), new nebc.GetFrom(accountMap)).add(new nebc.FieldFromSObject(Account.BillingStreet))))
+                .toList(new List<Contact>());
+
+        for(Contact thisContact : result) {
+            if(thisContact.AccountId == accounts[0].Id) {
+                System.assertEquals(accounts[0].BillingStreet, thisContact.MailingStreet);
+            } else {
+                System.assertEquals(accounts[1].BillingStreet, thisContact.MailingStreet);
             }
         }
     }
