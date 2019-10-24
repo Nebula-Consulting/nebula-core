@@ -25,6 +25,11 @@ global virtual class Composition implements Function {
         return this;
     }
 
+    global Composition compose(Function function) {
+        functions.add(function);
+        return this;
+    }
+
     global virtual Object call(Object o) {
         Object returnVal = o;
         for(Integer i=0; i < functions.size(); i++) {

@@ -18,6 +18,11 @@ global class SObjectFromPrototype implements Function{
         return this;
     }
 
+    global SObjectFromPrototype put(SObjectField field, Object valueOrFunction) {
+        functions.add(new SObjectPutField(field, valueOrFunction));
+        return this;
+    }
+
     global Object call(Object o) {
         return functions.call(prototype.clone(), o);
     }

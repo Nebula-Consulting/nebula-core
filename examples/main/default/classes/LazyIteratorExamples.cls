@@ -75,8 +75,8 @@ private class LazyIteratorExamples {
     static void mapSObjectsToOtherSObjects() {
         List<Task> tasks = new nebc.LazySObjectIterator(contacts)
                 .mapValues(new nebc.SObjectFromPrototype(new Task(ActivityDate = Date.today().addDays(7)))
-                        .put(new nebc.SObjectPutField(Task.WhoId, new nebc.FieldFromSObject(Contact.Id)))
-                        .put(new nebc.SObjectPutField(Task.Subject, new nebc.Add('Follow up with ', new nebc.FieldFromSObject(Contact.LastName))))
+                        .put(Task.WhoId, new nebc.FieldFromSObject(Contact.Id))
+                        .put(Task.Subject, new nebc.Add('Follow up with ', new nebc.FieldFromSObject(Contact.LastName)))
                 )
                 .toList(new List<Task>());
 
@@ -108,11 +108,13 @@ private class LazyIteratorExamples {
     static void useMapValuesToWriteBack() {
         Map<Id, Account> accountMap = new Map<Id, Account>(accounts);
 
-        List<Contact> result = new nebc.LazySObjectIterator(contacts)
-                .mapValues(new nebc.SObjectPutField(Contact.MailingStreet, new nebc.Composition(new nebc.FieldFromSObject(Contact.AccountId), new nebc.GetFrom(accountMap)).add(new nebc.FieldFromSObject(Account.BillingStreet))))
-                .toList(new List<Contact>());
+        new nebc.LazySObjectIterator(contacts)
+                .forEach(new nebc.SObjectPutField(
+                Contact.MailingStreet,
+                new nebc.Composition(new nebc.FieldFromSObject(Contact.AccountId), new nebc.GetFrom(accountMap))
+                        .compose(new nebc.FieldFromSObject(Account.BillingStreet))));
 
-        for(Contact thisContact : result) {
+        for(Contact thisContact : contacts) {
             if(thisContact.AccountId == accounts[0].Id) {
                 System.assertEquals(accounts[0].BillingStreet, thisContact.MailingStreet);
             } else {
