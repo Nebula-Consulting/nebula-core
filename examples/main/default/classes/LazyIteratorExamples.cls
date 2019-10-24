@@ -24,6 +24,7 @@ private class LazyIteratorExamples {
     static void getFieldFromListOfSObjects() {
         Set<Id> accountsIds = new nebc.LazySObjectIterator(contacts)
                 .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
+                .filter(new nebc.IsNotNull())
                 .toSet(new Set<Id>());
 
         System.assertEquals(2, accountsIds.size());
