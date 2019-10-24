@@ -27,6 +27,10 @@ global class IsGreaterThan implements BooleanFunction {
             return (Integer)leftValue > (Integer)rightValue;
         } else if (leftValue instanceof Decimal) {
             return (Decimal)leftValue > (Decimal)rightValue;
+        } else if (leftValue instanceof Datetime) {
+            return (Datetime)leftValue > (Datetime)rightValue;
+        } else if (leftValue instanceof Date) {
+            return (Date)leftValue > (Date)rightValue;
         }
 
         throw new TypeException('Cannot convert ' + leftValue + ' to a suitable type for ' + IsGreaterThan.class.getName());
