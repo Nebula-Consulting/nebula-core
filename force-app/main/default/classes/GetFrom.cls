@@ -9,11 +9,19 @@ global class GetFrom implements Function {
     private Gettable theGettable;
 
     global GetFrom(SObjectIndex theIndex) {
-        theGettable = new GetFromSObjectIndex(theIndex);
+        this(theIndex, NoResult.NO_RESULT);
+    }
+
+    global GetFrom(SObjectIndex theIndex, Object defaultIfMissing) {
+        theGettable = new GetFromSObjectIndex(theIndex, defaultIfMissing);
     }
 
     global GetFrom(Map<Id, SObject> sObjectMap) {
-        theGettable = new GetFromSObjectMap(sObjectMap);
+        this(sObjectMap, NoResult.NO_RESULT);
+    }
+
+    global GetFrom(Map<Id, SObject> sObjectMap, Object defaultIfMissing) {
+        theGettable = new GetFromSObjectMap(sObjectMap, defaultIfMissing);
     }
 
     global GetFrom(SObject anSObject) {
@@ -31,26 +39,35 @@ global class GetFrom implements Function {
     private class GetFromSObjectIndex implements Gettable {
 
         private SObjectIndex theIndex;
+        private Object defaultIfMissing;
 
-        public GetFromSObjectIndex(SObjectIndex theIndex) {
+        public GetFromSObjectIndex(SObjectIndex theIndex, Object defaultIfMissing) {
             this.theIndex = theIndex;
+            this.defaultIfMissing = defaultIfMissing;
         }
 
         public Object get(Object key) {
-            return theIndex.get(key);
+            List<SObject> results = theIndex.getAll(key);
+            if(results.isEmpty()) {
+                return defaultIfMissing;
+            } else {
+                return results[0];
+            }
         }
     }
 
     private class GetFromSObjectMap implements Gettable {
 
         private Map<Id, SObject> theMap;
+        private Object defaultIfMissing;
 
-        public GetFromSObjectMap(Map<Id, SObject> theMap) {
+        public GetFromSObjectMap(Map<Id, SObject> theMap, Object defaultIfMissing) {
             this.theMap = theMap;
+            this.defaultIfMissing = defaultIfMissing;
         }
 
         public Object get(Object key) {
-            return theMap.get((Id)key);
+            return theMap.containsKey((Id)key) ? theMap.get((Id)key) : defaultIfMissing;
         }
     }
 

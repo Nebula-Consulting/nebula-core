@@ -23,16 +23,19 @@ private class GetTest {
         for(Integer i=0; i < accounts.size(); i++) {
             System.assertEquals(accounts[i].Id, ((Account)sObjectIndexGet.call(accounts[i].Name)).Id);
         }
+
+        System.assertEquals(NoResult.NO_RESULT, sObjectIndexGet.call(accountIdGenerator.next()));
     }
 
     @IsTest
     static void mapGet() {
         Map<Id, Account> theMap = new Map<Id, Account>(accounts);
-        GetFrom sObjectIndexGet = new GetFrom(theMap);
+        GetFrom mapGet = new GetFrom(theMap);
 
         for(Integer i=0; i < accounts.size(); i++) {
-            System.assertEquals(accounts[i].Name, ((Account)sObjectIndexGet.call(accounts[i].Id)).Name);
+            System.assertEquals(accounts[i].Name, ((Account) mapGet.call(accounts[i].Id)).Name);
         }
+        System.assertEquals(NoResult.NO_RESULT, mapGet.call(accountIdGenerator.next()));
     }
 
     @IsTest
