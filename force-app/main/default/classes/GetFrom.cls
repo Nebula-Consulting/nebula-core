@@ -9,19 +9,11 @@ global class GetFrom implements Function {
     private Gettable theGettable;
 
     global GetFrom(SObjectIndex theIndex) {
-        this(theIndex, NoResult.NO_RESULT);
-    }
-
-    global GetFrom(SObjectIndex theIndex, Object defaultIfMissing) {
-        theGettable = new GetFromSObjectIndex(theIndex, defaultIfMissing);
+        theGettable = new GetFromSObjectIndex(theIndex);
     }
 
     global GetFrom(Map<Id, SObject> sObjectMap) {
-        this(sObjectMap, NoResult.NO_RESULT);
-    }
-
-    global GetFrom(Map<Id, SObject> sObjectMap, Object defaultIfMissing) {
-        theGettable = new GetFromSObjectMap(sObjectMap, defaultIfMissing);
+        theGettable = new GetFromSObjectMap(sObjectMap);
     }
 
     global GetFrom(SObject anSObject) {
@@ -36,14 +28,23 @@ global class GetFrom implements Function {
         return theGettable.get(o);
     }
 
+    global GetFrom setDefaultIfMissing(Object defaultIfMissing) {
+        theGettable.setDefaultIfMissing(defaultIfMissing);
+        return this;
+    }
+
     private class GetFromSObjectIndex implements Gettable {
 
         private SObjectIndex theIndex;
-        private Object defaultIfMissing;
+        private Object defaultIfMissing = NoResult.NO_RESULT;
 
-        public GetFromSObjectIndex(SObjectIndex theIndex, Object defaultIfMissing) {
+        public GetFromSObjectIndex(SObjectIndex theIndex) {
             this.theIndex = theIndex;
+        }
+
+        public Gettable setDefaultIfMissing(Object defaultIfMissing) {
             this.defaultIfMissing = defaultIfMissing;
+            return this;
         }
 
         public Object get(Object key) {
@@ -59,11 +60,15 @@ global class GetFrom implements Function {
     private class GetFromSObjectMap implements Gettable {
 
         private Map<Id, SObject> theMap;
-        private Object defaultIfMissing;
+        private Object defaultIfMissing = NoResult.NO_RESULT;
 
-        public GetFromSObjectMap(Map<Id, SObject> theMap, Object defaultIfMissing) {
+        public GetFromSObjectMap(Map<Id, SObject> theMap) {
             this.theMap = theMap;
+        }
+
+        public Gettable setDefaultIfMissing(Object defaultIfMissing) {
             this.defaultIfMissing = defaultIfMissing;
+            return this;
         }
 
         public Object get(Object key) {
@@ -77,6 +82,10 @@ global class GetFrom implements Function {
 
         public GetFromSObject(SObject theSObject) {
             this.theSObject = theSObject;
+        }
+
+        public Gettable setDefaultIfMissing(Object defaultIfMissing) {
+            return this;
         }
 
         public Object get(Object key) {

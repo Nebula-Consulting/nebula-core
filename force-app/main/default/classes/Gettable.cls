@@ -6,4 +6,5 @@
 
 global interface Gettable {
     Object get(Object key);
+    Gettable setDefaultIfMissing(Object defaultIfMissing);
 }
