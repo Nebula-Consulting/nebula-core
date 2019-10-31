@@ -14,12 +14,12 @@ global class SObjectFromPrototype implements Function{
     }
 
     global SObjectFromPrototype put(BinaryFunction function) {
-        functions.add(function);
+        functions.compose(function);
         return this;
     }
 
     global SObjectFromPrototype put(SObjectField field, Object valueOrFunction) {
-        functions.add(new SObjectPutField(field, valueOrFunction));
+        functions.compose(new SObjectPutField(field, valueOrFunction));
         return this;
     }
 

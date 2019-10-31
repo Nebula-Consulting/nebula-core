@@ -15,7 +15,7 @@ global class BinaryComposition extends BinaryFunctionWithConversion {
         functions = new List<BinaryFunction> { function1, function2 };
     }
 
-    global BinaryComposition add(BinaryFunction function) {
+    global BinaryComposition compose(BinaryFunction function) {
         functions.add(function);
         return this;
     }
