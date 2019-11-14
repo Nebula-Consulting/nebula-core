@@ -31,15 +31,18 @@ global inherited sharing class QueryBuilder {
         return this;
     }
 
-    global QueryBuilder addAllFields() {
+    global QueryBuilder addAllFields(BooleanFunction fieldFilter) {
         List<SObjectField> allFields = ((SObject)Type.forName(typeName).newInstance()).getSObjectType().getDescribe().fields.getMap().values();
         for(SObjectField f : allFields) {
-            DescribeFieldResult fDescribe = f.getDescribe();
-            if(fDescribe.isAccessible()) {
-                fieldsLowerCase.add(fDescribe.getName().toLowerCase());
+            if(fieldFilter.isTrueFor(f)) {
+                fieldsLowerCase.add(f.getDescribe().getName().toLowerCase());
             }
         }
         return this;
+    }
+
+    global QueryBuilder addAllFields() {
+        return addAllFields(new ConstantFunction(true));
     }
 
     global QueryBuilder setOrderByClause(String orderByClause) {

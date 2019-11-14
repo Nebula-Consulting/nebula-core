@@ -3,7 +3,7 @@
  * @date 2019-08-21
  */
 
-global class ConstantFunction implements Function, BinaryFunction, NullaryFunction {
+global class ConstantFunction implements Function, BinaryFunction, NullaryFunction, BooleanFunction {
     private Object value;
 
     global ConstantFunction(Object value) {
@@ -20,5 +20,8 @@ global class ConstantFunction implements Function, BinaryFunction, NullaryFuncti
 
     global Object call() {
         return value;
+    }
+    global Boolean isTrueFor(Object o) {
+        return (Boolean)value;
     }
 }
