@@ -31,6 +31,17 @@ global inherited sharing class QueryBuilder {
         return this;
     }
 
+    global QueryBuilder addAllFields() {
+        List<SObjectField> allFields = ((SObject)Type.forName(typeName).newInstance()).getSObjectType().getDescribe().fields.getMap().values();
+        for(SObjectField f : allFields) {
+            DescribeFieldResult fDescribe = f.getDescribe();
+            if(fDescribe.isAccessible()) {
+                fieldsLowerCase.add(fDescribe.getName().toLowerCase());
+            }
+        }
+        return this;
+    }
+
     global QueryBuilder setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
         return this;
@@ -59,9 +70,11 @@ global inherited sharing class QueryBuilder {
         String selectFields = String.join(new List<String>(fieldsLowerCase), ', ');
 
         String theQuery = 'SELECT ' + selectFields + ' '
-                + 'FROM ' + typeName + ' '
-                + 'WHERE ' + whereClause;
+                + 'FROM ' + typeName;
 
+        if(whereClause != null) {
+            theQuery += ' WHERE ' + whereClause;
+        }
         if(orderByClause != null) {
             theQuery += ' ORDER BY ' + orderByClause;
         }

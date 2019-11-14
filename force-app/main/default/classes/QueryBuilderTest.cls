@@ -15,11 +15,25 @@ private class QueryBuilderTest {
     @IsTest
     public static void queryFields() {
         Test.startTest();
-        String query = new QueryBuilder('Account')
+        String query = new QueryBuilder(Account.SObjectType)
                 .addFields(new Set<String> {'Name'})
                 .setWhereClause('Id != null')
                 .setOrderByClause('CreatedDate')
                 .setPaginationClause('LIMIT 10')
+                .getQuery();
+
+        List<Account> accounts = Database.query(query);
+        Test.stopTest();
+
+        System.assertEquals(1, accounts.size());
+        System.assertEquals(testAccount.Name, accounts[0].Name);
+    }
+
+    @IsTest
+    public static void allFields() {
+        Test.startTest();
+        String query = new QueryBuilder('Account')
+                .addAllFields()
                 .getQuery();
 
         List<Account> accounts = Database.query(query);
