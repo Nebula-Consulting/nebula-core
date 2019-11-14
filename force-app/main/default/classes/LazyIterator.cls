@@ -111,6 +111,13 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return result;
     }
 
+    global Object reduce(AccumulatorObject accumulatorObject) {
+        while(hasNext()) {
+            accumulatorObject.accumulate(next());
+        }
+        return accumulatorObject;
+    }
+
     global Object reduce(VoidFunction accumulatorObject) {
         while(hasNext()) {
             accumulatorObject.call(next());

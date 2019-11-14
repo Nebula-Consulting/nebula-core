@@ -5,10 +5,14 @@
 
 global virtual class SObjectPutField extends BinaryFunctionWithConversion {
 
-    private SObjectField field;
+    private String field;
     private Function function;
 
     global SObjectPutField(SObjectField field, Object valueOrFunction) {
+        this(field.getDescribe().getName(), valueOrFunction);
+    }
+
+    global SObjectPutField(String field, Object valueOrFunction) {
         this.field = field;
         if(valueOrFunction instanceof Function) {
             this.function =(Function)valueOrFunction;

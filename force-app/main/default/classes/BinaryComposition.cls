@@ -3,7 +3,7 @@
  * @date 2019-08-21
  */
 
-global class BinaryComposition extends BinaryFunctionWithConversion {
+global class BinaryComposition extends BinaryFunctionWithConversion implements AccumulatorObject {
 
     private List<BinaryFunction> functions;
 
@@ -26,5 +26,9 @@ global class BinaryComposition extends BinaryFunctionWithConversion {
             returnVal = functions[i].call(returnVal, o2);
         }
         return returnVal;
+    }
+
+    global void accumulate(Object o) {
+        functions.add((BinaryFunction)o);
     }
 }
