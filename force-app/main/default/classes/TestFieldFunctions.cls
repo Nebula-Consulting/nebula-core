@@ -111,7 +111,12 @@ global class TestFieldFunctions {
         global String parameterName;
 
         global Object getValue(String fieldName, Object value) {
-            return parentGenerator.getParameter(parameterName == null ? fieldName : parameterName);
+            parameterName = parameterName == null ? fieldName : parameterName;
+            if(parentGenerator.hasParameter(parameterName)) {
+                return parentGenerator.getParameter(parameterName);
+            } else {
+                return value;
+            }
         }
     }
 }
