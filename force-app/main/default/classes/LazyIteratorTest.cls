@@ -247,6 +247,26 @@ private class LazyIteratorTest {
         }
     }
 
+    @IsTest static void prepend() {
+        List<Integer> result = (List<Integer>)new LazyIterator(new List<Object>{3, 4, 5})
+                .prepend(new LazyIterator(new List<Object>{0, 1, 2}))
+                .toList( new List<Integer>());
+
+        for(Integer i=0; i < 6; i++) {
+            System.assertEquals(i, result[i]);
+        }
+    }
+
+    @IsTest static void prependSingle() {
+        List<Integer> result = (List<Integer>)new LazyIterator(new List<Object>{1, 2, 3})
+                .prepend(0)
+                .toList( new List<Integer>());
+
+        for(Integer i=0; i < 4; i++) {
+            System.assertEquals(i, result[i]);
+        }
+    }
+
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;
 
