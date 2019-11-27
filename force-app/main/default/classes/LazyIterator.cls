@@ -168,6 +168,10 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return new LazyAppendIterator(this, other);
     }
 
+    global LazyIterator append(Object item) {
+        return new LazyAppendIterator(this, new List<Object>{item}.iterator());
+    }
+
     global ForkManager fork() {
         return new ForkManager(this);
     }

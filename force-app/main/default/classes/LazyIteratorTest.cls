@@ -237,6 +237,16 @@ private class LazyIteratorTest {
         }
     }
 
+    @IsTest static void appendSingle() {
+        List<Integer> result = (List<Integer>)new LazyIterator(new List<Object>{0, 1, 2})
+                .append(3)
+                .toList( new List<Integer>());
+
+        for(Integer i=0; i < 4; i++) {
+            System.assertEquals(i, result[i]);
+        }
+    }
+
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;
 
