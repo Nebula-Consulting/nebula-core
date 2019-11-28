@@ -126,11 +126,11 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
     }
 
     global LazyIterator mapValues(Function mappingFunction) {
-        return new LazyMapIterator(this, mappingFunction);
+        return new LazyMappingIterator(this, mappingFunction);
     }
 
     global LazyIterator mapValues(BooleanFunction filterFunction, Function mappingFunction) {
-        return new LazyMapIterator(this, filterFunction, mappingFunction);
+        return new LazyMappingIterator(this, filterFunction, mappingFunction);
     }
 
     global void forEach(VoidFunction callingFunction) {

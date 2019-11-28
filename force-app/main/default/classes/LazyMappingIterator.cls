@@ -4,18 +4,18 @@
  * @description A lazy iterator that maps values using mappingFunction
  */
 
-public class LazyMapIterator extends LazyIterator {
+public class LazyMappingIterator extends LazyIterator {
 
     private Function mappingFunction;
     private BooleanFunction filterFunction;
 
-    public LazyMapIterator(Iterator<Object> iterator, Function mappingFunction) {
+    public LazyMappingIterator(Iterator<Object> iterator, Function mappingFunction) {
         super(iterator);
         this.mappingFunction = mappingFunction;
         this.filterFunction = new ConstantBooleanFunction(true);
     }
 
-    public LazyMapIterator(Iterator<Object> iterator, BooleanFunction filterFunction, Function mappingFunction) {
+    public LazyMappingIterator(Iterator<Object> iterator, BooleanFunction filterFunction, Function mappingFunction) {
         super(iterator);
         this.mappingFunction = mappingFunction;
         this.filterFunction = filterFunction;
