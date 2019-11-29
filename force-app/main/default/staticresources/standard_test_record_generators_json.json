@@ -1,0 +1,162 @@
+{
+  "Account": {
+    "generator": {
+      "MasterLabel": "Account",
+      "DeveloperName": "Account",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Account"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Account: Name",
+        "DeveloperName": "Account_Name",
+        "nebc__Field__c": "Name",
+        "nebc__Value__c": "Test Account"
+      }
+    ]
+  },
+  "Contact": {
+    "generator": {
+      "MasterLabel": "Contact",
+      "DeveloperName": "Contact",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Contact"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Contact: LastName",
+        "DeveloperName": "Contact_LastName",
+        "nebc__Field__c": "LastName",
+        "nebc__Value__c": "Test LastName"
+      },
+      {
+        "MasterLabel": "Contact: Account",
+        "DeveloperName": "Contact_Account",
+        "nebc__Field__c": "AccountId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Account\"}"
+      }
+    ]
+  },
+  "Opportunity": {
+    "generator": {
+      "MasterLabel": "Opportunity",
+      "DeveloperName": "Opportunity",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Opportunity"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Opportunity: Name",
+        "DeveloperName": "Opportunity_Name",
+        "nebc__Field__c": "Name",
+        "nebc__Value__c": "Test Opportunity"
+      },
+      {
+        "MasterLabel": "Opportunity: StageName",
+        "DeveloperName": "Opportunity_StageName",
+        "nebc__Field__c": "StageName",
+        "nebc__Value__c": "Qualification"
+      },
+      {
+        "MasterLabel": "Opportunity: CloseDate",
+        "DeveloperName": "Opportunity_CloseDate",
+        "nebc__Field__c": "CloseDate",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.Today"
+      }
+    ]
+  },
+  "Product2": {
+    "generator": {
+      "MasterLabel": "Product",
+      "DeveloperName": "Product",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Product2"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Product: Name",
+        "DeveloperName": "Product_Name",
+        "nebc__Field__c": "Name",
+        "nebc__Value__c": "Test Product"
+      }
+    ]
+  },
+  "PricebookEntry": {
+    "generator": {
+      "MasterLabel": "PricebookEntry",
+      "DeveloperName": "PricebookEntry",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "PricebookEntry"
+    },
+    "fields": [
+      {
+        "MasterLabel": "PricebookEntry: Pricebook",
+        "DeveloperName": "PricebookEntry_Pricebook",
+        "nebc__Field__c": "Pricebook2Id",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.GetStandardPriceBookId"
+      },
+      {
+        "MasterLabel": "PricebookEntry: Product",
+        "DeveloperName": "PricebookEntry_Product",
+        "nebc__Field__c": "Product2Id",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Product2\"}"
+      },
+      {
+        "MasterLabel": "PricebookEntry: UnitPrice",
+        "DeveloperName": "PricebookEntry_UnitPrice",
+        "nebc__Field__c": "UnitPrice",
+        "nebc__Value__c": "7"
+      },
+      {
+        "MasterLabel": "PricebookEntry: IsActive",
+        "DeveloperName": "PricebookEntry_IsActive",
+        "nebc__Field__c": "IsActive",
+        "nebc__Value__c": "true"
+      }
+    ]
+  },
+  "OpportunityLineItem": {
+    "generator": {
+      "MasterLabel": "OpportunityLineItem",
+      "DeveloperName": "OpportunityLineItem",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "OpportunityLineItem"
+    },
+    "fields": [
+      {
+        "MasterLabel": "OpportunityLineItem: Opportunity",
+        "DeveloperName": "OpportunityLineItem_Opportunity",
+        "nebc__Field__c": "OpportunityId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Opportunity\"}"
+      },
+      {
+        "MasterLabel": "OpportunityLineItem: PricebookEntry",
+        "DeveloperName": "OpportunityLineItem_PricebookEntry",
+        "nebc__Field__c": "PricebookEntryId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"PricebookEntry\"}"
+      },
+      {
+        "MasterLabel": "OpportunityLineItem: Quantity",
+        "DeveloperName": "OpportunityLineItem_Quantity",
+        "nebc__Field__c": "Quantity",
+        "nebc__Value__c": "3"
+      },
+      {
+        "MasterLabel": "OpportunityLineItem: UnitPrice",
+        "DeveloperName": "OpportunityLineItem_UnitPrice",
+        "nebc__Field__c": "UnitPrice",
+        "nebc__Value__c": "5"
+      }
+    ]
+  }
+}
