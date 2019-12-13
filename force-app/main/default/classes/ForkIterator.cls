@@ -5,7 +5,7 @@
  * operations on each branch of the fork
  */
 
-global class ForkIterator extends LazyIterator {
+global class ForkIterator extends LazyIterator implements LazyIteratorMutator {
 
     global ForkIterator() {
         super(new List<Object>());

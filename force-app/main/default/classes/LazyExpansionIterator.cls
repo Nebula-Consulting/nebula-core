@@ -4,7 +4,7 @@
  * @description A lazy iterator that uses an Expansion function to return more results than the initial iterator
  */
 
-public class LazyExpansionIterator extends LazyIterator {
+public class LazyExpansionIterator extends LazyIterator implements LazyIteratorMutator {
 
     private ExpansionFunction expansionFunction;
     private Boolean expansionFunctionInitialised;
@@ -17,7 +17,7 @@ public class LazyExpansionIterator extends LazyIterator {
 
     public override Boolean hasNext() {
         while(!expansionFunctionInitialised || !expansionFunction.hasNext()) {
-            if(internalHasNext()) {
+            if(super.hasNext()) {
                 initialiseExpansionFunction();
             } else {
                 return false;
@@ -34,7 +34,7 @@ public class LazyExpansionIterator extends LazyIterator {
     }
 
     private void initialiseExpansionFunction() {
-        expansionFunction.setValue(internalNext());
+        expansionFunction.setValue(super.next());
         expansionFunctionInitialised = true;
     }
 }

@@ -11,7 +11,11 @@ global class LazySObjectIterator extends LazyIterator {
     }
 
     global LazySObjectIterator(Iterable<SObject> iterable) {
-        super(new SObjectIteratorToObjectIterator(iterable.iterator()));
+        if(iterable instanceof Iterable<Object>) {
+            iterator = ((Iterable<Object>)iterable).iterator();
+        } else {
+            iterator = new SObjectIteratorToObjectIterator(iterable.iterator());
+        }
     }
 
     private class SObjectIteratorToObjectIterator implements Iterator<Object> {

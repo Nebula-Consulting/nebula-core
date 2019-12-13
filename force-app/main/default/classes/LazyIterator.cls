@@ -6,22 +6,7 @@
 
 global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
 
-    protected Iterator<Object> iterator {private get; set;}
-    private Iterator<Object> defaultIterator;
-
-    protected Boolean internalHasNext() {
-        Boolean result = iterator.hasNext();
-        if(!result && defaultIterator != null) {
-            iterator = defaultIterator;
-            result = iterator.hasNext();
-        }
-        defaultIterator = null;
-        return result;
-    }
-
-    protected Object internalNext() {
-        return iterator.next();
-    }
+    protected Iterator<Object> iterator;
 
     global LazyIterator(Iterable<Object> iterable) {
         this.iterator = iterable.iterator();
@@ -31,12 +16,14 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         this.iterator = iterator;
     }
 
+    protected LazyIterator() {}
+
     global virtual Boolean hasNext() {
-        return internalHasNext();
+        return iterator.hasNext();
     }
 
     global virtual Object next() {
-        return internalNext();
+        return iterator.next();
     }
 
     global Object firstOrDefault(Object defaultValue) {
@@ -92,15 +79,15 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
     }
 
     global LazyIterator filter(BooleanFunction matchingFunction) {
-        return new LazyFilterIterator(this, matchingFunction);
+        return new LazyFilterIterator(getIteratorForDecorator(), matchingFunction);
     }
 
     global LazyIterator filter(Function mappingFunction, BooleanFunction matchingFunction) {
-        return new LazyFilterIterator(this, mappingFunction, matchingFunction);
+        return new LazyFilterIterator(getIteratorForDecorator(), mappingFunction, matchingFunction);
     }
 
     global LazyIterator expand(ExpansionFunction expansionFunction) {
-        return new LazyExpansionIterator(this, expansionFunction);
+        return new LazyExpansionIterator(getIteratorForDecorator(), expansionFunction);
     }
 
     global Object reduce(AccumulatorFunction accumulatorFunction, Object initialValue) {
@@ -125,12 +112,20 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return accumulatorObject;
     }
 
+    private Iterator<Object> getIteratorForDecorator() {
+        if(this instanceof LazyIteratorMutator) {
+            return this;
+        } else {
+            return iterator;
+        }
+    }
+
     global LazyIterator mapValues(Function mappingFunction) {
-        return new LazyMappingIterator(this, mappingFunction);
+        return new LazyMappingIterator(getIteratorForDecorator(), mappingFunction);
     }
 
     global LazyIterator mapValues(BooleanFunction filterFunction, Function mappingFunction) {
-        return new LazyMappingIterator(this, filterFunction, mappingFunction);
+        return new LazyMappingConditionalIterator(getIteratorForDecorator(), filterFunction, mappingFunction);
     }
 
     global void forEach(VoidFunction callingFunction) {
@@ -156,28 +151,27 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
     }
 
     global LazyIterator setDefaultIfEmpty(Iterator<Object> defaultValues) {
-        defaultIterator = defaultValues;
-        return this;
+        return new LazyDefaultIfEmptyIterator(getIteratorForDecorator(), defaultValues);
     }
 
     global LazyIterator take(Integer nItemsToTake) {
-        return new LazyTakeIterator(this, nItemsToTake);
+        return new LazyTakeIterator(getIteratorForDecorator(), nItemsToTake);
     }
 
     global LazyIterator prepend(LazyIterator other) {
-        return new LazyAppendIterator(other, this);
+        return new LazyAppendIterator(other, getIteratorForDecorator());
     }
 
     global LazyIterator append(LazyIterator other) {
-        return new LazyAppendIterator(this, other);
+        return new LazyAppendIterator(getIteratorForDecorator(), other);
     }
 
     global LazyIterator append(Object item) {
-        return new LazyAppendIterator(this, new List<Object>{item}.iterator());
+        return new LazyAppendIterator(getIteratorForDecorator(), new List<Object>{item}.iterator());
     }
 
     global LazyIterator prepend(Object item) {
-        return new LazyAppendIterator(new List<Object>{item}.iterator(), this);
+        return new LazyAppendIterator(new List<Object>{item}.iterator(), getIteratorForDecorator());
     }
 
     global ForkManager fork() {

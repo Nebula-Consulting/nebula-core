@@ -4,7 +4,7 @@
  * @description A LazyIterator that appends another iterator to the end of its own values
  */
 
-public class LazyAppendIterator extends LazyIterator {
+public class LazyAppendIterator extends LazyIterator implements LazyIteratorMutator {
 
     private Iterator<Object> secondIterator;
 
@@ -14,14 +14,14 @@ public class LazyAppendIterator extends LazyIterator {
     }
 
     public override Object next() {
-        if(internalHasNext()) {
-            return internalNext();
+        if(super.hasNext()) {
+            return super.next();
         } else {
             return secondIterator.next();
         }
     }
 
     public override Boolean hasNext() {
-        return internalHasNext() || secondIterator.hasNext();
+        return super.hasNext() || secondIterator.hasNext();
     }
 }

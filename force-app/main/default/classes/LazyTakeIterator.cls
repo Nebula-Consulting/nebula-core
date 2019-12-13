@@ -4,7 +4,7 @@
  * @description A LazyIterator that will allow a limited number of items to be taken from the underlying iterator
  */
 
-public class LazyTakeIterator extends LazyIterator {
+public class LazyTakeIterator extends LazyIterator implements LazyIteratorMutator {
 
     private Integer nItemsToTake;
 
@@ -15,7 +15,7 @@ public class LazyTakeIterator extends LazyIterator {
 
     public override Object next() {
         if(nItemsToTake-- > 0) {
-            return internalNext();
+            return super.next();
         } else {
             throw new NoSuchElementException();
         }
@@ -23,7 +23,7 @@ public class LazyTakeIterator extends LazyIterator {
 
     public override Boolean hasNext() {
         if(nItemsToTake > 0) {
-            return internalHasNext();
+            return super.hasNext();
         } else {
             return false;
         }

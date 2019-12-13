@@ -4,7 +4,7 @@
  * @description A lazy iterator which only returns values that return true according to the matchingFunction
  */
 
-public class LazyFilterIterator extends LazyIterator {
+public class LazyFilterIterator extends LazyIterator implements LazyIteratorMutator {
     private BooleanFunction matchingFunction;
     private Function mappingFunction;
     private Object peek;
@@ -23,8 +23,8 @@ public class LazyFilterIterator extends LazyIterator {
     }
 
     private void peek() {
-        if(internalHasNext()) {
-            peek = internalNext();
+        if(super.hasNext()) {
+            peek = super.next();
             if(mappingFunction != null) {
                 peek = mappingFunction.call(peek);
             }
