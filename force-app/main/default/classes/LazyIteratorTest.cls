@@ -64,6 +64,16 @@ private class LazyIteratorTest {
         System.assertEquals(10, result[2].NumberOfEmployees);
     }
 
+    @IsTest static void filterWithMapInFilter() {
+        List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
+                .filter(new FieldFromSObject(Account.NumberOfEmployees), new IsEqual(1))
+                .mapValues(new DoubleNumberOfEmployeesMapping())
+                .toList(new List<Account>());
+
+        System.assertEquals(1, result.size(), result);
+        System.assertEquals(2, result[0].NumberOfEmployees);
+    }
+
     @IsTest static void doubleFilter() {
         List<Account> result = (List<Account>)new LazySObjectIterator(accounts.iterator())
                 .filter(new NumberOfEmployeesIsOdd())

@@ -5,29 +5,24 @@
  */
 
 public class LazyFilterIterator extends LazyIterator implements LazyIteratorMutator {
+
     private BooleanFunction matchingFunction;
-    private Function mappingFunction;
     private Object peek;
     private Boolean peekIsValid;
     private Boolean peekMatches;
 
     public LazyFilterIterator(Iterator<Object> iterator, BooleanFunction matchingFunction) {
-        this(iterator, null, matchingFunction);
-    }
-
-    public LazyFilterIterator(Iterator<Object> iterator, Function mappingFunction, BooleanFunction matchingFunction) {
         super(iterator);
         this.matchingFunction = matchingFunction;
-        this.mappingFunction = mappingFunction;
-        this.peekIsValid = false;
+        this.peekIsValid = false;    }
+
+    public LazyFilterIterator(Iterator<Object> iterator, Function mappingFunction, BooleanFunction matchingFunction) {
+        this(iterator, new MapThenTest(mappingFunction, matchingFunction));
     }
 
     private void peek() {
         if(super.hasNext()) {
             peek = super.next();
-            if(mappingFunction != null) {
-                peek = mappingFunction.call(peek);
-            }
             peekMatches = matchingFunction.isTrueFor(peek);
             peekIsValid = true;
         } else {
@@ -55,6 +50,21 @@ public class LazyFilterIterator extends LazyIterator implements LazyIteratorMuta
             return peek;
         } else {
             throw new NoSuchElementException();
+        }
+    }
+
+    private class MapThenTest implements BooleanFunction {
+
+        private Function mappingFunction;
+        private BooleanFunction matchingFunction;
+
+        public MapThenTest(Function mappingFunction, BooleanFunction matchingFunction) {
+            this.mappingFunction = mappingFunction;
+            this.matchingFunction = matchingFunction;
+        }
+
+        public Boolean isTrueFor(Object o) {
+            return matchingFunction.isTrueFor(mappingFunction.call(o));
         }
     }
 }
