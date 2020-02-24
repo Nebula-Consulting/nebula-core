@@ -11,6 +11,10 @@ global class IsInSObjectIndex implements BooleanFunction {
     }
 
     global Boolean isTrueFor(Object o) {
-        return theIndex.get((SObject)o) != null;
+        if(o instanceof SObject) {
+            return theIndex.get((SObject) o) != null;
+        } else {
+            return theIndex.get(o) != null;
+        }
     }
 }
