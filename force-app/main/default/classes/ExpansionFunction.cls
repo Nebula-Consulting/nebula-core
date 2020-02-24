@@ -5,7 +5,7 @@
  * again, the underlying value changes and a new iteration begins
  */
 
-global interface ExpansionFunction {
+global interface ExpansionFunction extends Iterator<Object> {
 
     void setValue(Object value);
 
