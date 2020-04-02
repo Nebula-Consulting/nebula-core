@@ -6,16 +6,11 @@
 @IsTest
 private class SObjectIndexTest {
 
-    private static TestRecordSource testRecordSource = new TestRecordSource();
     private final static String DOE = 'Doe';
     private final static String ACCOUNT_ID = Contact.AccountId.getDescribe().getName();
     private final static String LAST_NAME = Contact.LastName.getDescribe().getName();
 
-    static {
-        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = 'Test Account'), -1000);
-    }
-
-    private static Account togAccount = (Account) testRecordSource.getRecord(Account.SObjectType).withInsert();
+    private static Account togAccount = new Account(Name = 'ACME', Id = new TestIdGenerator(Account.SObjectType).next());
 
     @IsTest
     static void emptyIndex() {
@@ -91,9 +86,9 @@ private class SObjectIndexTest {
         System.assertEquals(1, values.size());
         System.assertEquals(togContact, values[0]);
 
-        List<Contact> valuesIterator = theIndex.valueIterator().toList(new List<Contact>());
-        System.assertEquals(1, valuesIterator.size());
-        System.assertEquals(togContact, valuesIterator[0]);
+        Iterator<Object> valuesIterator = theIndex.valueIterator();
+        System.assert(valuesIterator.hasNext());
+        System.assertEquals(togContact, valuesIterator.next());
     }
 
     @IsTest
@@ -125,9 +120,9 @@ private class SObjectIndexTest {
         System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
         System.assert(!theIndex.isEmpty());
 
-        Set<Id> accountIds = theIndex.keyIterator().toSet(new Set<Id>());
-        System.assertEquals(1, accountIds.size());
-        System.assert(accountIds.contains(togAccount.Id));
+        Iterator<Object> accountIds = theIndex.keyIterator();
+        System.assert(accountIds.hasNext());
+        System.assertEquals(togAccount.Id, accountIds.next());
     }
 
     @IsTest
@@ -244,9 +239,7 @@ private class SObjectIndexTest {
     static void crossObjectField() {
         SObjectIndex theIndex = new SObjectIndex(new List<String>{'Account.Name', LAST_NAME});
 
-        Contact togContact = new Contact(AccountId = togAccount.Id,  LastName = DOE);
-        insert togContact;
-        togContact = [SELECT Id, Account.Name, LastName FROM Contact WHERE Id = :togContact.Id];
+        Contact togContact = new Contact(Account = togAccount,  LastName = DOE);
         theIndex.put(togContact);
 
         System.assertEquals(1, theIndex.getAll(new Contact(Account = new Account(Name = togAccount.Name), LastName = DOE)).size());
