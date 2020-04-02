@@ -8,6 +8,13 @@
             "versionNumber": "0.61.0.NEXT"
         },
         {
+            "path": "nebula-triggers",
+            "default": false,
+            "package": "Nebula Triggers",
+            "versionName": "0.1",
+            "versionNumber": "0.1.0.NEXT"
+        },
+        {
             "path": "examples"
         }
     ],

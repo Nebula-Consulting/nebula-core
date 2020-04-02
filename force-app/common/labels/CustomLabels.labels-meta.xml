@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>LazyIterator_Nested_Forking_Error</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LazyIterator Nested Forking Error</shortDescription>
+        <value>You cannot call LazyIterator.fork() from within an existing call to fork()</value>
+    </labels>
+    <labels>
         <fullName>SObjectIndex_Case_Insensitive_Error</fullName>
         <language>en_US</language>
         <protected>true</protected>
