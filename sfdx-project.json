@@ -22,13 +22,6 @@
             "versionNumber": "0.1.0.NEXT"
         },
         {
-            "path": "nebula-lazy-iterator",
-            "default": false,
-            "package": "Nebula Lazy Iterator",
-            "versionName": "0.1",
-            "versionNumber": "0.1.0.NEXT"
-        },
-        {
             "path": "examples"
         }
     ],
