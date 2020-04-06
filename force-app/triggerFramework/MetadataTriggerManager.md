@@ -4,9 +4,9 @@ A trigger handling framework configured by custom metadata records.
 
 A trigger implemented in the framework requires three things:
 
- 1. A trigger on the relevant object, invoking the framework's handler class [MetadataTriggerManager](force-app/main/default/classes/MetadataTriggerManager.cls) e.g. [ContactTrigger](examples/main/default/triggers/ContactTrigger.trigger). You only need one per object.    
- 1. A class implementing some of the trigger handler interfaces   e.g. [ContactNumberOfContactsRollUp](examples/main/default/classes/ContactNumberOfContactsRollUp.cls) implements [AfterInsert](force-app/main/default/classes/AfterInsert.cls) and others.
- 1. A metadata record telling the framework about your class e.g. [ContactNumberOfContactsRollUpAI](examples/main/default/customMetadata/Trigger_Handler.ContactNumberOfContactsRollUpAI.md-meta.xml)
+ 1. A trigger on the relevant object, invoking the framework's handler class [MetadataTriggerManager](classes/MetadataTriggerManager.cls) e.g. [ContactTrigger](../../examples/main/default/triggers/ContactTrigger.trigger). You only need one per object.    
+ 1. A class implementing some of the trigger handler interfaces   e.g. [ContactNumberOfContactsRollUp](../../examples/main/default/classes/ContactNumberOfContactsRollUp.cls) implements [AfterInsert](classes/AfterInsert.cls) and others.
+ 1. A metadata record telling the framework about your class e.g. [ContactNumberOfContactsRollUpAI](../../examples/main/default/customMetadata/Trigger_Handler.ContactNumberOfContactsRollUpAI.md-meta.xml)
  
 ### Notes
 

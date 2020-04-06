@@ -134,9 +134,8 @@ global inherited sharing class NamedSObjectCache {
     /**
     * @description Queries using the andClause store values in the cache under a key composed of the name, along with
     * the andClause. This function takes a name and an andClause and returns the key.
-    * @param typeName object type
     * @param name name of the instance of an object
-    * @param ancClause a string to be included in the query
+    * @param andClause a string to be included in the query
     *
     * @return the key that would be used in the cache. Being a static method, this just forms the key in a consistent way. It does not say that they key is used
     */

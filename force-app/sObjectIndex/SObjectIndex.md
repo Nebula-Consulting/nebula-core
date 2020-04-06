@@ -1,6 +1,6 @@
 ##Storing/retrieving SObjects with SObjectIndex
 
-[SObjectIndex](force-app/main/default/classes/SObjectIndex.cls) is a generalisation of something that will be familiar to most Apex programmers: a Map of  Ids to SObjects.
+[SObjectIndex](classes/SObjectIndex.cls) is a generalisation of something that will be familiar to most Apex programmers: a Map of  Ids to SObjects.
 
 It brings great benefits over a standard `Map<Id, SObject>`, though:
 
