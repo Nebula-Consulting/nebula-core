@@ -57,6 +57,26 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void currentUserId() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Name',
+                        Apex_Class__c = TestFieldFunctions.CurrentUserId.class.getName()
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
+
+        System.assertEquals(UserInfo.getUserId(), result.Name);
+    }
+
+    @IsTest
     static void now() {
         Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(

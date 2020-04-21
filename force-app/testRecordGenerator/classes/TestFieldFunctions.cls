@@ -30,6 +30,13 @@ global class TestFieldFunctions {
             }
         }
     }
+
+    global class CurrentUserId extends nebc.TestFieldFunctions.TestFieldFunctionWithParent {
+        global Object getValue(String fieldName, Object value) {
+            return UserInfo.getUserId();
+        }
+    }
+
     global class GetStandardPriceBookId extends TestFieldFunctionWithParent {
         global Object getValue(String fieldName, Object value) {
             return Test.getStandardPricebookId();
