@@ -109,7 +109,15 @@ global inherited sharing class TestRecordSource {
         private SObjectType sObjectType;
         private String variant;
         private Map<String, Object> parameters;
-
+        private TestRecordGenerator generator {
+            get {
+                if(generator == null) {
+                    generator = parent.getGenerator(sObjectType, variant);
+                }
+                return generator;
+            }
+            set;
+        }
         private GetBuilder(TestRecordSource parent, SObjectType sObjectType) {
             this.parent = parent;
             this.sObjectType = sObjectType;
@@ -134,23 +142,24 @@ global inherited sharing class TestRecordSource {
             return this;
         }
 
-        private TestRecordGenerator getGenerator() {
-            return parent.getGenerator(sObjectType, variant);
+        global GetBuilder put(SObjectField field, Object value) {
+            generator.put(field, value);
+            return this;
         }
 
         global SObject withInsert() {
-            return getGenerator().getRecordWithInsert(parameters);
+            return generator.getRecordWithInsert(parameters);
         }
 
         global SObject withoutInsert() {
-            return getGenerator().getRecordWithoutInsert(parameters);
+            return generator.getRecordWithoutInsert(parameters);
         }
 
         global List<SObject> withoutInsert(Integer numberOfRecords) {
-            return getGenerator().getRecordsWithoutInsert(numberOfRecords, parameters);
+            return generator.getRecordsWithoutInsert(numberOfRecords, parameters);
         }
         global List<SObject> withInsert(Integer numberOfRecords) {
-            return getGenerator().getRecordsWithInsert(numberOfRecords, parameters);
+            return generator.getRecordsWithInsert(numberOfRecords, parameters);
         }
     }
 

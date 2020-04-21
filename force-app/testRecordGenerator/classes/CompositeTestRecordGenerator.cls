@@ -18,7 +18,7 @@ public class CompositeTestRecordGenerator extends TestRecordGenerator {
         generators.add(0, nextGenerator);
     }
 
-    public override SObject getRecordWithoutInsert() {
+    public override SObject generateRecord() {
         SObject result = generators[0].getRecordWithoutInsert(parameters);
 
         for(Integer i=1; i < generators.size(); i++) {

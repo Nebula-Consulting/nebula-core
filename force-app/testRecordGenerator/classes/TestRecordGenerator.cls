@@ -8,6 +8,8 @@ global inherited sharing abstract class TestRecordGenerator {
     global TestRecordSource parentRecordSource {get; private set;}
     global Test_Record_Generator__mdt metadata {get; private set;}
     global List<Test_Record_Generator_Field__mdt> metadataFields {get; private set;}
+    private Map<SObjectField, Object> recordInstanceValues;
+
     protected Map<String, Object> parameters {
         get {
             if(parameters == null) {
@@ -30,6 +32,12 @@ global inherited sharing abstract class TestRecordGenerator {
         this.parentRecordSource = parentRecordSource;
         this.metadata = metadata;
         this.metadataFields = metadataFields;
+        this.recordInstanceValues = new Map<SObjectField, Object>();
+    }
+
+    global TestRecordGenerator put(SObjectField field, Object value) {
+        recordInstanceValues.put(field, value);
+        return this;
     }
 
     global SObject getRecordWithoutInsert(Map<String, Object> parameters) {
@@ -37,7 +45,15 @@ global inherited sharing abstract class TestRecordGenerator {
         return getRecordWithoutInsert();
     }
 
-    global abstract SObject getRecordWithoutInsert();
+    global abstract SObject generateRecord();
+
+    global SObject getRecordWithoutInsert() {
+        SObject record = generateRecord();
+        for(SObjectField f : recordInstanceValues.keySet()) {
+            record.put(f, recordInstanceValues.get(f));
+        }
+        return record;
+    }
 
     global virtual List<SObject> getRecordsWithoutInsert(Integer numberOfRecords, Map<String, Object> params) {
         List<SObject> returnVal = new List<SObject>();

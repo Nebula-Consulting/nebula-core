@@ -187,6 +187,23 @@ private class TestRecordSourceTest {
     }
 
     @IsTest
+    static void withoutInsertPutValue() {
+        String accountName = 'Test Account';
+        String accountDescription = 'Widgets';
+
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), -1000);
+
+        Test.startTest();
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType)
+                .put(Account.Description, accountDescription)
+                .withoutInsert();
+        Test.stopTest();
+
+        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountDescription, result.Description);
+    }
+
+    @IsTest
     static void recordInsertFailure() {
         testRecordSource.addTemporaryMetadataFromInstance(new Account(), null);
 
