@@ -21,6 +21,15 @@ global class TestFieldFunctions {
         }
     }
 
+    global class InsertRandomNumber extends nebc.TestFieldFunctions.TestFieldFunctionWithParent {
+        global Object getValue(String fieldName, Object value) {
+            if(value == null) {
+                return null;
+            } else {
+                return String.format((String)value, new List<Object>{String.valueOf(Math.random())});
+            }
+        }
+    }
     global class GetStandardPriceBookId extends TestFieldFunctionWithParent {
         global Object getValue(String fieldName, Object value) {
             return Test.getStandardPricebookId();
