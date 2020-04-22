@@ -91,8 +91,8 @@ private class TestFieldFunctionsTest {
                         Field__c = 'Name',
                         Apex_Class__c = TestFieldFunctions.NamedObjectId.class.getName(),
                         Apex_Class_Parameters__c = JSON.serialize(new Map<String, String>{
-                           'sObjectType' => 'Organization',
-                           'name' => thisOrganization.Name
+                                'sObjectType' => 'Organization',
+                                'name' => thisOrganization.Name
                         })
                 )
         });
@@ -100,6 +100,27 @@ private class TestFieldFunctionsTest {
         Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
         System.assertEquals(thisOrganization.Id, result.Name);
+    }
+
+    @IsTest
+    static void blobData() {
+        String attachmentText = 'foo';
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Attachment'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Body',
+                        Value__c = attachmentText
+                )
+        });
+
+        Attachment result = (Attachment)testRecordSource.getRecord(Attachment.SObjectType).withoutInsert();
+
+        System.assertEquals(attachmentText, result.Body.toString());
     }
 
     @IsTest

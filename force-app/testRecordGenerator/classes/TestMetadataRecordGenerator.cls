@@ -26,6 +26,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
         Map<String, Object> concreteObjectDescription = new Map<String, Object>();
         Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
         Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
+        Map<String, Blob> fieldToBlobValue = new Map<String, Blob>();
 
         for(Test_Record_Generator_Field__mdt thisFieldMetadata : metadataFields) {
             SObjectField thisField = fields.get(thisFieldMetadata.Field__c);
@@ -39,10 +40,19 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
             FieldValueGenerator thisFieldValueGenerator = getGeneratorForField(thisField, thisFieldMetadata);
 
-            concreteObjectDescription.put(thisFieldMetadata.Field__c, thisFieldValueGenerator.getValue());
+            Object value = thisFieldValueGenerator.getValue();
+            if(value instanceof Blob) {
+                fieldToBlobValue.put(thisFieldMetadata.Field__c, (Blob)value);
+            } else {
+                concreteObjectDescription.put(thisFieldMetadata.Field__c, value);
+            }
         }
 
-        return (SObject)JSON.deserialize(JSON.serialize(concreteObjectDescription), sObjectClass);
+        SObject result = (SObject)JSON.deserialize(JSON.serialize(concreteObjectDescription), sObjectClass);
+        for(String field : fieldToBlobValue.keySet()) {
+            result.put(field, fieldToBlobValue.get(field));
+        }
+        return result;
     }
     private class FieldValueGenerator {
 
@@ -89,6 +99,9 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
                 }
                 when BOOLEAN {
                     return fieldMetadata.Value__c == null ? null : Boolean.valueOf(fieldMetadata.Value__c);
+                }
+                when BASE64 {
+                    return fieldMetadata.Value__c == null ? null : Blob.valueOf(fieldMetadata.Value__c);
                 }
                 when else {
                     return fieldMetadata.Value__c;
