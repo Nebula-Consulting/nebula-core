@@ -37,6 +37,17 @@ global class TestFieldFunctions {
         }
     }
 
+    global class NamedObjectId extends nebc.TestFieldFunctions.TestFieldFunctionWithParent {
+
+        global String sObjectType;
+        global String name;
+
+        global Object getValue(String fieldName, Object value) {
+            SObjectType sObjectType = ((SObject) TypeLoader.getType((String) sObjectType).newInstance()).getSObjectType();
+            return new NamedSObjectCache(sObjectType, name).getObject().Id;
+        }
+    }
+
     global class GetStandardPriceBookId extends TestFieldFunctionWithParent {
         global Object getValue(String fieldName, Object value) {
             return Test.getStandardPricebookId();
