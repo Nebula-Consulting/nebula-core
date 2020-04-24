@@ -143,6 +143,10 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return new LazyMappingConditionalIterator(getIteratorForDecorator(), filterFunction, mappingFunction);
     }
 
+    global LazyIterator mapIf(BooleanFunction filterFunction, Function mappingFunction) {
+        return new LazyMappingConditionalIterator(getIteratorForDecorator(), filterFunction, mappingFunction);
+    }
+
     global void forEach(VoidFunction callingFunction) {
         while(hasNext()) {
             callingFunction.call(next());
