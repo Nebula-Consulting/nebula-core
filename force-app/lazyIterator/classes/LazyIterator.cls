@@ -9,7 +9,9 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
     protected Iterator<Object> iterator;
 
     global LazyIterator(Object iterableOrIterator) {
-        if(iterableOrIterator instanceof Iterator<Object>) {
+        if(iterableOrIterator == null) {
+            iterator = EmptyIterator.getInstance();
+        } else if(iterableOrIterator instanceof Iterator<Object>) {
             iterator = (Iterator<Object>)iterableOrIterator;
         } else if(iterableOrIterator instanceof Iterable<Object>) {
             iterator = ((Iterable<Object>)iterableOrIterator).iterator();

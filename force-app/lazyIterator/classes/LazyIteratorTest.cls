@@ -277,6 +277,19 @@ private class LazyIteratorTest {
         }
     }
 
+    @IsTest static void iterateOnNull() {
+        Object o = null;
+        LazyIterator it = new LazyIterator(o);
+
+        System.assert(!it.hasNext());
+        try {
+            it.next();
+        } catch(NoSuchElementException e) {
+            return;
+        }
+        System.assert(false, 'Expected a NoSuchElementException');
+    }
+
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;
 
