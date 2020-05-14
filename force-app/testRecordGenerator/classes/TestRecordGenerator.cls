@@ -28,7 +28,7 @@ global inherited sharing abstract class TestRecordGenerator {
         return parameters.containsKey(name);
     }
 
-    public void setup(TestRecordSource parentRecordSource, Test_Record_Generator__mdt metadata, List<Test_Record_Generator_Field__mdt> metadataFields) {
+    global void setup(TestRecordSource parentRecordSource, Test_Record_Generator__mdt metadata, List<Test_Record_Generator_Field__mdt> metadataFields) {
         this.parentRecordSource = parentRecordSource;
         this.metadata = metadata;
         this.metadataFields = metadataFields;
