@@ -29,4 +29,22 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
             return iterator.next();
         }
     }
+
+    global LazySObjectIterator newRecords() {
+        return new LazySObjectIterator(mapValues(new NewFromTriggerContextPair()));
+    }
+
+    global LazySObjectIterator oldRecords() {
+        return new LazySObjectIterator(mapValues(new OldFromTriggerContextPair()));
+    }
+
+    global LazyTriggerContextPairIterator filterT(BooleanFunction matchingFunction) {
+        this.iterator = super.filter(matchingFunction);
+        return this;
+    }
+
+    global LazyTriggerContextPairIterator filterT(Function mappingFunction, BooleanFunction matchingFunction) {
+        this.iterator = super.filter(mappingFunction, matchingFunction);
+        return this;
+    }
 }
