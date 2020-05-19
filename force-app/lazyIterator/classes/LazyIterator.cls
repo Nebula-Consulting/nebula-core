@@ -107,6 +107,10 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return new LazyExpansionIterator(getIteratorForDecorator(), expansionFunction);
     }
 
+    global LazyIterator expand(ExpansionIterator expansionIterator) {
+        return new LazyExpansionIterator(getIteratorForDecorator(), expansionIterator);
+    }
+
     global Object reduce(AccumulatorFunction accumulatorFunction, Object initialValue) {
         Object result = initialValue;
         while(hasNext()) {

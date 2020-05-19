@@ -6,19 +6,25 @@
 
 public class LazyExpansionIterator extends LazyIterator implements LazyIteratorMutator {
 
-    private ExpansionFunction expansionFunction;
-    private Boolean expansionFunctionInitialised;
+    private ExpansionIterator expansionIterator;
+    private Iterator<Object> iterator;
 
     public LazyExpansionIterator(Iterator<Object> iterator, ExpansionFunction expansionFunction) {
         super(iterator);
-        this.expansionFunction = expansionFunction;
-        this.expansionFunctionInitialised = false;
+        this.expansionIterator = new ExpansionFunctionToIterator(expansionFunction);
+        this.iterator = null;
+    }
+
+    public LazyExpansionIterator(Iterator<Object> iterator, ExpansionIterator expansionIterator) {
+        super(iterator);
+        this.expansionIterator = expansionIterator;
+        this.iterator = null;
     }
 
     public override Boolean hasNext() {
-        while(!expansionFunctionInitialised || !expansionFunction.hasNext()) {
+        while(iterator == null || !iterator.hasNext()) {
             if(super.hasNext()) {
-                initialiseExpansionFunction();
+                iterator = expansionIterator.setValue(super.next());
             } else {
                 return false;
             }
@@ -27,14 +33,9 @@ public class LazyExpansionIterator extends LazyIterator implements LazyIteratorM
     }
 
     public override Object next() {
-        if(!expansionFunctionInitialised || !expansionFunction.hasNext()) {
-            initialiseExpansionFunction();
+        if(iterator == null || !iterator.hasNext()) {
+            iterator = expansionIterator.setValue(super.next());
         }
-        return expansionFunction.next();
-    }
-
-    private void initialiseExpansionFunction() {
-        expansionFunction.setValue(super.next());
-        expansionFunctionInitialised = true;
+        return iterator.next();
     }
 }
