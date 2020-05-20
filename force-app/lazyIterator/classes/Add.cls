@@ -23,4 +23,8 @@ global class Add implements Function {
         }
         throw new TypeException('Cannot convert ' + leftValue + ' to a suitable type for ' + Add.class.getName());
     }
+
+    global Add add(Object another) {
+        return new Add(this, another);
+    }
 }
