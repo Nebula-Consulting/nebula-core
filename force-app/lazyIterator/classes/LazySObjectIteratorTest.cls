@@ -7,13 +7,14 @@
 private class LazySObjectIteratorTest {
 
     private static TestIdGenerator accountIdGenerator = new TestIdGenerator(Account.SObjectType);
+    private static TestIdGenerator contactIdGenerator = new TestIdGenerator(Contact.SObjectType);
 
     private static List<Account> accounts = new List<Account>{
-            new Account(NumberOfEmployees = 1, Id = accountIdGenerator.next()),
-            new Account(NumberOfEmployees = 2, Id = accountIdGenerator.next()),
-            new Account(NumberOfEmployees = 3, Id = accountIdGenerator.next()),
-            new Account(NumberOfEmployees = 4, Id = accountIdGenerator.next()),
-            new Account(NumberOfEmployees = 5, Id = accountIdGenerator.next())
+            new Account(NumberOfEmployees = 1, Id = accountIdGenerator.next(), Parent = new Account(Id = accountIdGenerator.next())),
+            new Account(NumberOfEmployees = 2, Id = accountIdGenerator.next(), Parent = new Account(Id = accountIdGenerator.next())),
+            new Account(NumberOfEmployees = 3, Id = accountIdGenerator.next(), Parent = new Account(Id = accountIdGenerator.next())),
+            new Account(NumberOfEmployees = 4, Id = accountIdGenerator.next(), Parent = new Account(Id = accountIdGenerator.next())),
+            new Account(NumberOfEmployees = 5, Id = accountIdGenerator.next(), Parent = new Account(Id = accountIdGenerator.next()))
     };
 
     @IsTest
@@ -109,6 +110,48 @@ private class LazySObjectIteratorTest {
 
         for(Integer i=0; i < accounts.size(); i++) {
             System.assertEquals(accounts[i].Id, results[i]);
+        }
+    }
+
+    @IsTest
+    static void getSObject() {
+        Test.startTest();
+        List<Account> results = new LazySObjectIterator(accounts)
+                .getSObject(Account.ParentId)
+                .toList();
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assertEquals(accounts[i].Parent.Id, results[i].Id);
+        }
+    }
+
+    @IsTest
+    static void getSObjects() {
+        List<Contact> allContacts = new List<Contact>();
+        List<Object> mapAccounts = (List<Object>)JSON.deserializeUntyped(JSON.serialize(accounts));
+        for(Object a : mapAccounts) {
+            List<Contact> newContacts = new List<Contact>{
+                    new Contact(Id = contactIdGenerator.next()),
+                    new Contact(Id = contactIdGenerator.next())
+            };
+            allContacts.addAll(newContacts);
+            ((Map<String, Object>)a).put('Contacts', new Map<String, Object> {
+                    'totalSize' => newContacts.size(),
+                    'done' => true,
+                    'records' => newContacts
+            });
+        }
+        System.debug(JSON.serialize(mapAccounts));
+        accounts = (List<Account>)JSON.deserialize(JSON.serialize(mapAccounts), List<Account>.class);
+        Test.startTest();
+        List<Contact> results = new LazySObjectIterator(accounts)
+                .getSObjects('Contacts')
+                .toList();
+        Test.stopTest();
+
+        for(Integer i=0; i < allContacts.size(); i++) {
+            System.assertEquals(allContacts[i].Id, results[i].Id);
         }
     }
 

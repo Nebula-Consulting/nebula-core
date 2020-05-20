@@ -20,6 +20,11 @@ global class LazySObjectIterator extends LazyIterator {
         return this;
     }
 
+    global LazySObjectIterator mapValuesT(Function mappingFunction) {
+        this.iterator = super.mapValues(mappingFunction);
+        return this;
+    }
+
     global LazySObjectIterator put(SObjectField field,  Object valueOrFunction) {
         iterator = new LazyMappingIterator(iterator, new SObjectPutField(field, valueOrFunction));
         return this;
@@ -32,6 +37,14 @@ global class LazySObjectIterator extends LazyIterator {
 
     global LazyIterator get(SObjectField field) {
         return mapValues(new FieldFromSObject(field));
+    }
+
+    global LazySObjectIterator getSObject(SObjectField field) {
+        return mapValuesT(new SObjectFromSObject(field));
+    }
+
+    global LazySObjectIterator getSObjects(String field) {
+        return new LazySObjectIterator(expand(new SObjectsFromSObjectString(field)));
     }
 
     global List<Object> get(SObjectField field, List<Object> toFill) {

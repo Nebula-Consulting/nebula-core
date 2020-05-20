@@ -12,7 +12,7 @@ global class SObjectFromSObject implements Function {
         this.field = field;
     }
 
-    public Object call(Object o) {
+    global Object call(Object o) {
         return ((SObject)o).getSObject(field);
     }
 }
