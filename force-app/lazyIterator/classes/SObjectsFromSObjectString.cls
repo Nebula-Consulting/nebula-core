@@ -13,7 +13,13 @@ global class SObjectsFromSObjectString implements ExpansionIterator {
     }
 
     global Iterator<Object> setValue(Object value) {
-        Iterator<SObject> it = ((SObject)value).getSObjects(field).iterator();
-        return (Iterator<Object>)it;
+        List<SObject> sObjects = ((SObject)value).getSObjects(field);
+        if(sObjects != null) {
+            // Note that we need to cast in two steps because Apex is weird
+            Iterator<SObject> it = sObjects.iterator();
+            return (Iterator<Object>)it;
+        } else {
+            return EmptyIterator.getInstance();
+        }
     }
 }
