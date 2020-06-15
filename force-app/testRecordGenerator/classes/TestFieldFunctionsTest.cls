@@ -128,20 +128,20 @@ private class TestFieldFunctionsTest {
         Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
                         Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
-                        SObject__c = 'EmailMessage'
+                        SObject__c = 'Event'
                 ));
         testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
                 new Test_Record_Generator_Field__mdt(
                         Test_Record_Generator__c = metadata.Id,
-                        Field__c = 'FirstOpenedDate',
+                        Field__c = 'ActivityDateTime',
                         Apex_Class__c = TestFieldFunctions.Now.class.getName()
                 )
         });
 
-        EmailMessage result = (EmailMessage)testRecordSource.getRecord(EmailMessage.SObjectType).withoutInsert();
+        Event result = (Event)testRecordSource.getRecord(Event.SObjectType).withoutInsert();
 
         Datetime target = Datetime.now();
-        System.assert(result.FirstOpenedDate > target.addMinutes(-1) && result.FirstOpenedDate < target.addMinutes(1) );
+        System.assert(result.ActivityDateTime > target.addMinutes(-1) && result.ActivityDateTime < target.addMinutes(1) );
     }
 
     @IsTest
@@ -161,7 +161,7 @@ private class TestFieldFunctionsTest {
 
         Opportunity result = (Opportunity)testRecordSource.getRecord(Opportunity.SObjectType).withoutInsert();
 
-        System.assertEquals(Test.getStandardPriceBookId(), result.Pricebook2Id);
+        System.assertEquals(Test.getStandardPricebookId(), result.Pricebook2Id);
     }
 
     @IsTest
@@ -172,12 +172,12 @@ private class TestFieldFunctionsTest {
         Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
                         Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
-                        SObject__c = 'EmailMessage'
+                        SObject__c = 'Event'
                 ));
         testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
                 new Test_Record_Generator_Field__mdt(
                         Test_Record_Generator__c = metadata.Id,
-                        Field__c = 'FirstOpenedDate',
+                        Field__c = 'ActivityDateTime',
                         Apex_Class__c = TestFieldFunctions.Now.class.getName(),
                         Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
                                 'addDays' => addDays,
@@ -186,10 +186,10 @@ private class TestFieldFunctionsTest {
                 )
         });
 
-        EmailMessage result = (EmailMessage)testRecordSource.getRecord(EmailMessage.SObjectType).withoutInsert();
+        Event result = (Event)testRecordSource.getRecord(Event.SObjectType).withoutInsert();
 
         Datetime target = Datetime.now().addMinutes(addMinutes).addDays(addDays);
-        System.assert(result.FirstOpenedDate > target.addMinutes(-1) && result.FirstOpenedDate < target.addMinutes(1) );
+        System.assert(result.ActivityDateTime > target.addMinutes(-1) && result.ActivityDateTime < target.addMinutes(1) );
     }
 
     @IsTest
