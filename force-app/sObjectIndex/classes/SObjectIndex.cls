@@ -5,7 +5,7 @@
  * related objects, and a case-insensitive mode is available.
  */
 
-global class SObjectIndex implements SObjectIndexI {
+global class SObjectIndex implements SObjectIndexI, Container {
 
     global SObjectIndex(String fieldName)  {
         this(new List<String>{fieldName}, 0);
@@ -97,6 +97,16 @@ global class SObjectIndex implements SObjectIndexI {
     global SObjectIndex put(SObject newObj) {
         getOrCreateIndexFor(getKeyFrom(newObj)).put(newObj);
         return this;
+    }
+
+    global Boolean contains(Object o) {
+        if(o instanceof Map<String, Object>) {
+            return get((Map<String, Object>)o) != null;
+        } else if(o instanceof SObject) {
+            return get((SObject)o) != null;
+        } else {
+            return get(o) != null;
+        }
     }
 
     /**
