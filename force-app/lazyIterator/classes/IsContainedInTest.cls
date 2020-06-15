@@ -4,13 +4,13 @@
  */
 
 @IsTest
-private class ContainsTest {
+private class IsContainedInTest {
 
     @IsTest
     static void sObjectIndex() {
         Account anAccount = new Account(Name = 'foo');
         SObjectIndex anIndex = new SObjectIndex(Account.Name).put(anAccount);
-        Contains contains = new Contains(anIndex);
+        IsContainedIn contains = new IsContainedIn(anIndex);
         
         Test.startTest();
         System.assert(contains.isTrueFor(anAccount));
@@ -25,7 +25,7 @@ private class ContainsTest {
     @IsTest
     static void setObject() {
         Set<Object> strings = new Set<Object> {'a', 'b'};
-        Contains contains = new Contains(strings);
+        IsContainedIn contains = new IsContainedIn(strings);
 
         Test.startTest();
         System.assert(contains.isTrueFor('a'));
@@ -37,7 +37,7 @@ private class ContainsTest {
     @IsTest
     static void setString() {
         Set<String> strings = new Set<String> {'a', 'b'};
-        Contains contains = new Contains(strings);
+        IsContainedIn contains = new IsContainedIn(strings);
 
         Test.startTest();
         System.assert(contains.isTrueFor('a'));
@@ -52,7 +52,7 @@ private class ContainsTest {
 
         Id id1 = idGenerator.next(), id2 = idGenerator.next();
         Set<Id> strings = new Set<Id> {id1, id2};
-        Contains contains = new Contains(strings);
+        IsContainedIn contains = new IsContainedIn(strings);
 
         Test.startTest();
         System.assert(contains.isTrueFor(id1));
@@ -64,7 +64,7 @@ private class ContainsTest {
     @IsTest
     static void listString() {
         List<String> strings = new List<String> {'a', 'b'};
-        Contains contains = new Contains(strings);
+        IsContainedIn contains = new IsContainedIn(strings);
 
         Test.startTest();
         System.assert(contains.isTrueFor('a'));

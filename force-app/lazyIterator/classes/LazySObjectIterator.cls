@@ -20,6 +20,16 @@ global class LazySObjectIterator extends LazyIterator {
         return this;
     }
 
+    global LazySObjectIterator filterOnField(SObjectField field, BooleanFunction matchingFunction) {
+        this.iterator = super.filter(new FieldFromSObject(field), matchingFunction);
+        return this;
+    }
+
+    global LazySObjectIterator filterOnField(String field, BooleanFunction matchingFunction) {
+        this.iterator = super.filter(new FieldFromSObjectString(field), matchingFunction);
+        return this;
+    }
+
     global LazySObjectIterator mapValuesT(Function mappingFunction) {
         this.iterator = super.mapValues(mappingFunction);
         return this;

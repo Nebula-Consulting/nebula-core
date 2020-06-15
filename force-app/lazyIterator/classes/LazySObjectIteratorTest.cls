@@ -80,6 +80,44 @@ private class LazySObjectIteratorTest {
     }
 
     @IsTest
+    static void filterOnField() {
+        List<String> accountNames = new List<String>();
+        for(Integer i=0; i < accounts.size(); i++) {
+            accountNames.add('ACME ' + i);
+        }
+        Integer threshold = 2;
+
+        Test.startTest();
+        List<Account> results = new LazySObjectIterator(accounts)
+                .filterOnField(Account.NumberOfEmployees, new IsGreaterThan(threshold))
+                .put(Account.Name, new LazyIterator(accountNames))
+                .toList();
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            if(accounts[i].NumberOfEmployees > threshold) {
+                System.assertEquals(accountNames[i-threshold], results[i-threshold].Name, results);
+            }
+        }
+    }
+
+    @IsTest
+    static void filterOnFieldString() {
+        List<Account> expectedAccounts = new List<Account> { accounts[0], accounts[3] };
+        Set<Id> parentsToInclude = new Set<Id> {expectedAccounts[0].Parent.Id, expectedAccounts[1].Parent.Id};
+
+        Test.startTest();
+        List<Account> results = new LazySObjectIterator(accounts)
+                .filterOnField('Parent.Id', new IsContainedIn(parentsToInclude))
+                .toList();
+        Test.stopTest();
+
+        for(Integer i=0; i < expectedAccounts.size(); i++) {
+            System.assertEquals(expectedAccounts[i].Id, results[i].Id);
+        }
+    }
+
+    @IsTest
     static void filterMapPut() {
         List<String> accountNames = new List<String>();
         for(Integer i=0; i < accounts.size(); i++) {

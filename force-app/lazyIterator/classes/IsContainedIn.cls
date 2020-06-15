@@ -5,27 +5,27 @@
  * the container
  */
 
-global class Contains implements BooleanFunction {
+global class IsContainedIn implements BooleanFunction {
 
     private Container theContainer;
 
-    global Contains(SObjectIndex sObjectIndex) {
+    global IsContainedIn(SObjectIndex sObjectIndex) {
         theContainer = sObjectIndex;
     }
 
-    global Contains(Set<Object> aSet) {
+    global IsContainedIn(Set<Object> aSet) {
         theContainer = new SetObjectContainer(aSet);
     }
 
-    global Contains(Set<String> aSet) {
+    global IsContainedIn(Set<String> aSet) {
         theContainer = new SetStringContainer(aSet);
     }
 
-    global Contains(Set<Id> aSet) {
+    global IsContainedIn(Set<Id> aSet) {
         theContainer = new SetIdContainer(aSet);
     }
 
-    global Contains(List<Object> aList) {
+    global IsContainedIn(List<Object> aList) {
         theContainer = new ListContainer(aList);
     }
 
