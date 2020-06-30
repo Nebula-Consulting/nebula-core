@@ -1,6 +1,6 @@
 # TestRecordSource
 
-
+TODO - _Insert lovely intro from Aidan._
 
 ## Importing Test Data for Standard Objects
 
@@ -16,7 +16,8 @@ Supported standard objects:
 - OpportunityLineItem
 
 To create a standard test data record for Account for example the following can be used:
-new nebc.StandardTestRecordGenerators().deploy('Account');
+
+`new nebc.StandardTestRecordGenerators().deploy('Account');`
 
 Beware, this will overwrite existing definitions if they have the same name.
 
@@ -27,7 +28,6 @@ Beware, this will overwrite existing definitions if they have the same name.
 ### Simple Example
 
 A simple example of this would be to define the TestRecordSource and get the record using the SObjectType and insert it manually:
-`
     
     private static nebc.TestRecordSource testRecordSource = new nebc.TestRecordSource();
 
@@ -42,7 +42,6 @@ A simple example of this would be to define the TestRecordSource and get the rec
 ### Simple Create Example
 
 A simple example of this would be to define the TestRecordSource and get the record using the SObjectType:
-`
     
     private static nebc.TestRecordSource testRecordSource = new nebc.TestRecordSource();
 
@@ -59,7 +58,6 @@ The above example would insert one contact ready to be used for testing.
 
 Creating multiple records using the same static TestRecordSource might not give you the results you expect. In the below example both contacts are in fact the same contact: 
 
-`
     
     private static nebc.TestRecordSource testRecordSource = new nebc.TestRecordSource();
 
@@ -79,8 +77,6 @@ One work-around would be to simply clone the first Contact record and insert it 
  
 A better way to create multiple different records you could specify a number of records as a parameter to the withInsert method:
 
-`
-
     @IsTest
     static void multipleContacts() {
         List<Contact> contacts = (List<Contact>) testRecordSource.getRecord(Contact.SObjectType).withInsert(2);
@@ -95,8 +91,7 @@ This allows standard test fields functions to apply different logic to fields on
 Another way to create multiple records would be to use WithoutInsert, in the example below the first Contact will be created outside of the TestRecordSource framework.
 
 Therefor the second Contact when retrieved will be a fresh version and not cached. Note: if a third Contact was created using withInsert after the second then it will return the cached version.
-
-`   
+  
 
     @IsTest
      static void getContact() {
