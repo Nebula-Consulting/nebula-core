@@ -174,7 +174,7 @@ So for example creating a Contact can create the associate Account.
 This may not always be the desired behaviour, so using 'setRecord' it is possible to override this and specify the related record.
 
      @IsTest
-     static void setRecordVariant() {
+     static void setRecord() {
  
          Account testAccount = (Account) testRecordSource.getRecord(Account.SObjectType).withoutInsert();
          testAccount.Name = 'My New Account';
