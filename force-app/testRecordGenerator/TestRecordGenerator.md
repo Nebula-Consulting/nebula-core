@@ -54,6 +54,19 @@ A simple example of this would be to define the TestRecordSource and get the rec
 
 The above example would insert one contact ready to be used for testing.
 
+### Simple Create With Putting field
+
+A test may require that a field to be set in a particular way, but it is only relevant for this one test. 
+
+In this instance it doesn't make sense to adjust the record to include this data, instead you can put one or more field values as part of the chained get record in the test itself:
+
+     @IsTest
+     static void getContactAndSetField() {
+         Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).put(Contact.Department, 'Development').withInsert();
+         System.assertEquals('Development', testContact.Department);
+     } 
+
+
 ### Creating Multiple Records 
 
 Creating multiple records using the same static TestRecordSource might not give you the results you expect. In the below example both contacts are in fact the same contact: 
