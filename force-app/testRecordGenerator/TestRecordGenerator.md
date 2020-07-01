@@ -1,6 +1,14 @@
 # TestRecordSource
 
-TODO - _Insert lovely intro from Aidan._
+We are all familiar with the idea of a Test Utility class used for creating unit test data and can only be accessed only from a running test. 
+
+Test utility classes contain methods that can be called by test methods to perform useful tasks, such as setting up test data.
+
+One issue with creating test data this way is that it requires alterations to code when org validation rules change.
+
+Another is how do we handle the move to unmanaged packages to build a shared test utility class?
+
+TestRecordSource resolves these issues by moving the test data to custom metadata types, this means changes can be made without the need of a developer and packages can deploy and depend on their own or existing test metadata.
 
 ## Importing Test Data for Standard Objects
 
