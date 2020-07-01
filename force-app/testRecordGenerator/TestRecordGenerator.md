@@ -148,6 +148,62 @@ TODO
 
 ## Variants
 
+Variant allow different 'shapes' of the record to be stored. This may be useful for creating records with different record types and fields to be set. 
+
+Another useful scenario is to allow records at different stages to be stored, consider an org when moving an opportunity to closed won requires many fields to be set. 
+
+This could simply be defined as a 'Closed Won' variant of the opportunity: 
+
+`    @IsTest
+     static void opportunityVariant() {
+         Opportunity openOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).withoutInsert();
+         Opportunity closedWonOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).asVariant('Closed Won').withoutInsert();
+     }`
+
+## Variant Inheritance
+
+Defining different variants of a record is a good way to structure your test data allowing clear and concise way of defining the type of record being created.
+
+One downside of this is that defining each record in its fullest can be timing consuming both initially and when inevitable org changes occur.
+
+To alleviate this issue the idea of inheritance can be used so that only the differences need to be stored. 
+
+Here is an example of a contact test record:
+
+**Base Contact (no variant):**
+FirstName: Foo
+LastName: Bar
+Email: foo@bar.com
+Account: FooBar Inc.
+
+If we wanted to create a variant of this that is attached to a different account we could do this by simply defining the variant and just the account.
+
+By default, variants will inherit from the base contact (no variant) unless specified.
+
+**Nebula Contact (Variant 'Nebula')**
+Account: Nebula
+
+So above we'd still have a first name of 'Foo' and a last name of 'Bar' etc... but the account would be Nebula not FooBar Inc.
+
+If we wanted to create another variant from the 'Nebula' variant we simply make sure the 'Inherits From Variant' option is 'Nebula'. 
+
+**Nebula Contact With DOB (Variant 'Nebula DOB')**
+BirthDate: 30/07/1966
+
+This would then create the contact with first name, last name, email, account and birth date all set.
+
+Finally here is an example of the variant examples:
+
+        `Contact baseContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
+         Contact nebulaContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).asVariant('Nebula').withInsert();
+         Contact nebulaDOBContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).asVariant('Nebula DOB').withInsert();
+ 
+         ....
+ 
+         System.assertEquals('Bar', baseContact.LastName);
+         System.assertEquals('Nebula', nebulaContact.Account.Name);
+         System.assertEquals(Date.newInstance(1966, 7, 30), nebulaDOBContact.Birthdate);`
+
 TODO
 
 # Priority
