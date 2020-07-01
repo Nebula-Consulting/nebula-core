@@ -124,7 +124,7 @@ These include:
 * Now - get the current date and time with the option to addDays and/or addMinutes.
 * Today - get the current date with the option to addDays.
 * Increment - increment the current value with the accumulator and increment.
-* ReadParameter - ?
+* ReadParameter - TODO
 
 ### Example of Test Field Functions
 
@@ -140,11 +140,40 @@ This will set the field to Today's date, optionally you can specify days to add 
 
 ### Creating Custom Test Field Functions
 
-TODO
+It is possible to write custom test field functions by extending the _nebc.TestFieldFunctions.TestFieldFunctionWithParent class_.
+
+Here is an example that was created to get the current user ID:
+
+    global class GetCurrentUserId extends nebc.TestFieldFunctions.TestFieldFunctionWithParent {
+         global Object getValue(String fieldName, Object value) {
+             return UserInfo.getUserId();
+         }
+    }
+
+This is now part of the standard library of functions, if you spot a useful function that is not already part of the standard library raise an issue [here](https://bitbucket.org/nebulaconsulting/nebula-core/jira?statuses=new&statuses=indeterminate&sort=-updated&page=1) to get it added.
 
 ## Set Record
 
-TODO
+Using the TestFieldFunctions it is possible to create a relationship record when creating the test record with 'CreateRecord'.
+
+So for example creating a Contact can create the associate Account.
+
+This may not always be the desired behaviour, so using 'setRecord' it is possible to override this and specify the related record.
+
+     @IsTest
+     static void setRecordVariant() {
+ 
+         Account testAccount = (Account) testRecordSource.getRecord(Account.SObjectType).withoutInsert();
+         testAccount.Name = 'My New Account';
+         insert testAccount;
+ 
+         testRecordSource.setRecord(testAccount);
+ 
+         Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
+ 
+         System.assertEquals(testAccount.Id, testContact.AccountId);
+ 
+     }
 
 ## Variants
 
@@ -159,6 +188,10 @@ This could simply be defined as a 'Closed Won' variant of the opportunity:
           Opportunity openOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).withoutInsert();
           Opportunity closedWonOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).asVariant('Closed Won').withoutInsert();
       }
+
+Note: It is also possible to set a record with a variant as follows:
+
+    testRecordSource.setRecordAsVariant(testAccount, 'My Variant Name');
 
 ## Variant Inheritance
 
@@ -207,10 +240,10 @@ Finally, here is an example of the variant examples:
          System.assertEquals('Nebula', nebulaContact.Account.Name);
          System.assertEquals(Date.newInstance(1966, 7, 30), nebulaDOBContact.Birthdate);
 
-TODO
-
 # Priority
 
-TODO
+When specify a test record it is possible to assign a priority, so that if more than one test record exists for the same SObject and variant the highest priority record is used.
+
+This is useful to override behaviour that is deployed as part of a package in a customer org.
 
 
