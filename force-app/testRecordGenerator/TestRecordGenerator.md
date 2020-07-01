@@ -154,11 +154,11 @@ Another useful scenario is to allow records at different stages to be stored, co
 
 This could simply be defined as a 'Closed Won' variant of the opportunity: 
 
-`    @IsTest
-     static void opportunityVariant() {
-         Opportunity openOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).withoutInsert();
-         Opportunity closedWonOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).asVariant('Closed Won').withoutInsert();
-     }`
+      @IsTest
+      static void opportunityVariant() {             
+          Opportunity openOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).withoutInsert();
+          Opportunity closedWonOpportunity = (Opportunity) testRecordSource.getRecord(Opportunity.SObjectType).asVariant('Closed Won').withoutInsert();
+      }
 
 ## Variant Inheritance
 
@@ -194,7 +194,7 @@ This would then create the contact with first name, last name, email, account an
 
 Finally here is an example of the variant examples:
 
-        `Contact baseContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
+         Contact baseContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
          Contact nebulaContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).asVariant('Nebula').withInsert();
          Contact nebulaDOBContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).asVariant('Nebula DOB').withInsert();
  
@@ -202,7 +202,7 @@ Finally here is an example of the variant examples:
  
          System.assertEquals('Bar', baseContact.LastName);
          System.assertEquals('Nebula', nebulaContact.Account.Name);
-         System.assertEquals(Date.newInstance(1966, 7, 30), nebulaDOBContact.Birthdate);`
+         System.assertEquals(Date.newInstance(1966, 7, 30), nebulaDOBContact.Birthdate);
 
 TODO
 
