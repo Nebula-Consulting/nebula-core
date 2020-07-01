@@ -171,28 +171,28 @@ To alleviate this issue the idea of inheritance can be used so that only the dif
 Here is an example of a contact test record:
 
 **Base Contact (no variant):**
-FirstName: Foo
-LastName: Bar
-Email: foo@bar.com
-Account: FooBar Inc.
+- FirstName: Foo
+- LastName: Bar
+- Email: foo@bar.com
+- Account: FooBar Inc.
 
 If we wanted to create a variant of this that is attached to a different account we could do this by simply defining the variant and just the account.
 
 By default, variants will inherit from the base contact (no variant) unless specified.
 
 **Nebula Contact (Variant 'Nebula')**
-Account: Nebula
+- Account: Nebula
 
 So above we'd still have a first name of 'Foo' and a last name of 'Bar' etc... but the account would be Nebula not FooBar Inc.
 
 If we wanted to create another variant from the 'Nebula' variant we simply make sure the 'Inherits From Variant' option is 'Nebula'. 
 
 **Nebula Contact With DOB (Variant 'Nebula DOB')**
-BirthDate: 30/07/1966
+- BirthDate: 30/07/1966
 
 This would then create the contact with first name, last name, email, account and birth date all set.
 
-Finally here is an example of the variant examples:
+Finally, here is an example of the variant examples:
 
          Contact baseContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
          Contact nebulaContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).asVariant('Nebula').withInsert();
