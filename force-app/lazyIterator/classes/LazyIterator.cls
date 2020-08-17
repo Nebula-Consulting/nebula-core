@@ -219,6 +219,10 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return terminatorFunction.setIterator(this);
     }
 
+    global LazyIterator flatten() {
+        return expand(new LazyIteratorExpansionIterator());
+    }
+
     global Object call() {
         return next();
     }

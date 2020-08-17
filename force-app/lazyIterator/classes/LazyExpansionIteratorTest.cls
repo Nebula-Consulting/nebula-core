@@ -24,6 +24,24 @@ private class LazyExpansionIteratorTest {
         }
     }
 
+    @IsTest static void flatten() {
+        List<List<Integer>> data = new List<List<Integer>>{
+                new List<Integer> {0},
+                new List<Integer> {1, 2},
+                new List<Integer> {3, 4},
+                new List<Integer> {5}
+        };
+
+        List<Integer> flattened = (List<Integer>)new LazyIterator((List<Object>)data)
+                .flatten()
+                .toList(new List<Integer>());
+
+        System.assertEquals(6, flattened.size());
+        for (Integer i = 0; i < 6; i++) {
+            System.assertEquals(i, flattened[i]);
+        }
+    }
+
     @IsTest static void expandIterator() {
         List<List<Integer>> data = new List<List<Integer>>{
                 new List<Integer> {0},
