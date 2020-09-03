@@ -9,12 +9,12 @@ The base set of classes used by Nebula Consulting. The licence for this code is 
 
 Areas covered by the library:
 
-  - [Metadata-configured trigger handler framework](MetadataTriggerManager.md)
-  - [SObjectIndex for storing/retrieving lists of SObjects based on 1 or more criteria](SObjectIndex.md)
-  - [Iterator-based operations like filter() and map()](LazyIterator.md)
+  - [Metadata-configured trigger handler framework](force-app/triggerFramework/MetadataTriggerManager.md)
+  - [SObjectIndex for storing/retrieving lists of SObjects based on 1 or more criteria](force-app/sObjectIndex/SObjectIndex.md)
+  - [Iterator-based operations like filter() and map()](force-app/lazyIterator/LazyIterator.md)
   - Conversions between SObjects and JSON structures
-  - [A dependency-injection framework for building test data](TestRecordGenerator.md)
-  - [Metadata-configured logging framework](Logger.md)
+  - [A dependency-injection framework for building test data](force-app/testRecordGenerator/TestRecordGenerator.md)
+  - [Metadata-configured logging framework](force-app/logger/Logger.md)
   - Interfaces to help with common uses of the Strategy Pattern 
   - Caching class for retrieving objects by Name e.g. configuration data stored in SObjects
   - A callout-wrapper to make error-handling in callouts more consistent
