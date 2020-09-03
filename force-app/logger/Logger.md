@@ -1,6 +1,6 @@
 ## Logging with the Logger class
 
-###[Work in progress](WorkInProgress.md)
+### [Work in progress](WorkInProgress.md)
 
 The [Logger](force-app/main/default/classes/Logger.cls) provides a single entry point for writing logs, and uses custom metadata records to configure how/when logs are written.
 

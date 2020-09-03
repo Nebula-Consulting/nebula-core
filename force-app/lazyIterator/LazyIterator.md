@@ -84,7 +84,7 @@ The code examples above are written in whole tests in [LazyIteratorExamples](exa
 
 There is a trigger handler example in [ContactNumberOfContactsRollUpDeclarative](examples/main/default/classes/ContactNumberOfContactsRollUpDeclarative.cls) 
 
-###Why?
+### Why?
 
 For some things, like getting a set of ids from a list of SObjects, the motivation for using LazyIterator is clear. It's 
 concise and expressive. Using it for more complex cases is a matter of style.

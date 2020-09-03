@@ -1,4 +1,4 @@
-##Storing/retrieving SObjects with SObjectIndex
+## Storing/retrieving SObjects with SObjectIndex
 
 [SObjectIndex](classes/SObjectIndex.cls) is a generalisation of something that will be familiar to most Apex programmers: a Map of  Ids to SObjects.
 
