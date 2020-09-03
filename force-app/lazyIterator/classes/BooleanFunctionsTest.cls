@@ -15,11 +15,27 @@ private class BooleanFunctionsTest {
     }
 
     @IsTest
+    static void isNullField() {
+        BooleanFunction isNull = new IsNull(Account.Name);
+
+        System.assert(isNull.isTrueFor(new Account()));
+        System.assert(!isNull.isTrueFor(new Account(Name = 'ACME')));
+    }
+
+    @IsTest
     static void isNotNull() {
         BooleanFunction isNotNull = new IsNotNull();
 
         System.assert(isNotNull.isTrueFor(1));
         System.assert(!isNotNull.isTrueFor(null));
+    }
+
+    @IsTest
+    static void isNotNullField() {
+        BooleanFunction isNotNull = new IsNotNull(Account.Name);
+
+        System.assert(!isNotNull.isTrueFor(new Account()));
+        System.assert(isNotNull.isTrueFor(new Account(Name = 'ACME')));
     }
 
     @IsTest

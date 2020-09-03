@@ -11,6 +11,10 @@ global class IsNull implements BooleanFunction {
         this.mappingFunction = mappingFunction;
     }
 
+    global IsNull(SObjectField field) {
+        this.mappingFunction = new FieldFromSObject(field);
+    }
+
     global IsNull() {
         this(new IdentityFunction());
     }
