@@ -12,6 +12,10 @@ global class IsUniqueOn implements BooleanFunction {
         this.function = function;
     }
 
+    global IsUniqueOn(SObjectField field) {
+        this.function = new FieldFromSObject(field);
+    }
+
     global Boolean isTrueFor(Object o) {
         Object value = function.call(o);
         if(seen.contains(value)) {

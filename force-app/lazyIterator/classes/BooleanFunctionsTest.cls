@@ -141,7 +141,7 @@ private class BooleanFunctionsTest {
 
     @IsTest
     static void isUniqueOnSObjectField() {
-        BooleanFunction isUniqueOnSObjectField = new IsUniqueOn(new FieldFromSObject(Account.Name));
+        BooleanFunction isUniqueOnSObjectField = new IsUniqueOn(Account.Name);
 
         System.assert(isUniqueOnSObjectField.isTrueFor(new Account(Name = 'a')));
         System.assert(!isUniqueOnSObjectField.isTrueFor(new Account(Name = 'a')));
