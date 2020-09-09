@@ -3,9 +3,4 @@
  * @date 2019-06-21
  */
 
-global class NewFromTriggerContextPair implements Function {
-
-    global Object call(Object o) {
-        return ((TriggerContextPair)o).newRecord;
-    }
-}
+global class NewFromTriggerContextPair extends Right {}

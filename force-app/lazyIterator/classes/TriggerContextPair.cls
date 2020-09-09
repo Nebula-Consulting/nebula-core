@@ -4,7 +4,7 @@
  * @description A pair of SObject records (old and new) from a trigger context
  */
 
-global class TriggerContextPair {
+global class TriggerContextPair implements Pair {
 
     global SObject newRecord;
     global SObject oldRecord;
@@ -12,5 +12,13 @@ global class TriggerContextPair {
     global TriggerContextPair(SObject oldRecord, SObject newRecord) {
         this.oldRecord = oldRecord;
         this.newRecord = newRecord;
+    }
+
+    global Object left() {
+        return oldRecord;
+    }
+
+    global Object right() {
+        return newRecord;
     }
 }
