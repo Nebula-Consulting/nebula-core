@@ -74,4 +74,29 @@ global class LazySObjectIterator extends LazyIterator {
     global List<SObject> toList() {
         return toList(new List<SObject>());
     }
+
+    // Note: the database methods have the noise-word do in front of them because they are otherwise reserved words
+    global void doUpdate() {
+        update toList();
+    }
+
+    global LazyIterator doUpdate(Boolean allOrNothing) {
+        return new LazyIterator(Database.update(toList(), allOrNothing));
+    }
+
+    global void doInsert() {
+        insert toList();
+    }
+
+    global LazyIterator doInsert(Boolean allOrNothing) {
+        return new LazyIterator(Database.insert(toList(), allOrNothing));
+    }
+
+    global void doDelete() {
+        delete toList();
+    }
+
+    global LazyIterator doDelete(Boolean allOrNothing) {
+        return new LazyIterator(Database.delete(toList(), allOrNothing));
+    }
 }

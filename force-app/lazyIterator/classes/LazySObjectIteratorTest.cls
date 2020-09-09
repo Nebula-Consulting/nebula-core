@@ -152,6 +152,20 @@ private class LazySObjectIteratorTest {
     }
 
     @IsTest
+    static void doInsert() {
+        Test.startTest();
+        List<Database.SaveResult> results = (List<Database.SaveResult>)new LazySObjectIterator(accounts)
+                .put(Account.Id, null)
+                .doInsert(false)
+                .toList(new List<Database.SaveResult>());
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(!results[i].isSuccess() || accounts[i].Id != null);
+        }
+    }
+
+    @IsTest
     static void getSObject() {
         Test.startTest();
         List<Account> results = new LazySObjectIterator(accounts)
