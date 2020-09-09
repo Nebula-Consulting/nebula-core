@@ -3,13 +3,8 @@
  * @date 2019-08-21
  */
 
-global class Pair {
+global interface Pair {
 
-    global Object left;
-    global Object right;
-
-    global Pair(Object left, Object right) {
-        this.left = left;
-        this.right = right;
-    }
+    Object left();
+    Object right();
 }

@@ -14,6 +14,6 @@ global class ToPair implements Function {
     }
 
     public Object call(Object o) {
-        return new Pair(o, mapO1ToO2Function.call(o));
+        return new ObjectPair(o, mapO1ToO2Function.call(o));
     }
 }

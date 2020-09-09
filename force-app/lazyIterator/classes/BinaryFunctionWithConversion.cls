@@ -10,7 +10,7 @@ global abstract class BinaryFunctionWithConversion implements BinaryFunction {
     global Object call(Object o) {
         if(o instanceof Pair) {
             Pair p = (Pair) o;
-            return call(p.left, p.right);
+            return call(p.left(), p.right());
         } else {
             return call(o, NoResult.NO_RESULT);
         }
