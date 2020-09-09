@@ -47,4 +47,9 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
         this.iterator = super.filter(mappingFunction, matchingFunction);
         return this;
     }
+
+    global LazyTriggerContextPairIterator mapValuesT(Function mappingFunction) {
+        this.iterator = super.mapValues(mappingFunction);
+        return this;
+    }
 }
