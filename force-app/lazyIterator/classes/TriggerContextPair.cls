@@ -4,21 +4,12 @@
  * @description A pair of SObject records (old and new) from a trigger context
  */
 
-global class TriggerContextPair implements Pair {
+global class TriggerContextPair extends ListTuple {
 
-    global SObject newRecord;
-    global SObject oldRecord;
+    global SObject oldRecord {get {return (SObject)get(0);} set;}
+    global SObject newRecord {get {return (SObject)get(1);} set;}
 
     global TriggerContextPair(SObject oldRecord, SObject newRecord) {
-        this.oldRecord = oldRecord;
-        this.newRecord = newRecord;
-    }
-
-    global Object left() {
-        return oldRecord;
-    }
-
-    global Object right() {
-        return newRecord;
+        super(oldRecord, newRecord);
     }
 }
