@@ -154,14 +154,30 @@ private class LazySObjectIteratorTest {
     @IsTest
     static void doInsert() {
         Test.startTest();
-        List<Database.SaveResult> results = (List<Database.SaveResult>)new LazySObjectIterator(accounts)
+        List<SaveResult> results = (List<SaveResult>)new LazySObjectIterator(accounts)
                 .put(Account.Id, null)
+                .put(Account.Name, 'ACME')
                 .doInsert(false)
-                .toList(new List<Database.SaveResult>());
+                .toList(new List<SaveResult>());
         Test.stopTest();
 
         for(Integer i=0; i < accounts.size(); i++) {
-            System.assert(!results[i].isSuccess() || accounts[i].Id != null);
+            System.debug(String.format('success {0}; record: {1}', new List<Object>{results[i].isSuccess(), results[i].getRecord()}));
+            System.assert(!results[i].isSuccess() || results[i].getRecord().Id != null);
+        }
+    }
+
+    @IsTest
+    static void doDelete() {
+        Test.startTest();
+        List<DeleteResult> results = (List<DeleteResult>)new LazySObjectIterator(accounts)
+                .doDelete(false)
+                .toList(new List<DeleteResult>());
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(!results[i].isSuccess());
+            System.assertEquals(accounts[i].Id, results[i].record.Id);
         }
     }
 

@@ -83,7 +83,10 @@ global class LazySObjectIterator extends LazyIterator {
     }
 
     global LazyIterator doUpdate(Boolean allOrNothing) {
-        return new LazyIterator(Database.update(toList(), allOrNothing));
+        List<SObject> records = toList();
+        Iterator<Database.SaveResult> resultIterator = Database.update(records, allOrNothing).iterator();
+        Iterator<SObject> recordIterator = records.iterator();
+        return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, SaveResult.newInstance));
     }
 
     global LazySObjectIterator doInsert() {
@@ -93,7 +96,10 @@ global class LazySObjectIterator extends LazyIterator {
     }
 
     global LazyIterator doInsert(Boolean allOrNothing) {
-        return new LazyIterator(Database.insert(toList(), allOrNothing));
+        List<SObject> records = toList();
+        Iterator<Database.SaveResult> resultIterator = Database.insert(records, allOrNothing).iterator();
+        Iterator<SObject> recordIterator = records.iterator();
+        return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, SaveResult.newInstance));
     }
 
     global LazySObjectIterator doDelete() {
@@ -103,6 +109,9 @@ global class LazySObjectIterator extends LazyIterator {
     }
 
     global LazyIterator doDelete(Boolean allOrNothing) {
-        return new LazyIterator(Database.delete(toList(), allOrNothing));
+        List<SObject> records = toList();
+        Iterator<Database.DeleteResult> resultIterator = Database.delete(records, allOrNothing).iterator();
+        Iterator<SObject> recordIterator = records.iterator();
+        return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, DeleteResult.newInstance));
     }
 }

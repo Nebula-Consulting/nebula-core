@@ -7,9 +7,16 @@
 public with sharing class TupleIterator implements Iterator<Tuple> {
 
     private Tuple iterators;
+    private NewInstance tupleType;
 
     public TupleIterator(List<Iterator<Object>> iterators) {
         this.iterators = new ListTuple(iterators);
+        this.tupleType = ListTuple.newInstance;
+    }
+
+    public TupleIterator(List<Iterator<Object>> iterators, NewInstance tupleType) {
+        this.iterators = new ListTuple(iterators);
+        this.tupleType = tupleType;
     }
 
     public Boolean hasNext() {
@@ -19,7 +26,7 @@ public with sharing class TupleIterator implements Iterator<Tuple> {
     }
 
     public Tuple next() {
-        return new ListTuple(
+        return (Tuple)tupleType.newInstance(
                 new LazyIterator(iterators)
                         .mapValues(new Next())
                         .toList(new List<Object>())

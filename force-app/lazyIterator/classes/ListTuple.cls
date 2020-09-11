@@ -6,6 +6,7 @@
 public virtual class ListTuple implements Tuple {
 
     private List<Object> entries;
+    public static NewInstance newInstance = new NewListTuple();
 
     public ListTuple(Object o1, Object o2) {
         entries = new List<Object>{o1, o2};
@@ -25,5 +26,11 @@ public virtual class ListTuple implements Tuple {
 
     public Iterator<Object> iterator() {
         return entries.iterator();
+    }
+
+    private class NewListTuple implements NewInstance {
+        public Object newInstance(List<Object> parameters) {
+            return new ListTuple(parameters);
+        }
     }
 }
