@@ -29,6 +29,25 @@ private class LazyTriggerContextPairIteratorTest {
         System.assertEquals(12 + 14, totalEmployees);
     }
 
+    @IsTest static void bothRecords() {
+        List<Account> newAccounts = new List<Account>{
+        new Account(NumberOfEmployees = 1, ParentId = accountIdGenerator.next()),
+        new Account(NumberOfEmployees = 2, ParentId = accountIdGenerator.next()),
+        new Account(NumberOfEmployees = 3, ParentId = accountIdGenerator.next()),
+        new Account(NumberOfEmployees = 4, ParentId = accountIdGenerator.next()),
+        new Account(NumberOfEmployees = 5, ParentId = accountIdGenerator.next())
+                };
+
+        List<Account> result = (List<Account>)new LazyTriggerContextPairIterator(accounts, newAccounts)
+                .bothRecords()
+                .toList();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assertEquals(accounts[i].ParentId, result[i*2].ParentId);
+            System.assertEquals(newAccounts[i].ParentId, result[i*2+1].ParentId);
+        }
+    }
+
     @IsTest static void newRecords() {
         List<Account> newAccounts = accounts.deepClone();
         newAccounts[1].NumberOfEmployees += 10;
