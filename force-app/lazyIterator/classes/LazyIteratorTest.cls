@@ -135,34 +135,6 @@ private class LazyIteratorTest {
         System.assertEquals(3, result.NumberOfEmployees);
     }
 
-    @IsTest static void triggerContextVersion() {
-        List<Account> newAccounts = accounts.deepClone();
-        newAccounts[1].NumberOfEmployees += 10;
-        newAccounts[3].NumberOfEmployees += 10;
-
-        new LazyTriggerContextPairIterator(new TriggerContextIterator(accounts, newAccounts))
-                .filter(new NumberOfEmployeesChanged())
-                .mapValues(new NewFromTriggerContextPair())
-                .forEach(new SumNumberOfEmployees());
-
-        System.assertEquals(12 + 14, totalEmployees);
-    }
-
-    @IsTest static void triggerContextMapping() {
-        List<Account> newAccounts = accounts.deepClone();
-        newAccounts[1].NumberOfEmployees += 10;
-        newAccounts[3].NumberOfEmployees += 10;
-
-        List<Account> result = (List<Account>)new LazyTriggerContextPairIterator(accounts, newAccounts)
-                .filter(new NumberOfEmployeesChanged())
-                .mapValues(new NewFromTriggerContextPair())
-                .toList(new List<Account>());
-
-        System.assertEquals(2, result.size());
-        System.assertEquals(12, result[0].NumberOfEmployees);
-        System.assertEquals(14, result[1].NumberOfEmployees);
-    }
-
     @IsTest static void fieldFromSObject() {
         List<Decimal> numberOfEmployeesList = (List<Decimal>)new LazySObjectIterator(accounts)
                 .mapValues(new FieldFromSObject(Account.NumberOfEmployees))
@@ -335,12 +307,6 @@ private class LazyIteratorTest {
 
         public void call(Object currentValue) {
             accumulatorValue += ((Account)currentValue).NumberOfEmployees;
-        }
-    }
-
-    private class NumberOfEmployeesChanged extends TriggerContextBooleanFunction {
-        public override Boolean isTrueFor(SObject oldRecord, SObject newRecord) {
-            return ((Account)oldRecord).NumberOfEmployees != ((Account)newRecord).NumberOfEmployees;
         }
     }
 }
