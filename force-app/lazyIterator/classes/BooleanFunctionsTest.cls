@@ -149,4 +149,24 @@ private class BooleanFunctionsTest {
         System.assert(!isUniqueOnSObjectField.isTrueFor(new Account(Name = 'b')));
     }
 
+    @IsTest
+    static void isSuccess() {
+        BooleanFunction isSuccess = new IsSuccess();
+
+        Database.SaveResult successfulSave = (Database.SaveResult)JSON.deserialize('{"success" : true}', Database.SaveResult.class);
+        Database.SaveResult unsuccessfulSave = (Database.SaveResult)JSON.deserialize('{"success" : false}', Database.SaveResult.class);
+        System.assert(isSuccess.isTrueFor(new SaveResult(successfulSave, null)));
+        System.assert(!isSuccess.isTrueFor(new SaveResult(unsuccessfulSave, null)));
+    }
+
+    @IsTest
+    static void isNotSuccess() {
+        BooleanFunction isNotSuccess = new IsNotSuccess();
+
+        Database.SaveResult successfulSave = (Database.SaveResult)JSON.deserialize('{"success" : true}', Database.SaveResult.class);
+        Database.SaveResult unsuccessfulSave = (Database.SaveResult)JSON.deserialize('{"success" : false}', Database.SaveResult.class);
+        System.assert(!isNotSuccess.isTrueFor(new SaveResult(successfulSave, null)));
+        System.assert(isNotSuccess.isTrueFor(new SaveResult(unsuccessfulSave, null)));
+    }
+
 }
