@@ -13,6 +13,10 @@ global class IsGreaterThan implements BooleanFunction {
         functions = new FunctionList(left, right);
     }
 
+    global IsGreaterThan(SObjectField left, Object right) {
+        functions = new FunctionList(new FieldFromSObject(left), right);
+    }
+
     global IsGreaterThan(Object right) {
         functions = new FunctionList(new IdentityFunction(), right);
     }
