@@ -23,6 +23,18 @@ global class SObjectFromPrototype implements Function{
         return this;
     }
 
+    // Note that this cannot overload put(SObjectField field, Object valueOrFunction) or calling put(f, null) would
+    // become ambiguous
+    global SObjectFromPrototype putField(SObjectField targetField, SObjectField sourceField) {
+        functions.compose(new SObjectPutField(targetField, new FieldFromSObject(sourceField)));
+        return this;
+    }
+
+    global SObjectFromPrototype put(SObjectField field) {
+        functions.compose(new SObjectPutField(field, new IdentityFunction()));
+        return this;
+    }
+
     global Object call(Object o) {
         return functions.call(prototype.clone(), o);
     }
