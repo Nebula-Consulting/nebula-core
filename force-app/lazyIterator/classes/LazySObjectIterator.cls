@@ -40,6 +40,16 @@ global class LazySObjectIterator extends LazyIterator {
         return this;
     }
 
+    global LazySObjectIterator putField(SObjectField targetField, SObjectField sourceField) {
+        iterator = new LazyMappingIterator(iterator, new SObjectPutField(targetField, new FieldFromSObject(sourceField)));
+        return this;
+    }
+
+    global LazySObjectIterator putField(SObjectField targetField, String sourceField) {
+        iterator = new LazyMappingIterator(iterator, new SObjectPutField(targetField, new FieldFromSObjectString(sourceField)));
+        return this;
+    }
+
     global LazySObjectIterator putIf(BooleanFunction filterFunction, SObjectField field,  Object valueOrFunction) {
         iterator = new LazyMappingConditionalIterator(iterator, filterFunction, new SObjectPutField(field, valueOrFunction));
         return this;
@@ -113,5 +123,9 @@ global class LazySObjectIterator extends LazyIterator {
         Iterator<Database.DeleteResult> resultIterator = Database.delete(records, allOrNothing).iterator();
         Iterator<SObject> recordIterator = records.iterator();
         return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, DeleteResult.newInstance));
+    }
+
+    global LazySObjectIterator append(LazySObjectIterator other) {
+        return new LazySObjectIterator(super.append(other));
     }
 }
