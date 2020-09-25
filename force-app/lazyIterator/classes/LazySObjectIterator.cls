@@ -20,13 +20,19 @@ global class LazySObjectIterator extends LazyIterator {
         return this;
     }
 
-    global LazySObjectIterator filterOnField(SObjectField field, BooleanFunction matchingFunction) {
-        this.iterator = super.filter(new FieldFromSObject(field), matchingFunction);
+    global LazySObjectIterator filterOnField(SObjectField field, Object valueOrBooleanFunction) {
+        this.iterator = super.filter(
+                new FieldFromSObject(field),
+                valueOrBooleanFunction instanceof BooleanFunction ? (BooleanFunction)valueOrBooleanFunction : new IsEqual(valueOrBooleanFunction)
+        );
         return this;
     }
 
-    global LazySObjectIterator filterOnField(String field, BooleanFunction matchingFunction) {
-        this.iterator = super.filter(new FieldFromSObjectString(field), matchingFunction);
+    global LazySObjectIterator filterOnField(String field, Object valueOrBooleanFunction) {
+        this.iterator = super.filter(
+                new FieldFromSObjectString(field),
+                valueOrBooleanFunction instanceof BooleanFunction ? (BooleanFunction)valueOrBooleanFunction : new IsEqual(valueOrBooleanFunction)
+        );
         return this;
     }
 
