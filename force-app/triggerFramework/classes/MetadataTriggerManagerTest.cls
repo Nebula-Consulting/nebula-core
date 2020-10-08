@@ -8,6 +8,7 @@ private class MetadataTriggerManagerTest {
 
     public static Set<String> lastNamesSeen = new Set<String>();
 
+    @JsonAccess(deserializable='never')
     public class TestHandler implements AfterDelete, AfterInsert, AfterUndelete, AfterUpdate, BeforeDelete, BeforeInsert, BeforeUpdate {
 
         public void handleAfterDelete(List<Contact> oldList) {
@@ -55,7 +56,7 @@ private class MetadataTriggerManagerTest {
 
         for(TriggerOperation thisTriggerOperation : TriggerOperation.values()) {
             MetadataTriggerManager.mockMetadata.add(new Trigger_Handler__mdt(
-                Event__c = thisTriggerOperation.name(),
+                    Event__c = thisTriggerOperation.name(),
                     SObject__c = 'Contact',
                     Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName()
             ));
@@ -74,6 +75,33 @@ private class MetadataTriggerManagerTest {
             System.assert(lastNamesSeen.contains(contactList[0].LastName));
         }
 
+    }
+
+    @IsTest
+    public static void jsonButNotAllowed() {
+        MetadataTriggerManager.mockMetadata = new List<Trigger_Handler__mdt>();
+
+        for(TriggerOperation thisTriggerOperation : TriggerOperation.values()) {
+            MetadataTriggerManager.mockMetadata.add(new Trigger_Handler__mdt(
+                    Event__c = thisTriggerOperation.name(),
+                    SObject__c = 'Contact',
+                    Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName(),
+                    Parameters__c = '{}'
+            ));
+        }
+
+        List<Contact> contactList = new List<Contact>{new Contact()};
+
+        MetadataTriggerManager manager = new MetadataTriggerManager(Contact.SObjectType);
+
+        try {
+            manager.handle(TriggerOperation.AFTER_UPDATE, contactList, contactList);
+        } catch(JSONException e) {
+            System.assert(e.getMessage().contains('MetadataTriggerManager: handler class must be annotated with @JsonAccess'));
+            return;
+        }
+
+        System.assert(false, 'Expected a JSONException');
     }
 
     @IsTest

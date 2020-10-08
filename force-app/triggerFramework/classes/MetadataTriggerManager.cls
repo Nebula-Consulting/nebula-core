@@ -90,7 +90,12 @@ global with sharing class MetadataTriggerManager {
             if(handlerType == null) {
                 throw new ClassNotFoundException('MetadataTriggerManager: handler class not found for ' + thisHandlerDescription + '. Is it global? Does it need to include a namespace?');
             } else {
-                Object handlerInstance = TypeLoader.getInstance(handlerType, thisHandlerDescription.Parameters__c);
+                Object handlerInstance;
+                try {
+                    handlerInstance = TypeLoader.getInstance(handlerType, thisHandlerDescription.Parameters__c);
+                } catch (JSONException e) {
+                    throw new JSONException('MetadataTriggerManager: handler class must be annotated with @JsonAccess(deserializable=\'always\')', e);
+                }
                 handleInstance(handlerInstance, triggerOperation, oldList, newList);
             }
         }
