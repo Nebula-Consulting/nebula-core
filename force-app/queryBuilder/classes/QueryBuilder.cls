@@ -13,6 +13,7 @@ global inherited sharing class QueryBuilder {
     private Set<String> fieldsLowerCase;
     private String orderByClause;
     private String paginationClause;
+    private Boolean withSecurityEnforced = false;
 
     global QueryBuilder(SObjectType sObjectType) {
         this(sObjectType.getDescribe().getName());
@@ -60,10 +61,46 @@ global inherited sharing class QueryBuilder {
         return this;
     }
 
+    global QueryBuilder addField(String field) {
+        fieldsLowerCase.add(field.toLowerCase());
+        return this;
+    }
+
+    global QueryBuilder addField(SObjectField field) {
+        fieldsLowerCase.add(field.getDescribe().getName().toLowerCase());
+        return this;
+    }
+
     global QueryBuilder addFields(Set<String> fields) {
         for(String f : fields) {
-            this.fieldsLowerCase.add(f.toLowerCase());
+            addField(f);
         }
+        return this;
+    }
+
+    global QueryBuilder addFields(List<String> fields) {
+        for(String f : fields) {
+            addField(f);
+        }
+        return this;
+    }
+
+    global QueryBuilder addFields(Set<SObjectField> fields) {
+        for(SObjectField f : fields) {
+            addField(f);
+        }
+        return this;
+    }
+
+    global QueryBuilder addFields(List<SObjectField> fields) {
+        for(SObjectField f : fields) {
+            addField(f);
+        }
+        return this;
+    }
+
+    global QueryBuilder withSecurityEnforced() {
+        withSecurityEnforced = true;
         return this;
     }
 
@@ -78,6 +115,11 @@ global inherited sharing class QueryBuilder {
         if(whereClause != null) {
             theQuery += ' WHERE ' + whereClause;
         }
+
+        if(withSecurityEnforced) {
+            theQuery += ' WITH SECURITY_ENFORCED';
+        }
+
         if(orderByClause != null) {
             theQuery += ' ORDER BY ' + orderByClause;
         }
