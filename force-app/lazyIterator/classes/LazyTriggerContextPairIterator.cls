@@ -48,4 +48,21 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
         this.iterator = super.mapValues(mappingFunction);
         return this;
     }
+
+    global LazyTriggerContextPairIterator mapNewFromOld(SObjectField destinationField, SObjectField sourceField) {
+        return mapNewFromOld(destinationField, new FieldFromSObject(sourceField));
+    }
+
+    global LazyTriggerContextPairIterator mapNewFromOld(SObjectField destinationField, SObjectField sourceField, Function fieldValueMappingFunction) {
+        return mapNewFromOld(destinationField, new Composition(new FieldFromSObject(sourceField)).compose(fieldValueMappingFunction));
+    }
+
+    global LazyTriggerContextPairIterator mapNewFromOld(SObjectField destinationField, Function functionOnOldRecord) {
+        return mapValuesT(new Swap())
+                .mapValuesT(new TupleMapFunction(new ListTuple(
+                        new SObjectPutField(destinationField, functionOnOldRecord),
+                        new IdentityFunction()
+                )))
+                .mapValuesT(new Swap());
+    }
 }
