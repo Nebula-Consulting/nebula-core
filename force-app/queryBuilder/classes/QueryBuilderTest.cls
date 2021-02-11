@@ -109,6 +109,22 @@ private class QueryBuilderTest {
     }
 
     @IsTest
+    public static void addSubQuery() {
+        Test.startTest();
+        String query = new QueryBuilder(Account.SObjectType)
+                .addField('Name')
+                .addSubQuery(new QueryBuilder('Contacts').addField('Name'))
+                .getQuery();
+
+        List<Account> accounts = Database.query(query);
+        Test.stopTest();
+
+        System.assertEquals(1, accounts.size());
+        System.assertEquals(testAccount.Name, accounts[0].Name);
+        System.assert(query.containsIgnoreCase('(SELECT Id, Name FROM Contacts)'));
+    }
+
+    @IsTest
     public static void withSecurityEnforced() {
         Test.startTest();
         String query = new QueryBuilder(Account.SObjectType)

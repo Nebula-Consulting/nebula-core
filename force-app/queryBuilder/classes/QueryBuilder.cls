@@ -11,6 +11,7 @@ global inherited sharing class QueryBuilder {
     private String whereClause;
 
     private Set<String> fieldsLowerCase;
+    private List<QueryBuilder> subQueries = new List<QueryBuilder>();
     private String orderByClause;
     private String paginationClause;
     private Boolean withSecurityEnforced = false;
@@ -99,12 +100,21 @@ global inherited sharing class QueryBuilder {
         return this;
     }
 
+    global QueryBuilder addSubQuery(QueryBuilder subQuery) {
+        subQueries.add(subQuery);
+        return this;
+    }
+
     global QueryBuilder withSecurityEnforced() {
         withSecurityEnforced = true;
         return this;
     }
 
     global String getQuery() {
+
+        for(QueryBuilder thisSubQuery : subQueries) {
+            fieldsLowerCase.add('(' + thisSubQuery.getQuery() + ')');
+        }
 
         // Set<T> does not implement Iterable<T>, see https://success.salesforce.com/ideaView?id=08730000000kxLyAAI
         String selectFields = String.join(new List<String>(fieldsLowerCase), ', ');
