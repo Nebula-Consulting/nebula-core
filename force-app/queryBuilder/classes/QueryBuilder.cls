@@ -100,6 +100,18 @@ global inherited sharing class QueryBuilder {
         return this;
     }
 
+    global QueryBuilder addFields(Iterator<Object> stringOrFieldIterator) {
+        while(stringOrFieldIterator.hasNext()) {
+            Object stringOrField = stringOrFieldIterator.next();
+            if(stringOrField instanceof String) {
+                addField((String)stringOrField);
+            } else {
+                addField((SObjectField)stringOrField);
+            }
+        }
+        return this;
+    }
+
     global QueryBuilder addSubQuery(QueryBuilder subQuery) {
         subQueries.add(subQuery);
         return this;

@@ -47,6 +47,24 @@ private class QueryBuilderTest {
     }
 
     @IsTest
+    public static void addFieldsIteratorString() {
+        Test.startTest();
+        Iterator<String> stringIterator = new List<String> {'Name'}.iterator();
+        String query = new QueryBuilder(Account.SObjectType)
+                .addFields(stringIterator)
+                .setWhereClause('Id != null')
+                .setOrderByClause('CreatedDate')
+                .setPaginationClause('LIMIT 10')
+                .getQuery();
+
+        List<Account> accounts = Database.query(query);
+        Test.stopTest();
+
+        System.assertEquals(1, accounts.size());
+        System.assertEquals(testAccount.Name, accounts[0].Name);
+    }
+
+    @IsTest
     public static void addFieldsSetField() {
         Test.startTest();
         String query = new QueryBuilder(Account.SObjectType)
@@ -68,6 +86,24 @@ private class QueryBuilderTest {
         Test.startTest();
         String query = new QueryBuilder(Account.SObjectType)
                 .addFields(new List<SObjectField> {Account.Name})
+                .setWhereClause('Id != null')
+                .setOrderByClause('CreatedDate')
+                .setPaginationClause('LIMIT 10')
+                .getQuery();
+
+        List<Account> accounts = Database.query(query);
+        Test.stopTest();
+
+        System.assertEquals(1, accounts.size());
+        System.assertEquals(testAccount.Name, accounts[0].Name);
+    }
+
+    @IsTest
+    public static void addFieldsIteratorField() {
+        Test.startTest();
+        Iterator<SObjectField> fieldIterator = new List<SObjectField> {Account.Name}.iterator();
+        String query = new QueryBuilder(Account.SObjectType)
+                .addFields(fieldIterator)
                 .setWhereClause('Id != null')
                 .setOrderByClause('CreatedDate')
                 .setPaginationClause('LIMIT 10')
