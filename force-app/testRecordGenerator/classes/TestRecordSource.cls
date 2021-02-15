@@ -9,13 +9,10 @@ global inherited sharing class TestRecordSource {
 
     private SObjectIndex generatorMetadata {get {
         if(generatorMetadata == null) {
+            List<Test_Record_Generator__mdt> generatorRecords = Test_Record_Generator__mdt.getAll().values();
+            Lists.sort(generatorRecords, new ReverseComparator(new SObjectFieldComparator(Test_Record_Generator__mdt.Priority__c)));
             generatorMetadata = new SObjectIndex(Test_Record_Generator__mdt.SObject__c, Test_Record_Generator__mdt.Variant__c)
-                    .putAll(
-                    [
-                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c, DeveloperName, Inherits_From_Variant__c
-                            FROM Test_Record_Generator__mdt
-                            ORDER BY Priority__c DESC
-                    ]);
+                    .putAll(generatorRecords);
         }
         return generatorMetadata;
     } set;}
@@ -258,14 +255,10 @@ global inherited sharing class TestRecordSource {
     }
 
     global static Metadata.DeployContainer getDeployContainerForMetadataFields(SObject exampleObject, String qualifiedApiName) {
-        List<Test_Record_Generator__mdt> parents = [
-                SELECT Id, DeveloperName, MasterLabel, QualifiedApiName
-                FROM Test_Record_Generator__mdt
-                WHERE QualifiedApiName = :qualifiedApiName];
-        System.assertEquals(1, parents.size(),
+        Test_Record_Generator__mdt parent = Test_Record_Generator__mdt.getInstance(qualifiedApiName);
+        System.assertNotEquals(null, parent,
                 'No record found matching qualified API name "' + qualifiedApiName + '"'
         );
-        Test_Record_Generator__mdt parent = parents[0];
 
         List<Test_Record_Generator_Field__mdt> fields = getMetadataFields(exampleObject, null);
 

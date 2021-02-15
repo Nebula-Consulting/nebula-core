@@ -58,7 +58,8 @@ private class MetadataTriggerManagerTest {
             MetadataTriggerManager.mockMetadata.add(new Trigger_Handler__mdt(
                     Event__c = thisTriggerOperation.name(),
                     SObject__c = 'Contact',
-                    Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName()
+                    Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName(),
+                    Order__c = 0
             ));
         }
 
@@ -86,7 +87,8 @@ private class MetadataTriggerManagerTest {
                     Event__c = thisTriggerOperation.name(),
                     SObject__c = 'Contact',
                     Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName(),
-                    Parameters__c = '{}'
+                    Parameters__c = '{}',
+                    Order__c = 0
             ));
         }
 
@@ -111,7 +113,8 @@ private class MetadataTriggerManagerTest {
                 new Trigger_Handler__mdt(
                         Event__c = TriggerOperation.AFTER_UPDATE.name(),
                         SObject__c = 'Contact',
-                        Apex_Class__c = 'NoSuchClass'
+                        Apex_Class__c = 'NoSuchClass',
+                        Order__c = 0
                 )
         };
 

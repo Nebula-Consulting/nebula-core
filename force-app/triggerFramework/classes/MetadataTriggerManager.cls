@@ -23,18 +23,11 @@ global with sharing class MetadataTriggerManager {
     private SObjectIndex theseTriggers;
     private static SObjectIndex sObjectTypeNameToEventToTriggerList { get {
         if (sObjectTypeNameToEventToTriggerList == null) {
-            sObjectTypeNameToEventToTriggerList = new SObjectIndex(
-                    Trigger_Handler__mdt.SObject__c.getDescribe().getName(),
-                    Trigger_Handler__mdt.Event__c.getDescribe().getName()
-            )
-                    .putAll(mockMetadata != null ? mockMetadata :
-                            [
-                                    SELECT DeveloperName, NamespacePrefix, Event__c, SObject__c, Apex_Class__c, Order__c,
-                                            Parameters__c
-                                    FROM Trigger_Handler__mdt
-                                    WHERE Active__c = TRUE
-                                    ORDER BY Order__c ASC
-                            ]);
+            List<Trigger_Handler__mdt> triggerHandlers = mockMetadata != null ? mockMetadata : Trigger_Handler__mdt.getAll().values();
+            Lists.sort(triggerHandlers, new SObjectFieldComparator(Trigger_Handler__mdt.Order__c));
+
+            sObjectTypeNameToEventToTriggerList = new SObjectIndex(Trigger_Handler__mdt.SObject__c, Trigger_Handler__mdt.Event__c)
+                    .putAll(triggerHandlers);
         }
         return sObjectTypeNameToEventToTriggerList;
     } set;}
