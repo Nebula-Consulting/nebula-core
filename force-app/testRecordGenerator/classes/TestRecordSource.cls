@@ -9,8 +9,7 @@ global inherited sharing class TestRecordSource {
 
     private SObjectIndex generatorMetadata {get {
         if(generatorMetadata == null) {
-            generatorMetadata = new SObjectIndex(
-                    new List<String>{ GENERATOR_SOBJECT_FIELD, GENERATOR_VARIANT_FIELD})
+            generatorMetadata = new SObjectIndex(Test_Record_Generator__mdt.SObject__c, Test_Record_Generator__mdt.Variant__c)
                     .putAll(
                     [
                             SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c, DeveloperName, Inherits_From_Variant__c
@@ -23,14 +22,8 @@ global inherited sharing class TestRecordSource {
 
     private SObjectIndex generatorFieldMetadata {get {
         if(generatorFieldMetadata == null) {
-            generatorFieldMetadata = new SObjectIndex(
-                    Test_Record_Generator_Field__mdt.Test_Record_Generator__c.getDescribe().getName())
-                    .putAll(
-                    [
-                            SELECT Test_Record_Generator__c, Field__c, Value__c, Apex_Class__c,
-                                    Apex_Class_Parameters__c
-                            FROM Test_Record_Generator_Field__mdt
-                    ]);
+            generatorFieldMetadata = new SObjectIndex(Test_Record_Generator_Field__mdt.Test_Record_Generator__c)
+                    .putAll(Test_Record_Generator_Field__mdt.getAll().values());
         }
         return generatorFieldMetadata;
     } set;}

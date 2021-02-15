@@ -8,7 +8,7 @@ private class MetadataTriggerManagerTest {
 
     public static Set<String> lastNamesSeen = new Set<String>();
 
-    @JsonAccess(deserializable='never')
+    @JsonAccess(Deserializable='never')
     public class TestHandler implements AfterDelete, AfterInsert, AfterUndelete, AfterUpdate, BeforeDelete, BeforeInsert, BeforeUpdate {
 
         public void handleAfterDelete(List<Contact> oldList) {
