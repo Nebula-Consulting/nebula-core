@@ -40,6 +40,30 @@
       }
     ]
   },
+  "Contract": {
+    "generator": {
+      "MasterLabel": "Contract",
+      "DeveloperName": "Contract",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Contract"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Contract: Name",
+        "DeveloperName": "Contract_Name",
+        "nebc__Field__c": "Name",
+        "nebc__Value__c": "Test Contract"
+      },
+      {
+        "MasterLabel": "Contract: Account",
+        "DeveloperName": "Contract_Account",
+        "nebc__Field__c": "AccountId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Account\"}"
+      }
+    ]
+  },
   "Opportunity": {
     "generator": {
       "MasterLabel": "Opportunity",
