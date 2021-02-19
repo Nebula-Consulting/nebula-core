@@ -57,6 +57,29 @@ private class SObjectIndexTest {
     }
 
     @IsTest
+    static void putAllIterator() {
+        List<Account> accounts = new List<Account> {togAccount, togAccount.clone(), togAccount.clone()};
+        accounts[0].NumberOfEmployees = 1;
+        accounts[0].Name = '0';
+        accounts[1].NumberOfEmployees = 1;
+        accounts[1].Name = '1';
+        accounts[2].NumberOfEmployees = 3;
+        accounts[2].Name = '2';
+        Iterator<Account> accountIterator = accounts.iterator();
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{ Account.NumberOfEmployees.getDescribe().getName()})
+                .putAll(accountIterator);
+
+        List<Account> group1 = theIndex.getAll(1);
+        List<Account> group2 = theIndex.getAll(3);
+
+        System.assertEquals(2, group1.size());
+        System.assertEquals('0', group1[0].Name);
+        System.assertEquals('1', group1[1].Name);
+        System.assertEquals(1, group2.size());
+        System.assertEquals('2', group2[0].Name);
+    }
+
+    @IsTest
     static void nullValueOnIndexField() {
         SObjectIndex theIndex = new SObjectIndex(Account.ParentId.getDescribe().getName()).put(togAccount);
         Account indexAccount = (Account)theIndex.get((Id)null);

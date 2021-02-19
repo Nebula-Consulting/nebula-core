@@ -77,6 +77,13 @@ global class SObjectIndex implements SObjectIndexI, Container {
         return this;
     }
 
+    global SObjectIndex putAll(Iterator<Object> iterator) {
+        while(iterator.hasNext()) {
+            put((SObject)iterator.next());
+        }
+        return this;
+    }
+
     private SObjectIndexI getOrCreateIndexFor(Object key) {
         SObjectIndexI existingIndex = children.get(key);
         if(existingIndex != null) {
