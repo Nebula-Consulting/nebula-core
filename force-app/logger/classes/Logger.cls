@@ -72,7 +72,10 @@ global without sharing class Logger {
     @TestVisible
     private static List<Log_Setting__mdt> logSettings {get {
         if(logSettings == null) {
-            logSettings = Log_Setting__mdt.getAll().values();
+            logSettings = [
+                    SELECT Component__c, User_Id__c, Level__c, LogMethod_Class__c
+                    FROM Log_Setting__mdt
+            ];
         }
         return logSettings;
     } set;}

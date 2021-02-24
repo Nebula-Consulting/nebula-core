@@ -9,10 +9,13 @@ global inherited sharing class TestRecordSource {
 
     private SObjectIndex generatorMetadata {get {
         if(generatorMetadata == null) {
-            List<Test_Record_Generator__mdt> generatorRecords = Test_Record_Generator__mdt.getAll().values();
-            Lists.sort(generatorRecords, new ReverseComparator(new SObjectFieldComparator(Test_Record_Generator__mdt.Priority__c)));
             generatorMetadata = new SObjectIndex(Test_Record_Generator__mdt.SObject__c, Test_Record_Generator__mdt.Variant__c)
-                    .putAll(generatorRecords);
+                    .putAll(
+                    [
+                            SELECT Apex_Class__c, Priority__c, SObject__c, Variant__c, Parameters__c, DeveloperName, Inherits_From_Variant__c
+                            FROM Test_Record_Generator__mdt
+                            ORDER BY Priority__c DESC
+                    ]);
         }
         return generatorMetadata;
     } set;}
@@ -20,7 +23,12 @@ global inherited sharing class TestRecordSource {
     private SObjectIndex generatorFieldMetadata {get {
         if(generatorFieldMetadata == null) {
             generatorFieldMetadata = new SObjectIndex(Test_Record_Generator_Field__mdt.Test_Record_Generator__c)
-                    .putAll(Test_Record_Generator_Field__mdt.getAll().values());
+                    .putAll(
+                    [
+                            SELECT Test_Record_Generator__c, Field__c, Value__c, Apex_Class__c,
+                                    Apex_Class_Parameters__c
+                            FROM Test_Record_Generator_Field__mdt
+                    ]);
         }
         return generatorFieldMetadata;
     } set;}

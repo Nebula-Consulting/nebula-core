@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "Nebula Core",
-            "versionName": "0.69",
-            "versionNumber": "0.69.0.NEXT"
+            "versionName": "0.70",
+            "versionNumber": "0.70.0.NEXT"
         },
         {
             "path": "nebula-triggers",
@@ -56,6 +56,7 @@
         "Nebula Core@0.68.0-1": "04t6M000000km63QAA",
         "Nebula Core@0.68.0-2": "04t6M000000km68QAA",
         "Nebula Core@0.68.0-3": "04t6M000000km6hQAA",
-        "Nebula Core@0.69.0-1": "04t6M000000km6rQAA"
+        "Nebula Core@0.69.0-1": "04t6M000000km6rQAA",
+        "Nebula Core@0.70.0-1": "04t6M000000km6wQAA"
     }
 }
