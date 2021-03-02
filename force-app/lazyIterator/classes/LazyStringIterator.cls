@@ -6,27 +6,7 @@
 
 global class LazyStringIterator extends LazyIterator {
 
-    global LazyStringIterator(Iterator<String> iterator) {
-        super(new StringIteratorToObjectIterator(iterator));
-    }
-
-    global LazyStringIterator(Iterable<String> iterable) {
-        super(new StringIteratorToObjectIterator(iterable.iterator()));
-    }
-
-    private class StringIteratorToObjectIterator implements Iterator<Object> {
-
-        private Iterator<String> iterator;
-
-        public StringIteratorToObjectIterator(Iterator<String> iterator) {
-            this.iterator = iterator;
-        }
-
-        public Boolean hasNext() {
-            return iterator.hasNext();
-        }
-        public Object next() {
-            return iterator.next();
-        }
+    global LazyStringIterator(Object iterableOrIterator) {
+        super(iterableOrIterator);
     }
 }
