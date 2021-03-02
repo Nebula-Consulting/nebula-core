@@ -3,28 +3,28 @@
  * @date 10/09/2020
  */
 
-public virtual class ListTuple implements Tuple {
+global virtual class ListTuple implements Tuple {
 
     private List<Object> entries;
-    public static NewInstance newInstance = new NewListTuple();
+    global static NewInstance newInstance = new NewListTuple();
 
-    public ListTuple(Object o1, Object o2) {
+    global ListTuple(Object o1, Object o2) {
         entries = new List<Object>{o1, o2};
     }
 
-    public ListTuple(List<Object> entries) {
+    global ListTuple(List<Object> entries) {
         this.entries = entries.clone();
     }
 
-    public Object get(Integer n) {
+    global Object get(Integer n) {
         return entries[n];
     }
 
-    public Integer size() {
+    global Integer size() {
         return entries.size();
     }
 
-    public Iterator<Object> iterator() {
+    global Iterator<Object> iterator() {
         return entries.iterator();
     }
 

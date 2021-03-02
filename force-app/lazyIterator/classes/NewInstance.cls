@@ -5,6 +5,6 @@
  * they are reflectively constructed)
  */
 
-public interface NewInstance {
+global interface NewInstance {
     Object newInstance(List<Object> parameters);
 }
