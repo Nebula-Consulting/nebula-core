@@ -26,8 +26,16 @@ Areas covered by the library:
 
 ## Just Triggers?
 
-There is a lot of functionality in Nebula Core, but that also implies a footprint that might not work for you. Or you 
-just might want to build with no namespace. 
+There is a lot of functionality in Nebula Core, but that also implies a footprint that might not work for you. So, you 
+can install 'Nebula Triggers' instead. This contains just the trigger handlers and a few parts of Nebula Core that were 
+used to write it. 
+
+- [Install Nebula Triggers on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7LQAQ)
+- [Install Nebula Triggers on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7LQAQ)
+- Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000km7LQAQ
+- Include in your SFDX project as `"Nebula Triggers": "04t6M000000km7LQAQ"`
+
+Or you just might want to build from the source with no namespace. 
 
 In that case, use the [nebula-triggers/](nebula-triggers) directory. This 
 is a symbolic link, that pulls in just what you need to run the trigger framework. 
