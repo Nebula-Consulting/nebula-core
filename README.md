@@ -24,3 +24,19 @@ Areas covered by the library:
   - An HttpCalloutMock which just throws an exception
   - A class for pulling the details out of nested exceptions
 
+## Just Triggers?
+
+There is a lot of functionality in Nebula Core, but that also implies a footprint that might not work for you. Or you 
+just might want to build with no namespace. 
+
+In that case, use the [nebula-triggers/](nebula-triggers) directory. This 
+is a symbolic link, that pulls in just what you need to run the trigger framework. 
+
+So, for example, if you have checked out the entire repository, you should be able to run the following commands 
+successfully to put just the triggers in a scratch org, as source:
+
+    sfdx force:org:create edition=Developer --setalias 'Trigger Framework' --nonamespace
+    sfdx force:source:deploy --sourcepath nebula-triggers -u 'Trigger Framework'
+    sfdx force:apex:test:run --wait 60 -u 'Trigger Framework'
+
+So, you could use `force:source:deploy` to deploy the code to your sandbox org for source-only usage.
