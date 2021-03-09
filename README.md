@@ -38,7 +38,8 @@ used to write it.
 Or you just might want to build from the source with no namespace. 
 
 In that case, use the [nebula-triggers/](nebula-triggers) directory. This 
-is a symbolic link, that pulls in just what you need to run the trigger framework. 
+is a symbolic link, that pulls in just what you need to run the trigger framework. Note that if you're on Windows, you 
+need to tick a checkbox when you install Git to make this work (see https://github.community/t/git-bash-symbolic-links-on-windows/522/4).
 
 So, for example, if you have checked out the entire repository, you should be able to run the following commands 
 successfully to put just the triggers in a scratch org, as source:
