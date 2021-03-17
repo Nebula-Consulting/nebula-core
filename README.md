@@ -1,9 +1,9 @@
 # Nebula Core
 
- - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km6rQAA)
- - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km6rQAA)
- - Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000km6rQAA
- - Include in your SFDX project as `"Nebula Core": "04t6M000000km6rQAA"`
+ - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7GQAQ)
+ - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7GQAQ)
+ - Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000km7GQAQ
+ - Include in your SFDX project as `"Nebula Core": "04t6M000000km7GQAQ"`
  
 The base set of classes used by Nebula Consulting. The licence for this code is MIT, see [LICENSE](LICENSE). 
 
@@ -30,10 +30,10 @@ There is a lot of functionality in Nebula Core, but that also implies a footprin
 can install 'Nebula Triggers' instead. This contains just the trigger handlers and a few parts of Nebula Core that were 
 used to write it. 
 
-- [Install Nebula Triggers on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7LQAQ)
-- [Install Nebula Triggers on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7LQAQ)
-- Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000km7LQAQ
-- Include in your SFDX project as `"Nebula Triggers": "04t6M000000km7LQAQ"`
+- [Install Nebula Triggers on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7GQAQ,)
+- [Install Nebula Triggers on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000km7GQAQ,)
+- Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000km7GQAQ,
+- Include in your SFDX project as `"Nebula Triggers": "04t6M000000km7GQAQ,"`
 
 Or you just might want to build from the source with no namespace. 
 
