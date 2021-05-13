@@ -23,11 +23,11 @@ public class Assertion {
         }
 
         public Assertable that(Object actual) {
-            return new Assertable(actual, this);
+            return new Assertable(actual, toString());
         }
 
         public AssertableString that(String actual) {
-            return new AssertableString(actual, this);
+            return new AssertableString(actual, toString());
         }
 
         public void that(Boolean shouldBeTrue) {
@@ -44,9 +44,9 @@ public class Assertion {
     public class Assertable {
 
         private Object actual;
-        private DescribedAssertion description;
+        private String description;
 
-        private Assertable(Object actual, DescribedAssertion description) {
+        private Assertable(Object actual, String description) {
             this.actual = actual;
             this.description = description;
         }
@@ -62,9 +62,9 @@ public class Assertion {
     public class AssertableString {
 
         private String actual;
-        private DescribedAssertion description;
+        private String description;
 
-        private AssertableString(String actual, DescribedAssertion description) {
+        private AssertableString(String actual, String description) {
             this.actual = actual;
             this.description = description;
         }
