@@ -37,6 +37,10 @@ global without sharing class StandardTestRecordGenerators {
     }
 
     public Metadata.DeployContainer getDeployContainerFor(String name) {
+        Assertion.is(
+                String.format('No standard metadata generators found for {0}. Existing definitions are: {1}',
+                        new List<String>{ name, String.join(new List<String>(allStandardGenerators.keySet()), ',') }))
+                .that(allStandardGenerators.containsKey(name));
         return getDeployContainerFor(allStandardGenerators.get(name));
     }
 

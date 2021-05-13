@@ -24,4 +24,19 @@ private class StandardTestRecordGeneratorsTest {
         Metadata.CustomMetadata testRecordGeneratorFieldMetadata = (Metadata.CustomMetadata)resultMetadata[1];
         System.assertEquals('nebc__Test_Record_Generator_Field.Product_Name', testRecordGeneratorFieldMetadata.fullName);
     }
+
+    @IsTest
+    static void noSuchObject() {
+        StandardTestRecordGenerators standardTestRecordGenerators = new StandardTestRecordGenerators();
+
+        Test.startTest();
+        try {
+            standardTestRecordGenerators.getDeployContainerFor('Nope');
+        } catch (AssertionException e) {
+            return;
+        }
+        Test.stopTest();
+
+        System.assert(false, 'Should have thrown an exception');
+    }
 }
