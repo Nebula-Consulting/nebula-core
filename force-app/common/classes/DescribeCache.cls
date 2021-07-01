@@ -5,7 +5,7 @@
  * and access by name/token
  */
 
-global virtual class DescribeCache {
+global class DescribeCache {
 
     global static Map<String, Schema.SObjectType> globalDescribe {
         get {
@@ -19,5 +19,9 @@ global virtual class DescribeCache {
 
     global static FieldSet getFieldSet(String sObjectType, String fieldSetName) {
         return globalDescribe.get(sObjectType).getDescribe().fieldSets.getMap().get(fieldSetName);
+    }
+
+    global static DescribeSObjectResult describeSObject(String typeName) {
+        return Schema.describeSObjects(new List<String>{typeName})[0];
     }
 }

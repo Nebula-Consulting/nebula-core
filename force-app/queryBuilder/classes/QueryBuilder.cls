@@ -34,7 +34,7 @@ global inherited sharing class QueryBuilder {
     }
 
     global QueryBuilder addAllFields(BooleanFunction fieldFilter) {
-        List<SObjectField> allFields = ((SObject)Type.forName(typeName).newInstance()).getSObjectType().getDescribe().fields.getMap().values();
+        List<SObjectField> allFields = DescribeCache.describeSObject(typeName).fields.getMap().values();
         for(SObjectField f : allFields) {
             if(fieldFilter.isTrueFor(f)) {
                 fieldsLowerCase.add(f.getDescribe().getName().toLowerCase());

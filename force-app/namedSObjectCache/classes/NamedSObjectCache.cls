@@ -71,7 +71,7 @@ global inherited sharing class NamedSObjectCache {
     }
 
     global static RecordType getRecordType(String sObjectType, String developerName) {
-        return getRecordType(((SObject)Type.forName(sObjectType).newInstance()).getSObjectType(), developerName);
+        return getRecordType(DescribeCache.describeSObject(sObjectType).getSObjectType(), developerName);
     }
 
     global static RecordType getRecordType(SObjectType sObjectType, String developerName) {

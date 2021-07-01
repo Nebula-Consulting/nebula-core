@@ -70,8 +70,8 @@ global inherited sharing class TestRecordSource {
         return returnGenerator;
     }
 
-    private SObjectType getSObjectTypeFromString(String SObjectTypeName) {
-        return ((SObject)Type.forName(SObjectTypeName).newInstance()).getSObjectType();
+    private SObjectType getSObjectTypeFromString(String sObjectTypeName) {
+        return DescribeCache.describeSObject(sObjectTypeName).getSObjectType();
     }
 
     private TestRecordGenerator createGenerator(Test_Record_Generator__mdt thisGeneratorMetadata) {
