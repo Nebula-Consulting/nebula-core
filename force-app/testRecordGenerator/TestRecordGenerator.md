@@ -55,7 +55,8 @@ A simple example of this would be to define the TestRecordSource and get the rec
 
     @IsTest
     static void createContact() {
-        Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
+        Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType)
+            .withInsert();
     }
 
 
@@ -70,7 +71,10 @@ In this instance it doesn't make sense to adjust the record to include this data
 
      @IsTest
      static void getContactAndSetField() {
-         Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).put(Contact.Department, 'Development').withInsert();
+         Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType)
+             .put(Contact.Department, 'Development')
+             .withInsert();
+             
          System.assertEquals('Development', testContact.Department);
      } 
 
@@ -100,7 +104,8 @@ A better way to create multiple different records you could specify a number of 
 
     @IsTest
     static void multipleContacts() {
-        List<Contact> contacts = (List<Contact>) testRecordSource.getRecord(Contact.SObjectType).withInsert(2);
+        List<Contact> contacts = (List<Contact>) testRecordSource.getRecord(Contact.SObjectType)
+            .withInsert(2);
 
         System.assertNotEquals(contacts[0].Id, contacts[1].Id);
     }
@@ -117,10 +122,12 @@ Therefor the second Contact when retrieved will be a fresh version and not cache
     @IsTest
      static void getContact() {
      
-         Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType).withoutInsert();
+         Contact testContact = (Contact) testRecordSource.getRecord(Contact.SObjectType)
+             .withoutInsert();
          insert testContact;
  
-         Contact testContact2 = (Contact) testRecordSource.getRecord(Contact.SObjectType).withInsert();
+         Contact testContact2 = (Contact) testRecordSource.getRecord(Contact.SObjectType)
+             .withInsert();
          
          System.assertNotEquals(testContact.Id, testContact2.Id);
  
