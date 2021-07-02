@@ -3,10 +3,10 @@
  * @date 10/09/2020
  */
 
-global class DeleteResult extends ListTuple implements DatabaseResult {
+global class DeleteResult extends TwoTuple implements DatabaseResult {
 
-    global Database.DeleteResult deleteResult {get {return (Database.DeleteResult)get(0);} set; }
-    global SObject record {get {return (SObject)get(1);} set; }
+    global Database.DeleteResult deleteResult {get {return (Database.DeleteResult)left;} set; }
+    global SObject record {get {return (SObject)right;} set; }
     public static NewInstance newInstance = new NewDeleteResult();
 
     global DeleteResult(Database.DeleteResult deleteResult, SObject record) {

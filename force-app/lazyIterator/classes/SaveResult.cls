@@ -4,10 +4,10 @@
  * @description A 2-Tuple of Database.SaveResult and SObject
  */
 
-global class SaveResult extends ListTuple implements DatabaseResult {
+global class SaveResult extends TwoTuple implements DatabaseResult {
 
-    global Database.SaveResult saveResult {get {return (Database.SaveResult)get(0);} set; }
-    global SObject record {get {return (SObject)get(1);} set; }
+    global Database.SaveResult saveResult {get {return (Database.SaveResult)left;} set; }
+    global SObject record {get {return (SObject)right;} set; }
     public static NewInstance newInstance = new NewSaveResult();
 
     global SaveResult(Database.SaveResult saveResult, SObject record) {

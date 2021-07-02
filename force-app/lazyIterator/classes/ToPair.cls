@@ -14,6 +14,6 @@ global class ToPair implements Function {
     }
 
     public Object call(Object o) {
-        return new ListTuple(o, mapO1ToO2Function.call(o));
+        return new TwoTuple(o, mapO1ToO2Function.call(o));
     }
 }

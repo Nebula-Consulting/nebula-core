@@ -5,8 +5,8 @@
 
 global abstract class TriggerContextBooleanFunction implements BooleanFunction {
     global Boolean isTrueFor(Object o) {
-        TriggerContextPair pair = (TriggerContextPair)o;
-        return isTrueFor(pair.oldRecord, pair.newRecord);
+        TwoTuple pair = (TwoTuple) o;
+        return isTrueFor((SObject)pair.left, (SObject)pair.right);
     }
 
     global abstract Boolean isTrueFor(SObject oldRecord, SObject newRecord);
