@@ -6,8 +6,8 @@
 
 global virtual class TwoTuple implements Tuple {
 
-    public Object left {get; private set;}
-    public Object right {get; private set;}
+    global Object left {get; private set;}
+    global Object right {get; private set;}
 
     global static NewInstance newInstance = new NewTwoTuple();
 
