@@ -262,6 +262,42 @@ private class LazyIteratorTest {
         System.assert(false, 'Expected a NoSuchElementException');
     }
 
+    @IsTest
+    static void observeParentIds() {
+        Set<Id> results = new Set<Id>();
+
+        Test.startTest();
+        List<Account> unchanged = new LazySObjectIterator(accounts)
+                .observeValuesT(new Composition(new FieldFromSObject(Account.ParentId)).compose(new AddTo(results)))
+                .toList();
+        Test.stopTest();
+
+        System.assertEquals(accounts.size(), results.size());
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(results.contains(accounts[i].ParentId));
+            System.assertEquals(accounts[i], unchanged[i]);
+        }
+    }
+
+    @IsTest
+    static void observeFilteredParentIds() {
+        Set<Id> results = new Set<Id>();
+
+        Test.startTest();
+        List<Account> unchanged = new LazySObjectIterator(accounts)
+                .observeValues(new NumberOfEmployeesIsOdd(), new Composition(new FieldFromSObject(Account.ParentId)).compose(new AddTo(results)))
+                .isSObjectIterator()
+                .toList();
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            if(Math.mod(accounts[i].NumberOfEmployees, 2) == 1) {
+                System.assert(results.contains(accounts[i].ParentId));
+                System.assertEquals(accounts[i], unchanged[i]);
+            }
+        }
+    }
+
     private class NumberOfEmployeesIs implements BooleanFunction {
         private Integer target;
 

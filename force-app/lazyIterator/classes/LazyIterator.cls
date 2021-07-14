@@ -153,6 +153,43 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return new LazyMappingConditionalIterator(getIteratorForDecorator(), filterFunction, mappingFunction);
     }
 
+    /**
+     * Calls the observer function on each item as it is iterated, returning the original unmodified item. Can be used
+     * to add iterated items to a collection whilst also processing them another way later.
+     *
+     * @param observerFunction a function to call on each item, should not modify them
+     *
+     * @return iterator on the underlying items, unmodified
+     */
+    global LazyIterator observeValues(Function observerFunction) {
+        return new LazyObserverIterator(getIteratorForDecorator(), observerFunction);
+
+    }
+
+    /**
+     * Calls the observer function on each item as it is iterated, as long as is satisfies the filterFunction. The
+     * original unmodified item is returned by each iteration. Can be used to add iterated items to a collection whilst
+     * also processing them another way later.
+     *
+     * @param filterFunction a filter on which items to observe
+     * @param observerFunction a function to call on each item, should not modify them
+     *
+     * @return  iterator on the underlying items, unmodified
+     */
+    global LazyIterator observeValues(BooleanFunction filterFunction, Function observerFunction) {
+        return new LazyObserverConditionalIterator(getIteratorForDecorator(), filterFunction, observerFunction);
+    }
+
+    /**
+     * If you know the underlying items are SObjects and want the convenience methods of LazySObjectIterator, call this
+     * to get them.
+     *
+     * @return a LazySObjectIterator of this iterator
+     */
+    global LazySObjectIterator isSObjectIterator() {
+        return new LazySObjectIterator(this);
+    }
+
     global void forEach(VoidFunction callingFunction) {
         while(hasNext()) {
             callingFunction.call(next());

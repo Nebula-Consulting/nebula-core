@@ -18,7 +18,8 @@ private class AddToTest {
         Set<String> accountNames = new Set<String>();
         new LazySObjectIterator(accounts)
                 .get(Account.Name)
-                .forEach(new AddTo(accountNames));
+                .observeValues(new AddTo(accountNames))
+                .forEach();
 
         for(Account thisAccount : accounts) {
             System.assert(accountNames.contains(thisAccount.Name));

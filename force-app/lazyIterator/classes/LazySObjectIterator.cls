@@ -41,6 +41,21 @@ global class LazySObjectIterator extends LazyIterator {
         return this;
     }
 
+    global LazySObjectIterator mapValuesT(BooleanFunction filterFunction, Function mappingFunction) {
+        this.iterator = super.mapValues(filterFunction, mappingFunction);
+        return this;
+    }
+
+    global LazySObjectIterator observeValuesT(Function mappingFunction) {
+        this.iterator = super.observeValues(mappingFunction);
+        return this;
+    }
+
+    global LazySObjectIterator observeValuesT(BooleanFunction filterFunction, Function mappingFunction) {
+        this.iterator = super.observeValues(filterFunction, mappingFunction);
+        return this;
+    }
+
     global LazySObjectIterator put(SObjectField field,  Object valueOrFunction) {
         iterator = new LazyMappingIterator(iterator, new SObjectPutField(field, valueOrFunction));
         return this;
@@ -85,6 +100,18 @@ global class LazySObjectIterator extends LazyIterator {
     global Set<String> get(SObjectField field, Set<String> toFill) {
         return mapValues(new FieldFromSObject(field))
                 .toSet(toFill);
+    }
+
+    global LazySObjectIterator addTo(SObjectField field, List<Object> toFill) {
+        return observeValuesT(new Composition(new FieldFromSObject(field)).compose(new AddTo(toFill)));
+    }
+
+    global LazySObjectIterator addTo(SObjectField field, Set<Id> toFill) {
+        return observeValuesT(new Composition(new FieldFromSObject(field)).compose(new AddTo(toFill)));
+    }
+
+    global LazySObjectIterator addTo(SObjectField field, Set<String> toFill) {
+        return observeValuesT(new Composition(new FieldFromSObject(field)).compose(new AddTo(toFill)));
     }
 
     global List<SObject> toList() {

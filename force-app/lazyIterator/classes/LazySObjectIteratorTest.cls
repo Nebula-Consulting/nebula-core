@@ -152,6 +152,22 @@ private class LazySObjectIteratorTest {
     }
 
     @IsTest
+    static void addToList() {
+        List<Id> results = new List<Id>();
+
+        Test.startTest();
+        new LazySObjectIterator(accounts)
+                .addTo(Account.Id, results)
+                .forEach();
+
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assertEquals(accounts[i].Id, results[i]);
+        }
+    }
+
+    @IsTest
     static void doInsert() {
         Test.startTest();
         List<SaveResult> results = (List<SaveResult>)new LazySObjectIterator(accounts)
@@ -228,6 +244,22 @@ private class LazySObjectIteratorTest {
         Test.startTest();
         Set<Id> results = new LazySObjectIterator(accounts)
                 .get(Account.Id, new Set<Id>());
+        Test.stopTest();
+
+        System.assertEquals(accounts.size(), results.size());
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(results.contains(accounts[i].Id));
+        }
+    }
+
+    @IsTest
+    static void addToSet() {
+        Test.startTest();
+        Set<Id> results = new Set<Id>();
+
+        new LazySObjectIterator(accounts)
+                .addTo(Account.Id, results)
+                .forEach();
         Test.stopTest();
 
         System.assertEquals(accounts.size(), results.size());
