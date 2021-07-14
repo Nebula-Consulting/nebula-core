@@ -4,7 +4,7 @@
  */
 
 @IsTest
-private class GetTest {
+private class GetFromTest {
     private static TestIdGenerator accountIdGenerator = new TestIdGenerator(Account.SObjectType);
 
     private static List<Account> accounts = new List<Account>{
