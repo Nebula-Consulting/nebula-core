@@ -293,8 +293,8 @@ private class LazyIteratorTest {
         for(Integer i=0; i < accounts.size(); i++) {
             if(Math.mod(accounts[i].NumberOfEmployees, 2) == 1) {
                 System.assert(results.contains(accounts[i].ParentId));
-                System.assertEquals(accounts[i], unchanged[i]);
             }
+            System.assertEquals(accounts[i], unchanged[i]);
         }
     }
 
