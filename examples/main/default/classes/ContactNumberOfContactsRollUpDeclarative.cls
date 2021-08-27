@@ -11,9 +11,11 @@ global without sharing class ContactNumberOfContactsRollUpDeclarative implements
     }
 
     public void handleAfterUpdate(List<Contact> oldList, List<Contact> newList) {
-        updateAccountRollUps(new nebc.LazyTriggerContextPairIterator(oldList, newList)
-                .filter(new nebc.IsFieldChangedInTrigger(Contact.AccountId))
-                .expand(new nebc.TriggerContextPairExpandToBoth()));
+        nebc.LazyIterator oldAndNewWithChangedAccounts = new nebc.LazyTriggerContextPairIterator(oldList, newList)
+                .filterT(new nebc.IsFieldChangedInTrigger(Contact.AccountId))
+                .expand(new nebc.TriggerContextPairExpandToBoth());
+
+        updateAccountRollUps(new LazySObjectIterator(oldAndNewWithChangedAccounts));
     }
 
     public void handleAfterDelete(List<Contact> oldList) {
@@ -24,17 +26,15 @@ global without sharing class ContactNumberOfContactsRollUpDeclarative implements
         updateAccountRollUps(new nebc.LazySObjectIterator(newList));
     }
 
-    private void updateAccountRollUps(nebc.LazyIterator contacts) {
+    private void updateAccountRollUps(nebc.LazySObjectIterator contacts) {
         Set<Id> accountIds = contacts
-                .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
+                .get(Contact.AccountId)
                 .filter(new nebc.IsNotNull())
                 .toSet(new Set<Id>());
 
-        if(!accountIds.isEmpty()) {
-            update new nebc.LazyIdIterator(accountIds.iterator())
-                    .mapValues(new AccountWithNumberOfContactsFromAccountId(accountIds))
-                    .toList(new List<Account>());
-        }
+        update new nebc.LazyIdIterator(accountIds.iterator())
+                .mapValues(new AccountWithNumberOfContactsFromAccountId(accountIds))
+                .toList(new List<Account>());
     }
 
     private class AccountWithNumberOfContactsFromAccountId implements nebc.Function {
@@ -42,14 +42,16 @@ global without sharing class ContactNumberOfContactsRollUpDeclarative implements
         private nebc.SObjectIndex accountIdToContactCount;
 
         public AccountWithNumberOfContactsFromAccountId(Set<Id> accountIds) {
-            accountIdToContactCount = new nebc.SObjectIndex('AccountId')
-                    .putAll([
-                            SELECT COUNT(Id) contactCount,
-                                    AccountId
-                            FROM Contact
-                            WHERE AccountId IN :accountIds
-                            GROUP BY AccountId
-                    ]);
+            accountIdToContactCount = new nebc.SObjectIndex('AccountId');
+            if(!accountIds.isEmpty()) {
+                accountIdToContactCount.putAll([
+                        SELECT COUNT(Id) contactCount,
+                                AccountId
+                        FROM Contact
+                        WHERE AccountId IN :accountIds
+                        GROUP BY AccountId
+                ]);
+            }
         }
         public Object call(Object o) {
             Account thisAccountToUpdate = new Account(Id = (Id)o, Number_of_Contacts_Declarative__c = 0);
