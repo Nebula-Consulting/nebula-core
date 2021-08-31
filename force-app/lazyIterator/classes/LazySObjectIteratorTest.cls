@@ -253,6 +253,36 @@ private class LazySObjectIteratorTest {
     }
 
     @IsTest
+    static void observeSetId() {
+        Test.startTest();
+        Set<Id> results = new Set<Id>();
+        new LazySObjectIterator(accounts)
+                .observeField(Account.Id, results)
+                .forEach();
+        Test.stopTest();
+
+        System.assertEquals(accounts.size(), results.size());
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(results.contains(accounts[i].Id));
+        }
+    }
+
+    @IsTest
+    static void observeListId() {
+        Test.startTest();
+        List<Id> results = new List<Id>();
+        new LazySObjectIterator(accounts)
+                .observeField('Id', results)
+                .forEach();
+        Test.stopTest();
+
+        System.assertEquals(accounts.size(), results.size());
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(results.contains(accounts[i].Id));
+        }
+    }
+
+    @IsTest
     static void addToSet() {
         Test.startTest();
         Set<Id> results = new Set<Id>();

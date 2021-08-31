@@ -51,6 +51,14 @@ global class LazySObjectIterator extends LazyIterator {
         return this;
     }
 
+    global LazySObjectIterator observeField(SObjectField field, Object addableCollection) {
+        return this.observeValuesT(new Composition(new FieldFromSObject(field)).compose(getCollectionAdder(addableCollection)));
+    }
+
+    global LazySObjectIterator observeField(String field, Object addableCollection) {
+        return this.observeValuesT(new Composition(new FieldFromSObjectString(field)).compose(getCollectionAdder(addableCollection)));
+    }
+
     global LazySObjectIterator observeValuesT(BooleanFunction filterFunction, Function mappingFunction) {
         this.iterator = super.observeValues(filterFunction, mappingFunction);
         return this;
@@ -160,5 +168,22 @@ global class LazySObjectIterator extends LazyIterator {
 
     global LazySObjectIterator append(LazySObjectIterator other) {
         return new LazySObjectIterator(super.append(other));
+    }
+
+    private AddTo getCollectionAdder(Object addableCollection) {
+        if(addableCollection instanceof Set<Id>) {
+            return new AddTo((Set<Id>)addableCollection);
+        } else if(addableCollection instanceof Set<String>) {
+            return new AddTo((Set<String>)addableCollection);
+        } else if(addableCollection instanceof List<Object>) {
+            return new AddTo((List<Object>)addableCollection);
+        } else if(addableCollection instanceof SObjectIndex) {
+            return new AddTo((SObjectIndex)addableCollection);
+        }
+
+        Assertion.is('Expected collection to be Set<Id>, Set<String>, List<Object>, or nebc.SObjectType. Got ' + addableCollection)
+                .that(false);
+
+        return null;
     }
 }
