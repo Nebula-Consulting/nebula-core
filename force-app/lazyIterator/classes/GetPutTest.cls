@@ -11,9 +11,12 @@ private class GetPutTest {
         Lead testLead = new Lead(FirstName = 'Foo', LastName = 'Bar');
         List<String> fields = new List<String>{'FirstName', 'LastName'};
         Contact result = new Contact();
+
+        Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(testLead)))
                 .forEach(new PutTo(result));
+        Test.stopTest();
 
         System.assertEquals(testLead.FirstName, result.FirstName);
         System.assertEquals(testLead.LastName, result.LastName);
@@ -24,9 +27,12 @@ private class GetPutTest {
         Map<String, Object> inputMap = new Map<String, Object>{ 'FirstName' => 'Foo', 'LastName' => 'Bar'};
         List<String> fields = new List<String>{'FirstName', 'LastName'};
         Contact result = new Contact();
+
+        Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(inputMap)))
                 .forEach(new PutTo(result));
+        Test.stopTest();
 
         System.assertEquals(inputMap.get('FirstName'), result.FirstName);
         System.assertEquals(inputMap.get('LastName'), result.LastName);
@@ -42,10 +48,13 @@ private class GetPutTest {
         };
 
         Contact result = new Contact();
+
+        Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(inputMap)))
                 .mapValues(new TwoTupleApply(new GetFrom(fieldMap), new IdentityFunction()))
                 .forEach(new PutTo(result));
+        Test.stopTest();
 
         System.assertEquals(inputMap.get('Names').get('FirstName'), result.FirstName);
         System.assertEquals(inputMap.get('Names').get('LastName'), result.LastName);
@@ -57,9 +66,11 @@ private class GetPutTest {
         List<String> fields = new List<String>{'FirstName', 'LastName'};
         Map<String, Object> result = new Map<String, Object>();
 
+        Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(testLead)))
                 .forEach(new PutTo(result));
+        Test.stopTest();
 
         System.assertEquals(testLead.FirstName, result.get('FirstName'));
         System.assertEquals(testLead.LastName, result.get('LastName'));
@@ -75,13 +86,14 @@ private class GetPutTest {
                 'LastName' => 'Names.LastName'
         };
 
+        Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(testLead)))
                 .mapValues(new TwoTupleApply(new GetFrom(fieldMap), new IdentityFunction()))
                 .forEach(new PutTo(result));
+        Test.stopTest();
 
         System.assertEquals(testLead.FirstName, ((Map<String, Object>)result.get('Names')).get('FirstName'));
         System.assertEquals(testLead.LastName, ((Map<String, Object>)result.get('Names')).get('LastName'));
     }
-
 }
