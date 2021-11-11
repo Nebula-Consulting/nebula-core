@@ -16,8 +16,33 @@ global class GetFrom implements Function {
         theGettable = new GetFromSObjectMap(sObjectMap);
     }
 
+    global GetFrom(Map<String, String> mapStringString) {
+        theGettable = new GetFromMapStringString(mapStringString);
+    }
+
     global GetFrom(SObject anSObject) {
         this.theGettable = new GetFromSObject(anSObject);
+    }
+
+    global GetFrom(Map<String, Object> aJsonObject) {
+        this.theGettable = new GetFromJsonObject(aJsonObject);
+    }
+
+    global GetFrom(Object anObject) {
+        if(anObject instanceof SObjectIndex) {
+            this.theGettable = new GetFromSObjectIndex((SObjectIndex) anObject);
+        } else if(anObject instanceof SObject) {
+            this.theGettable = new GetFromSObject((SObject)anObject);
+        } else if (anObject instanceof Map<String, Object>) {
+            this.theGettable = new GetFromJsonObject(anObject);
+        } else {
+            throw new IllegalArgumentException(String.format(
+                    'GetFrom constructed with invalid type {0}. Must be SObjectIndex, SObject, or Map<String, Object>',
+                    new List<String>{
+                            String.valueOf(anObject)
+                    })
+            );
+        }
     }
 
     global GetFrom(Gettable customGettable) {
@@ -73,6 +98,43 @@ global class GetFrom implements Function {
 
         public Object get(Object key) {
             return theMap.containsKey((Id)key) ? theMap.get((Id)key) : defaultIfMissing;
+        }
+    }
+
+    private class GetFromMapStringString implements Gettable {
+
+        private Map<String, String> theMap;
+        private Object defaultIfMissing = NoResult.NO_RESULT;
+
+        public GetFromMapStringString(Map<String, String> theMap) {
+            this.theMap = theMap;
+        }
+
+        public Gettable setDefaultIfMissing(Object defaultIfMissing) {
+            this.defaultIfMissing = defaultIfMissing;
+            return this;
+        }
+
+        public Object get(Object key) {
+            return theMap.containsKey((String)key) ? theMap.get((String)key) : defaultIfMissing;
+        }
+    }
+
+    private class GetFromJsonObject implements Gettable {
+
+        private JsonReader jsonReader;
+
+        public GetFromJsonObject(Object jsonObject) {
+            this.jsonReader = new JsonReader(jsonObject);
+        }
+
+        public Object get(Object key) {
+            return jsonReader.read((String)key);
+        }
+
+        public Gettable setDefaultIfMissing(Object defaultIfMissing) {
+            jsonReader.setMissingKeyResult(defaultIfMissing);
+            return this;
         }
     }
 
