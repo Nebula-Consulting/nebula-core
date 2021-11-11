@@ -45,4 +45,36 @@ private class GetFromTest {
         System.assertEquals(accounts[0].Name, sObjectGet.call('Name'));
         System.assertEquals(accounts[0].Id, sObjectGet.call('Id'));
     }
+
+    @IsTest
+    static void jsonObjectGet() {
+        GetFrom jsonGet = new GetFrom(new Map<String, Object> { 'a' => 'b', 'c' => new Map<String, Object> { 'd' => 'e' }})
+            .setDefaultIfMissing('foo');
+
+        System.assertEquals('b', jsonGet.call('a'));
+        System.assertEquals('e', jsonGet.call('c.d'));
+        System.assertEquals('foo', jsonGet.call('noSuchKey'));
+    }
+
+    @IsTest
+    static void jsonObjectGetAsObject() {
+        GetFrom jsonGet = new GetFrom((Object)new Map<String, Object> { 'a' => 'b', 'c' => new Map<String, Object> { 'd' => 'e' }});
+
+        System.assertEquals('b', jsonGet.call('a'));
+        System.assertEquals('e', jsonGet.call('c.d'));
+    }
+
+    @IsTest
+    static void noMatchAsObject() {
+
+        try {
+            new GetFrom(1);
+        } catch (IllegalArgumentException e) {
+            String message = e.getMessage();
+            System.assert(message.contains('GetFrom constructed with invalid type'), message);
+            return;
+        }
+
+        System.assert(false, 'Should have thrown exception');
+    }
 }
