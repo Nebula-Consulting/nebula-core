@@ -286,7 +286,7 @@ private class LazyIteratorTest {
         Test.startTest();
         List<Account> unchanged = new LazySObjectIterator(accounts)
                 .observeValues(new NumberOfEmployeesIsOdd(), new Composition(new FieldFromSObject(Account.ParentId)).compose(new AddTo(results)))
-                .isSObjectIterator()
+                .toSObjectIterator()
                 .toList();
         Test.stopTest();
 

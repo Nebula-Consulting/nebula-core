@@ -186,7 +186,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
      *
      * @return a LazySObjectIterator of this iterator
      */
-    global LazySObjectIterator isSObjectIterator() {
+    global LazySObjectIterator toSObjectIterator() {
         return new LazySObjectIterator(this);
     }
 
