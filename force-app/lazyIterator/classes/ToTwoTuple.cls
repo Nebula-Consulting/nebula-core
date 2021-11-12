@@ -1,7 +1,7 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 11/11/2021
- * @description (if required)
+ * @description Turns an object, o,  and a pair of functions, f1 and f2, into a two-tuple as <f1(o), f2(o)>
  */
 
 global class ToTwoTuple implements Function {

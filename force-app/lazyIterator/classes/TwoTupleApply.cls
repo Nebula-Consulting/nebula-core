@@ -1,7 +1,8 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 11/11/2021
- * @description (if required)
+ * @description Applies two functions to the corresponding elements of a tuple (at least size 2) i.e. given a tuple,
+ * <o1, o2, ...>,  and a pair of functions, f1 and f2, returns a two-tuple as <f1(o), f2(o)>
  */
 
 global class TwoTupleApply implements Function {
