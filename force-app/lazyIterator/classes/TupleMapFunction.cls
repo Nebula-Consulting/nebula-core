@@ -8,9 +8,15 @@
 global with sharing class TupleMapFunction implements Function {
 
     private Tuple functions;
+    private NewInstance tupleNewInstance = ListTuple.newInstance;
 
     global TupleMapFunction(Tuple functions) {
         this.functions = functions;
+    }
+
+    global TupleMapFunction setTupleNewInstance(NewInstance tupleNewInstance) {
+        this.tupleNewInstance = tupleNewInstance;
+        return this;
     }
 
     global Tuple call(Object o) {
@@ -21,6 +27,6 @@ global with sharing class TupleMapFunction implements Function {
             result[i] = ((Function)functions.get(i)).call(inputTuple);
         }
 
-        return new ListTuple(result);
+        return (Tuple)tupleNewInstance.newInstance(result);
     }
 }
