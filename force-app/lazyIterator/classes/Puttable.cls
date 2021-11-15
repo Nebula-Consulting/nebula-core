@@ -4,6 +4,6 @@
  * @description An object that you can put values into e.g. Map, SObject, SObjectIndex
  */
 
-public interface Puttable {
+global interface Puttable {
     void put(Object key, Object value);
 }

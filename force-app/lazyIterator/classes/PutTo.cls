@@ -4,19 +4,34 @@
  * @description Puts values into map-like objects e.g. Map, SObjectIndex, SObject. Call with a 2-tuple of <key, value>
  */
 
-public class PutTo implements nebc.Function {
+global class PutTo implements nebc.Function {
 
     private Puttable target;
 
-    public PutTo(SObject target) {
+    global PutTo(SObject target) {
         this.target = new SObjectPuttable(target);
     }
 
-    public PutTo(Map<String, Object> target) {
+    global PutTo(Map<String, Object> target) {
         this.target = new JsonObjectPuttable(target);
     }
 
-    public Object call(Object o) {
+    global PutTo(Object target) {
+        if(target instanceof SObject) {
+            this.target = new SObjectPuttable((SObject)target);
+        } else if (target instanceof Map<String, Object>) {
+            this.target = new JsonObjectPuttable((Map<String, Object>)target);
+        } else {
+            throw new IllegalArgumentException(String.format(
+                    'PutTo constructed with invalid type {0}. Must be SObject, or Map<String, Object>',
+                    new List<String>{
+                            String.valueOf(target)
+                    })
+            );
+        }
+    }
+
+    global Object call(Object o) {
         Tuple keyValue = (Tuple) o;
         target.put((String)keyValue.get(0), keyValue.get(1));
         return keyValue;
