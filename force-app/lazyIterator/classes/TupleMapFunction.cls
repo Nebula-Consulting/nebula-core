@@ -14,6 +14,10 @@ global with sharing class TupleMapFunction implements Function {
         this.functions = functions;
     }
 
+    global TupleMapFunction(Function function1, Function function2) {
+        this.functions = new TwoTuple(function1, function2);
+    }
+
     global TupleMapFunction setTupleNewInstance(NewInstance tupleNewInstance) {
         this.tupleNewInstance = tupleNewInstance;
         return this;
