@@ -2,7 +2,8 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 03/02/2021
  * @description Applies a tuple of Functions to a tuple of data, returning a tuple of mapped data. Each Function will
- * receive the entire tuple as its calling parameter
+ * receive the entire tuple as its calling parameter i.e. TupleMapFunction(f1, ...,fn) called on <o1, ..., on> will
+ * return <f1(<o1, ... on>), ..., fn(<o1, ..., on>)>
  */
 
 global with sharing class TupleMapFunction implements Function {

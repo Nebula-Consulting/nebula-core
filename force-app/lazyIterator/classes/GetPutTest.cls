@@ -52,7 +52,7 @@ private class GetPutTest {
         Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(inputMap)))
-                .mapValues(new TwoTupleApply(new GetFrom(fieldMap), new IdentityFunction()))
+                .mapValues(new TwoTupleMapValues(new GetFrom(fieldMap), new IdentityFunction()))
                 .forEach(new PutTo(result));
         Test.stopTest();
 
@@ -89,7 +89,7 @@ private class GetPutTest {
         Test.startTest();
         new LazyIterator(fields)
                 .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(testLead)))
-                .mapValues(new TwoTupleApply(new GetFrom(fieldMap), new IdentityFunction()))
+                .mapValues(new TwoTupleMapValues(new GetFrom(fieldMap), new IdentityFunction()))
                 .forEach(new PutTo(result));
         Test.stopTest();
 
