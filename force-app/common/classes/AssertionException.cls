@@ -3,7 +3,7 @@
  * @date 27/04/2021
  */
 
-public class AssertionException extends Exception {
+global class AssertionException extends Exception {
 
     public Object actual;
     public Object expected;

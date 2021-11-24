@@ -4,7 +4,7 @@
  * @description Unlike System.assert, these methods throw catchable exceptions and have a fluent interface
  */
 
-public class Assertion {
+global class Assertion {
 
     public static DescribedAssertion is {get {
         return new DescribedAssertion(null);
