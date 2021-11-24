@@ -8,6 +8,6 @@ global class Swap implements Function {
 
     global Object call(Object o) {
         Tuple inputTuple = (Tuple)o;
-        return new ListTuple(inputTuple.get(1), inputTuple.get(0));
+        return new TwoTuple(inputTuple.get(1), inputTuple.get(0));
     }
 }
