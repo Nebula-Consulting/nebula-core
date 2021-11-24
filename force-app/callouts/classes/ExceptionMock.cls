@@ -4,7 +4,18 @@
  */
 
 global class ExceptionMock implements HttpCalloutMock {
+
+    private Exception toThrow;
+
+    global ExceptionMock(Exception toThrow) {
+        this.toThrow = toThrow;
+    }
+
+    global ExceptionMock() {
+        this(new NullPointerException());
+    }
+
     global HttpResponse respond(HttpRequest request) {
-        throw new NullPointerException();
+        throw toThrow;
     }
 }
