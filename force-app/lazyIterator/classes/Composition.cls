@@ -12,6 +12,10 @@ global virtual class Composition implements Function {
         functions = new List<Function> { function1 };
     }
 
+    global Composition(SObjectField field) {
+        functions = new List<Function> { new FieldFromSObject(field) };
+    }
+
     global Composition(Function function1, Function function2) {
         functions = new List<Function> { function1, function2 };
     }
