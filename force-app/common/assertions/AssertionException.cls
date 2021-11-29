@@ -8,7 +8,7 @@ global class AssertionException extends Exception {
     public Object actual;
     public Object expected;
 
-    public AssertionException(Object actual, Object expected, String message) {
+    global AssertionException(Object actual, Object expected, String message) {
         super.setMessage(message);
         this.actual = actual;
         this.expected = expected;
