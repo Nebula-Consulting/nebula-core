@@ -51,6 +51,34 @@ private class AssertionTest {
     }
 
     @IsTest
+    static void stringEquals() {
+
+        Assertion.is.that('a').equals('a');
+
+        try {
+            Assertion.is.that('a').equals('A');
+        } catch (AssertionException e) {
+            return;
+        }
+
+        System.assert(false, 'Should have thrown exception');
+    }
+
+    @IsTest
+    static void stringContains() {
+
+        Assertion.is.that('abc').contains('bc');
+
+        try {
+            Assertion.is.that('abc').contains('A');
+        } catch (AssertionException e) {
+            return;
+        }
+
+        System.assert(false, 'Should have thrown exception');
+    }
+
+    @IsTest
     static void datetimeEquals() {
 
         Assertion.is.that(Datetime.newInstance(2021, 11, 29, 15, 15, 1)).equals(Datetime.newInstance(2021, 11, 29, 15, 15, 1));

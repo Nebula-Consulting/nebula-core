@@ -20,9 +20,17 @@ global class AssertableString {
         }
         return this;
     }
+
     global AssertableString equals(Object expected) {
         if(!actual.equals(expected)) {
             throw new AssertionException(actual, expected, description + 'Expected (case sensitive): ' + expected + ', Actual: ' + actual);
+        }
+        return this;
+    }
+
+    global AssertableString contains(String expected) {
+        if(!actual.contains(expected)) {
+            throw new AssertionException(actual, expected, description + 'Expected: ' + expected + ' to be contained in: ' + actual);
         }
         return this;
     }
