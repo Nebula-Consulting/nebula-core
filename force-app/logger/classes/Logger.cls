@@ -5,11 +5,11 @@
 
 global without sharing class Logger {
 
-    global static void log(System.LoggingLevel logLevel, String component, String body) {
+    global static void log(System.LoggingLevel logLevel, String component, Object body) {
         log(logLevel, component, body, null);
     }
 
-    global static void log(System.LoggingLevel logLevel, String component, String body, Id relatedTo) {
+    global static void log(System.LoggingLevel logLevel, String component, Object body, Id relatedTo) {
         new LazySObjectIterator(componentToLogSetting.getAll(component))
                 .setDefaultIfEmpty(new Log_Setting__mdt(LogMethod_Class__c = DebugLogger.class.getName(), Level__c = logLevel.name()))
                 .filter(new IsActiveLogLevel(logLevel))
@@ -34,10 +34,10 @@ global without sharing class Logger {
 
         private System.LoggingLevel logLevel;
         private String component;
-        private String body;
+        private Object body;
         private Id relatedTo;
 
-        public WriteLog(System.LoggingLevel logLevel, String component, String body, Id relatedTo) {
+        public WriteLog(System.LoggingLevel logLevel, String component, Object body, Id relatedTo) {
             this.logLevel = logLevel;
             this.component = component;
             this.body = body;
@@ -51,19 +51,27 @@ global without sharing class Logger {
     }
 
     global static void commitLogs() {
-        for(LogMethod thisActiveMethod : activeLogMethods.values()) {
+        for(LogMethodObject thisActiveMethod : activeLogMethods.values()) {
             thisActiveMethod.commitLogs();
         }
     }
 
-    private static LogMethod getLogMethod(String logMethodName) {
-        LogMethod activeLogMethod = activeLogMethods.get(logMethodName);
+    private static LogMethodObject getLogMethod(String logMethodName) {
+        LogMethodObject activeLogMethod = activeLogMethods.get(logMethodName);
         if(activeLogMethod == null) {
             Type logMethodType = TypeLoader.getType(logMethodName);
+
             if (logMethodType == null) {
                 throw new ClassNotFoundException('No log method found matching class name ' + logMethodName + '. Is the class global? Does it include any required namespace?');
             }
-            activeLogMethod = ((LogMethod) logMethodType.newInstance());
+
+            Object newInstance = logMethodType.newInstance();
+            if(newInstance instanceof LogMethodObject) {
+                activeLogMethod = ((LogMethodObject)newInstance);
+            } else {
+                activeLogMethod = new LogMethodToLogMethodObject((LogMethod)newInstance);
+            }
+
             activeLogMethods.put(logMethodName, activeLogMethod);
         }
         return activeLogMethod;
@@ -100,5 +108,5 @@ global without sharing class Logger {
         return logLevelToPriority;
     } set;}
 
-    private static Map<String, LogMethod> activeLogMethods = new Map<String, LogMethod>();
+    private static Map<String, LogMethodObject> activeLogMethods = new Map<String, LogMethodObject>();
 }

@@ -8,6 +8,7 @@ public class LoggerTest {
 
     public static List<String> logs = new List<String>();
     public static List<String> logs2 = new List<String>();
+    public static List<Integer> integerLog = new List<Integer>();
 
     @IsTest
     static void testBehavior() {
@@ -20,6 +21,30 @@ public class LoggerTest {
         Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), theMessage);
 
         System.assertEquals(theMessage, logs[0]);
+    }
+
+    @IsTest
+    static void nonString() {
+        Logger.logSettings = new List<Log_Setting__mdt>{ new Log_Setting__mdt(
+                Level__c = LoggingLevel.DEBUG.name(),
+                Component__c = LoggerTest.class.getName(),
+                LogMethod_Class__c = LoggerImplementation.class.getName()
+        )};
+        Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), 123);
+
+        System.assertEquals(String.valueOf(123), logs[0]);
+    }
+
+    @IsTest
+    static void integerLog() {
+        Logger.logSettings = new List<Log_Setting__mdt>{ new Log_Setting__mdt(
+                Level__c = LoggingLevel.DEBUG.name(),
+                Component__c = LoggerTest.class.getName(),
+                LogMethod_Class__c = IntegerLoggerImplementation.class.getName()
+        )};
+        Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), 123);
+
+        System.assertEquals(123, integerLog[0]);
     }
 
     @IsTest
@@ -91,6 +116,17 @@ public class LoggerTest {
 
         public void log(LoggingLevel logLevel, String component, String body, Id relatedTo) {
             LoggerTest.logs2.add(body);
+        }
+
+        public void commitLogs() {
+        }
+    }
+
+    public class IntegerLoggerImplementation implements LogMethodObject {
+
+        public void log(LoggingLevel logLevel, String component, Object body, Id relatedTo) {
+            System.debug('IntegerLoggerImplementation');
+            LoggerTest.integerLog.add((Integer)body);
         }
 
         public void commitLogs() {
