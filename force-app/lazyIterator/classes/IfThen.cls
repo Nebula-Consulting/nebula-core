@@ -8,7 +8,7 @@
 global class IfThen implements Function {
 
     private BooleanFunction condition;
-    private Function thenFunction = new IdentityFunction();
+    private Function thenFunction;
     private Function elseFunction = new IdentityFunction();
 
     global IfThen(BooleanFunction condition, Function thenFunction) {
