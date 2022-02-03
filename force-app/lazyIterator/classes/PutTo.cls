@@ -45,8 +45,30 @@ global class PutTo implements nebc.Function {
             this.target = target;
         }
 
+        @SuppressWarnings('PMD.OneDeclarationPerLine') // OK for optimised loops
         public void put(Object key, Object value) {
-            target.put((String)key, value);
+            List<String> sObjectFieldPath = ((String)key).split('\\.');
+
+            SObject boxingPosition = target;
+            for(Integer i = 0, size = sObjectFieldPath.size() - 1; i < size; i++) {
+                SObject newBoxingPosition = boxingPosition.getSObject(sObjectFieldPath[i]);
+
+                if(newBoxingPosition == null) {
+                    newBoxingPosition = fieldToNewInstance(boxingPosition, relationToField(sObjectFieldPath[i]));
+                    boxingPosition.putSObject(sObjectFieldPath[i], newBoxingPosition);
+                }
+
+                boxingPosition = newBoxingPosition;
+            }
+            boxingPosition.put(sObjectFieldPath[sObjectFieldPath.size() - 1], value);
+        }
+
+        private String relationToField(String relation) {
+            return relation.contains('__r') ? relation.replace('__r', '__c') : relation + 'Id';
+        }
+
+        private SObject fieldToNewInstance(SObject sourceSObject, String field) {
+            return sourceSObject.getSObjectType().getDescribe().fields.getMap().get(field).getDescribe().referenceTo[0].newSObject();
         }
     }
 
@@ -58,23 +80,21 @@ global class PutTo implements nebc.Function {
             this.target = target;
         }
 
+        @SuppressWarnings('PMD.OneDeclarationPerLine') // OK for optimised loops
         public void put(Object key, Object value) {
             List<String> jsonObjectFieldPath = ((String)key).split('\\.');
 
             Map<String, Object> boxingPosition = target;
-            for(Integer i=0; i < jsonObjectFieldPath.size(); i++) {
-                if(i == jsonObjectFieldPath.size() - 1) {
-                    boxingPosition.put(jsonObjectFieldPath[i], value);
-                } else {
-                    Map<String, Object> newBoxingPosition = (Map<String, Object>)boxingPosition.get(jsonObjectFieldPath[i]);
+            for(Integer i = 0, size = jsonObjectFieldPath.size() - 1; i < size; i++) {
+                Map<String, Object> newBoxingPosition = (Map<String, Object>)boxingPosition.get(jsonObjectFieldPath[i]);
 
-                    if(newBoxingPosition == null) {
-                        newBoxingPosition = new Map<String, Object>();
-                        boxingPosition.put(jsonObjectFieldPath[i], newBoxingPosition);
-                    }
-                    boxingPosition = newBoxingPosition;
+                if(newBoxingPosition == null) {
+                    newBoxingPosition = new Map<String, Object>();
+                    boxingPosition.put(jsonObjectFieldPath[i], newBoxingPosition);
                 }
+                boxingPosition = newBoxingPosition;
             }
+            boxingPosition.put(jsonObjectFieldPath[jsonObjectFieldPath.size() - 1], value);
         }
     }
 }

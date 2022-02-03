@@ -39,6 +39,30 @@ private class GetPutTest {
     }
 
     @IsTest
+    static void mapToDeepSObject() {
+        Map<String, Object> inputMap = new Map<String, Object>{ 'FirstName' => 'Foo', 'LastName' => 'Bar', 'Company' => 'ACME'};
+        List<String> fields = new List<String>{'FirstName', 'LastName', 'Company'};
+        Map<String, String> fieldMap = new Map<String, String>{
+                'FirstName' => 'FirstName',
+                'LastName' => 'LastName',
+                'Company' => 'Account.Name'
+        };
+
+        Contact result = new Contact();
+
+        Test.startTest();
+        new LazyIterator(fields)
+                .mapValues(new ToTwoTuple(new IdentityFunction(), new GetFrom(inputMap)))
+                .mapValues(new TwoTupleMapValues(new GetFrom(fieldMap), new IdentityFunction()))
+                .forEach(new PutTo(result));
+        Test.stopTest();
+
+        System.assertEquals(inputMap.get('FirstName'), result.FirstName);
+        System.assertEquals(inputMap.get('LastName'), result.LastName);
+        System.assertEquals(inputMap.get('Company'), result.Account.Name);
+    }
+
+    @IsTest
     static void deepMapToSObject() {
         Map<String, Map<String, Object>> inputMap = new Map<String, Map<String, Object>>{ 'Names' => new Map<String, Object>{'FirstName' => 'Foo', 'LastName' => 'Bar'}};
         List<String> fields = new List<String>{'Names.FirstName', 'Names.LastName'};
