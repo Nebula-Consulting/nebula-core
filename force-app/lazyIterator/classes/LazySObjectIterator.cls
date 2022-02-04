@@ -4,7 +4,7 @@
  * @description SObject-typed version of LazyIterator
  */
 
-global class LazySObjectIterator extends LazyIterator {
+global inherited sharing class LazySObjectIterator extends LazyIterator {
 
     global LazySObjectIterator(Object iterableOrIterator) {
         super(iterableOrIterator);
