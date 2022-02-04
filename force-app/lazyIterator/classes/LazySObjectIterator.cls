@@ -134,8 +134,14 @@ global class LazySObjectIterator extends LazyIterator {
     }
 
     global LazyIterator doUpdate(Boolean allOrNothing) {
+        Database.DMLOptions dmlOptions = new Database.DMLOptions();
+        dmlOptions.optAllOrNone = allOrNothing;
+        return doUpdate(dmlOptions);
+    }
+
+    global LazyIterator doUpdate(Database.DMLOptions dmlOptions) {
         List<SObject> records = toList();
-        Iterator<Database.SaveResult> resultIterator = Database.update(records, allOrNothing).iterator();
+        Iterator<Database.SaveResult> resultIterator = Database.update(records, dmlOptions).iterator();
         Iterator<SObject> recordIterator = records.iterator();
         return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, SaveResult.newInstance));
     }
@@ -147,8 +153,14 @@ global class LazySObjectIterator extends LazyIterator {
     }
 
     global LazyIterator doInsert(Boolean allOrNothing) {
+        Database.DMLOptions dmlOptions = new Database.DMLOptions();
+        dmlOptions.optAllOrNone = allOrNothing;
+        return doInsert(dmlOptions);
+    }
+
+    global LazyIterator doInsert(Database.DMLOptions dmlOptions) {
         List<SObject> records = toList();
-        Iterator<Database.SaveResult> resultIterator = Database.insert(records, allOrNothing).iterator();
+        Iterator<Database.SaveResult> resultIterator = Database.insert(records, dmlOptions).iterator();
         Iterator<SObject> recordIterator = records.iterator();
         return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, SaveResult.newInstance));
     }
