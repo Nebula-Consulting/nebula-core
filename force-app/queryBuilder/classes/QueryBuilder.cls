@@ -15,6 +15,7 @@ global inherited sharing class QueryBuilder {
     private String orderByClause;
     private String paginationClause;
     private Boolean withSecurityEnforced = false;
+    private String groupBy;
 
     global QueryBuilder(SObjectType sObjectType) {
         this(sObjectType.getDescribe().getName());
@@ -22,7 +23,7 @@ global inherited sharing class QueryBuilder {
 
     global QueryBuilder(String typeName) {
         this.typeName = typeName;
-        this.fieldsLowerCase = new Set<String>{'id'};
+        this.fieldsLowerCase = new Set<String>();
     }
 
     global QueryBuilder addFieldSet(String fieldSetName) {
@@ -54,6 +55,16 @@ global inherited sharing class QueryBuilder {
 
     global QueryBuilder setPaginationClause(String paginationClause) {
         this.paginationClause = paginationClause;
+        return this;
+    }
+
+    global QueryBuilder groupBy(SObjectField field) {
+        this.groupBy = field.getDescribe().name;
+        return this;
+    }
+
+    global QueryBuilder groupBy(String groupBy) {
+        this.groupBy = groupBy;
         return this;
     }
 
@@ -124,6 +135,10 @@ global inherited sharing class QueryBuilder {
 
     global String getQuery() {
 
+        if(fieldsLowerCase.isEmpty()) {
+            fieldsLowerCase.add('id');
+        }
+
         for(QueryBuilder thisSubQuery : subQueries) {
             fieldsLowerCase.add('(' + thisSubQuery.getQuery() + ')');
         }
@@ -140,6 +155,10 @@ global inherited sharing class QueryBuilder {
 
         if(withSecurityEnforced) {
             theQuery += ' WITH SECURITY_ENFORCED';
+        }
+
+        if(groupBy != null) {
+            theQuery += ' GROUP BY ' + groupBy;
         }
 
         if(orderByClause != null) {
