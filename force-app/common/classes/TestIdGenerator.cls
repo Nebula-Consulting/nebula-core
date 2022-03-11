@@ -19,8 +19,7 @@ global class TestIdGenerator implements Iterator<Id> {
     }
 
     global Id next() {
-        return keyPrefix
-                + String.valueOf(count++).leftPad(4, '0')
-                + '0'.repeat(8);
+        return keyPrefix + '00'
+                + String.valueOf(count++).leftPad(10, '0');
     }
 }
