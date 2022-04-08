@@ -131,6 +131,26 @@ private class BooleanFunctionsTest {
     }
 
     @IsTest
+    static void isTriggerChangedFromValue() {
+        TriggerContextBooleanFunction isChangedFrom = new IsFieldChangedFrom(Account.Name, 'Acme');
+
+        System.assert(isChangedFrom.isTrueFor(new Account(Name = 'Acme'), new Account(Name = 'Not Acme')));
+        System.assert(!isChangedFrom.isTrueFor(new Account(Name = 'Acme'), new Account(Name = 'Acme')));
+        System.assert(!isChangedFrom.isTrueFor(null, new Account(Name = 'Not Acme')));
+        System.assert(!isChangedFrom.isTrueFor(new Account(Name = 'Not Acme'), new Account(Name = 'Acme')));
+    }
+
+    @IsTest
+    static void isTriggerChangedFromFunction() {
+        TriggerContextBooleanFunction isChangedFrom = new IsFieldChangedFrom(Account.Name, new ConstantFunction('Acme'));
+
+        System.assert(isChangedFrom.isTrueFor(new Account(Name = 'Acme'), new Account(Name = 'Not Acme')));
+        System.assert(!isChangedFrom.isTrueFor(new Account(Name = 'Acme'), new Account(Name = 'Acme')));
+        System.assert(!isChangedFrom.isTrueFor(null, new Account(Name = 'Not Acme')));
+        System.assert(!isChangedFrom.isTrueFor(new Account(Name = 'Not Acme'), new Account(Name = 'Acme')));
+    }
+
+    @IsTest
     static void isSObjectFieldEqual() {
         BooleanFunction isSObjectFieldEqual = new IsSObjectFieldEqual(Account.Name, 'a');
 
