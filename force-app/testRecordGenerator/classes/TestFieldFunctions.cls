@@ -84,6 +84,14 @@ global class TestFieldFunctions {
         global String developerName;
 
         global Object getValue(String fieldName, Object value) {
+
+            if (sObjectType == null) {
+                sObjectType = parentGenerator.metadata.SObject__c;
+            }
+            if (developerName == null) {
+                sObjectType = (String) value;
+            }
+
             return NamedSObjectCache.getRecordType(
                     sObjectType,
                     developerName
