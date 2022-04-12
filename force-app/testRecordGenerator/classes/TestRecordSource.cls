@@ -107,6 +107,7 @@ global inherited sharing class TestRecordSource {
         private SObjectType sObjectType;
         private String variant;
         private Map<String, Object> parameters;
+        private Map<SObjectField, Object> recordInstanceValues = new Map<SObjectField, Object>();
         private TestRecordGenerator generator {
             get {
                 if(generator == null) {
@@ -141,22 +142,26 @@ global inherited sharing class TestRecordSource {
         }
 
         global GetBuilder put(SObjectField field, Object value) {
-            generator.put(field, value);
+            recordInstanceValues.put(field, value);
             return this;
         }
 
         global SObject withInsert() {
+            generator.putAll(recordInstanceValues);
             return generator.getRecordWithInsert(parameters);
         }
 
         global SObject withoutInsert() {
+            generator.putAll(recordInstanceValues);
             return generator.getRecordWithoutInsert(parameters);
         }
 
         global List<SObject> withoutInsert(Integer numberOfRecords) {
+            generator.putAll(recordInstanceValues);
             return generator.getRecordsWithoutInsert(numberOfRecords, parameters);
         }
         global List<SObject> withInsert(Integer numberOfRecords) {
+            generator.putAll(recordInstanceValues);
             return generator.getRecordsWithInsert(numberOfRecords, parameters);
         }
     }

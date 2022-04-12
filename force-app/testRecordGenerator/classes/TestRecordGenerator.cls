@@ -36,7 +36,12 @@ global inherited sharing abstract class TestRecordGenerator {
     }
 
     global TestRecordGenerator put(SObjectField field, Object value) {
-        recordInstanceValues.put(field, value);
+        this.recordInstanceValues.put(field, value);
+        return this;
+    }
+
+    global TestRecordGenerator putAll(Map<SObjectField, Object> recordInstanceValues) {
+        this.recordInstanceValues.putAll(recordInstanceValues);
         return this;
     }
 
