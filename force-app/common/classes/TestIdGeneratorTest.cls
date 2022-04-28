@@ -9,9 +9,8 @@ private class TestIdGeneratorTest {
     @IsTest static void singleId() {
 
         TestIdGenerator testIdGenerator = new TestIdGenerator(Contact.SObjectType);
-        System.assert(testIdGenerator.next() != null);
+        System.assertEquals(Contact.SObjectType, testIdGenerator.next().getSobjectType());
         System.assertEquals(true, testIdGenerator.hasNext());
-
     }
 
     @IsTest static void largeNumberOfIds() {
@@ -20,7 +19,6 @@ private class TestIdGeneratorTest {
         for (Integer i = 0; i < 10001; i++) {
             testIdGenerator.next();
         }
-        System.assert(testIdGenerator.next() != null);
-
+        System.assertEquals(Contact.SObjectType, testIdGenerator.next().getSobjectType());
     }
 }
