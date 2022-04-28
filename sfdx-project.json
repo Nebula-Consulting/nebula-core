@@ -25,6 +25,7 @@
             "path": "examples"
         }
     ],
+    "pushPackageDirectoriesSequentially": true,
     "namespace": "nebc",
     "sfdcLoginUrl": "https://login.salesforce.com",
     "sourceApiVersion": "51.0",
