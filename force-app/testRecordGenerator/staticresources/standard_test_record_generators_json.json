@@ -27,7 +27,7 @@
     "fields": [
       {
         "MasterLabel": "Asset: Name",
-        "DeveloperName": "Asset_LastName",
+        "DeveloperName": "Asset_Name",
         "nebc__Field__c": "Name",
         "nebc__Value__c": "Test",
         "nebc__Apex_Class__c": "nebc.TestFieldFunctions.AppendRandomNumber"
@@ -189,13 +189,6 @@
       "nebc__SObject__c": "Lead"
     },
     "fields": [
-      {
-        "MasterLabel": "Lead: FirstName",
-        "DeveloperName": "Lead_FirstName",
-        "nebc__Field__c": "FirstName",
-        "nebc__Value__c": "Test FirstName {0}",
-        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.InsertRandomNumber"
-      },
       {
         "MasterLabel": "Lead: LastName",
         "DeveloperName": "Lead_LastName",
