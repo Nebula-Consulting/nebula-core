@@ -89,7 +89,7 @@ global class TestFieldFunctions {
                 sObjectType = parentGenerator.metadata.SObject__c;
             }
             if (developerName == null) {
-                sObjectType = (String) value;
+                developerName = (String) value;
             }
 
             return NamedSObjectCache.getRecordType(
@@ -134,6 +134,12 @@ global class TestFieldFunctions {
 
         global Object getValue(String fieldName, Object value) {
             Date returnValue = Date.today();
+            if(toStartOfWeek == true) {
+                returnValue = returnValue.toStartOfWeek();
+            }
+            if(toStartOfMonth == true) {
+                returnValue = returnValue.toStartOfMonth();
+            }
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
             }
@@ -142,12 +148,6 @@ global class TestFieldFunctions {
             }
             if(addYears != null) {
                 returnValue = returnValue.addYears(addYears);
-            }
-            if(toStartOfWeek == true) {
-                returnValue = returnValue.toStartOfWeek();
-            }
-            if(toStartOfMonth == true) {
-                returnValue = returnValue.toStartOfMonth();
             }
             return returnValue;
         }
