@@ -10,6 +10,74 @@ private class TestFieldFunctionsTest {
     private static String accountName = 'Test Account';
 
     @IsTest
+    static void today() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Contact'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Birthdate',
+                        Apex_Class__c = TestFieldFunctions.Today.class.getName()
+                )
+        });
+
+        Contact result = (Contact)testRecordSource.getRecord(Contact.SObjectType).withoutInsert();
+        System.assertEquals(Date.today(), result.Birthdate);
+
+    }
+
+    @IsTest
+    static void todayAddDaysMonthsYears() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Contact'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Birthdate',
+                        Apex_Class__c = TestFieldFunctions.Today.class.getName(),
+                        Apex_Class_Parameters__c = JSON.serialize(new Map<String, String>{
+                                'addDays' => '1',
+                                'addMonths' => '2',
+                                'addYears' => '-5'
+                        })
+                )
+        });
+
+        Contact result = (Contact)testRecordSource.getRecord(Contact.SObjectType).withoutInsert();
+        System.assertEquals(Date.today().addDays(1).addMonths(2).addYears(-5), result.Birthdate);
+
+    }
+
+    @IsTest
+    static void todayToStartOfMonth() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Contact'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Birthdate',
+                        Apex_Class__c = TestFieldFunctions.Today.class.getName(),
+                        Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
+                                'toStartOfMonth' => true
+                        })
+                )
+        });
+
+        Contact result = (Contact)testRecordSource.getRecord(Contact.SObjectType).withoutInsert();
+        System.assertEquals(Date.today().toStartOfMonth(), result.Birthdate);
+
+    }
+
+    @IsTest
     static void appendRandomNumber() {
         Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
@@ -142,6 +210,31 @@ private class TestFieldFunctionsTest {
 
         Datetime target = Datetime.now();
         System.assert(result.ActivityDateTime > target.addMinutes(-1) && result.ActivityDateTime < target.addMinutes(1) );
+    }
+
+    @IsTest
+    static void nowAddDaysMonthsYears() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Event'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'ActivityDateTime',
+                        Apex_Class__c = TestFieldFunctions.Now.class.getName(),
+                        Apex_Class_Parameters__c = JSON.serialize(new Map<String, String>{
+                        'addDays' => '1',
+                        'addMonths' => '2',
+                        'addYears' => '5'
+                        })
+                )
+        });
+
+        Event result = (Event)testRecordSource.getRecord(Event.SObjectType).withoutInsert();
+
+        System.assertEquals(Date.today().addDays(1).addMonths(2).addYears(5), result.ActivityDateTime.date());
     }
 
     @IsTest

@@ -84,6 +84,14 @@ global class TestFieldFunctions {
         global String developerName;
 
         global Object getValue(String fieldName, Object value) {
+
+            if (sObjectType == null) {
+                sObjectType = parentGenerator.metadata.SObject__c;
+            }
+            if (developerName == null) {
+                developerName = (String) value;
+            }
+
             return NamedSObjectCache.getRecordType(
                     sObjectType,
                     developerName
@@ -94,12 +102,20 @@ global class TestFieldFunctions {
     global class Now extends TestFieldFunctionWithParent {
 
         global Integer addDays;
+        global Integer addMonths;
+        global Integer addYears;
         global Integer addMinutes;
 
         global Object getValue(String fieldName, Object value) {
             Datetime returnValue = Datetime.now();
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
+            }
+            if(addMonths != null) {
+                returnValue = returnValue.addMonths(addMonths);
+            }
+            if(addYears != null) {
+                returnValue = returnValue.addYears(addYears);
             }
             if(addMinutes != null) {
                 returnValue = returnValue.addMinutes(addMinutes);
@@ -111,11 +127,27 @@ global class TestFieldFunctions {
     global class Today extends TestFieldFunctionWithParent {
 
         global Integer addDays;
+        global Integer addMonths;
+        global Integer addYears;
+        global Boolean toStartOfWeek;
+        global Boolean toStartOfMonth;
 
         global Object getValue(String fieldName, Object value) {
             Date returnValue = Date.today();
+            if(toStartOfWeek == true) {
+                returnValue = returnValue.toStartOfWeek();
+            }
+            if(toStartOfMonth == true) {
+                returnValue = returnValue.toStartOfMonth();
+            }
             if(addDays != null) {
                 returnValue = returnValue.addDays(addDays);
+            }
+            if(addMonths != null) {
+                returnValue = returnValue.addMonths(addMonths);
+            }
+            if(addYears != null) {
+                returnValue = returnValue.addYears(addYears);
             }
             return returnValue;
         }
