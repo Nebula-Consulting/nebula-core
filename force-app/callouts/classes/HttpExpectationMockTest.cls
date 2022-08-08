@@ -48,4 +48,22 @@ private class HttpExpectationMockTest {
         System.assertEquals(201, response.getStatusCode());
         System.assertEquals('', response.getBody());
     }
+
+    @IsTest
+    static void getWithHeader() {
+        HttpRequest request = new HttpRequest();
+        request.setMethod(HttpMethod.HTTP_GET.name);
+        request.setEndpoint('https://foo.com/bar');
+
+        theMock.expect(new HttpExpectation('https://foo.*/bar', HttpMethod.HTTP_GET)
+            .setResponseHeader('token', '12345')
+        );
+
+        Test.startTest();
+        HttpResponse response = new Http().send(request);
+        Test.stopTest();
+
+        System.assert(theMock.isEmpty());
+        System.assertEquals('12345', response.getHeader('token'));
+    }
 }

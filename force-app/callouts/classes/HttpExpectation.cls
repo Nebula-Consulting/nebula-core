@@ -32,6 +32,11 @@ global class HttpExpectation {
         return this;
     }
 
+    global HttpExpectation setResponseHeader(String key, String value) {
+        response.setHeader(key, value);
+        return this;
+    }
+
     global HttpExpectation setBodyVerification(BooleanFunction bodyVerification) {
         this.bodyVerification = bodyVerification;
         return this;
