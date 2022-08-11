@@ -18,7 +18,7 @@ global class IsFieldChangedFrom extends TriggerContextBooleanFunction {
     }
 
     global override Boolean isTrueFor(SObject oldRecord, SObject newRecord) {
-        return oldRecord != null && oldRecord.get(field) != newRecord.get(field) && oldRecord.get(field) == function.call(oldRecord);
+        return oldRecord?.get(field) != newRecord.get(field) && oldRecord?.get(field) == function.call(oldRecord);
     }
 
 }

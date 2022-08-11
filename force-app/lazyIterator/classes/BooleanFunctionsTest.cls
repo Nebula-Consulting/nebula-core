@@ -141,6 +141,16 @@ private class BooleanFunctionsTest {
     }
 
     @IsTest
+    static void isTriggerChangedFromNullValue() {
+        TriggerContextBooleanFunction isChangedFrom = new IsFieldChangedFrom(Account.Name, null);
+
+        System.assert(!isChangedFrom.isTrueFor(new Account(Name = 'Acme'), new Account(Name = 'Not Acme')));
+        System.assert(isChangedFrom.isTrueFor(new Account(), new Account(Name = 'Acme')));
+        System.assert(isChangedFrom.isTrueFor(null, new Account(Name = 'Not Acme')));
+        System.assert(!isChangedFrom.isTrueFor(new Account(Name = 'Not Null'), new Account()));
+    }
+
+    @IsTest
     static void isTriggerChangedFromFunction() {
         TriggerContextBooleanFunction isChangedFrom = new IsFieldChangedFrom(Account.Name, new ConstantFunction('Acme'));
 
