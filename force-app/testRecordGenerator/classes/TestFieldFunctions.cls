@@ -15,18 +15,34 @@ global class TestFieldFunctions {
         }
     }
 
-    global class AppendRandomNumber extends TestFieldFunctionWithParent {
+    global abstract class RandomNumber extends TestFieldFunctionWithParent {
+
+        global Integer maxLength;
+
+        global virtual String getRandomNumber() {
+            String randomNumber = String.valueOf(Math.random());
+            if (maxLength > 0) {
+                // for lengths less than 3 there is no point returning '0.' or '0' as .random() returns a positive double
+                // that is greater than or equal to 0.0 and less than 1.0. So return a number starting with the mantissa
+                randomNumber = maxLength < 3 ? randomNumber.mid(randomNumber.indexOf('.') + 1, maxLength) : randomNumber.left(maxLength);
+            }
+            return randomNumber;
+        }
+
+    }
+
+    global class AppendRandomNumber extends RandomNumber {
         global Object getValue(String fieldName, Object value) {
-            return value == null ? value : (value + String.valueOf(Math.random()));
+            return value == null ? value : (value + getRandomNumber());
         }
     }
 
-    global class InsertRandomNumber extends nebc.TestFieldFunctions.TestFieldFunctionWithParent {
+    global class InsertRandomNumber extends RandomNumber {
         global Object getValue(String fieldName, Object value) {
             if(value == null) {
                 return null;
             } else {
-                return String.format((String)value, new List<Object>{String.valueOf(Math.random())});
+                return String.format((String)value, new List<Object>{getRandomNumber()});
             }
         }
     }

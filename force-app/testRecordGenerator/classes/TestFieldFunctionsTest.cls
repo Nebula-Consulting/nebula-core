@@ -32,6 +32,34 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void appendRandomNumberWithLength() {
+
+        Integer numberLength = 2;
+
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Name',
+                        Apex_Class__c = TestFieldFunctions.AppendRandomNumber.class.getName(),
+                        Value__c = accountName,
+                        Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
+                                'maxLength' => numberLength
+                        })
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
+
+        System.assert(result.Name.contains(accountName));
+        System.assert(result.Name.length() == accountName.length() + numberLength, result.Name);
+    }
+
+    @IsTest
     static void insertRandomNumber() {
         accountName = 'Test {0} Account';
 
@@ -54,6 +82,37 @@ private class TestFieldFunctionsTest {
         System.assert(result.Name.contains('Test '));
         System.assert(result.Name.contains(' Account'));
         System.assert(result.Name.length() > accountName.length(), result.Name);
+    }
+
+    @IsTest
+    static void insertRandomNumberWithLength() {
+
+        Integer numberLength = 8;
+
+        accountName = 'Test {0} Account';
+
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = 'Name',
+                        Apex_Class__c = TestFieldFunctions.InsertRandomNumber.class.getName(),
+                        Value__c = accountName,
+                        Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
+                                'maxLength' => numberLength
+                        })
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
+
+        System.assert(result.Name.contains('Test '));
+        System.assert(result.Name.contains(' Account'));
+        System.assert(result.Name.length() == accountName.length() + (numberLength - '{0}'.length()), result.Name);
     }
 
     @IsTest
