@@ -16,6 +16,62 @@
       }
     ]
   },
+  "Asset": {
+    "generator": {
+      "MasterLabel": "Asset",
+      "DeveloperName": "Asset",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Asset"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Asset: Name",
+        "DeveloperName": "Asset_Name",
+        "nebc__Field__c": "Name",
+        "nebc__Value__c": "Test",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.AppendRandomNumber"
+      },
+      {
+        "MasterLabel": "Asset: Product",
+        "DeveloperName": "Asset_Product",
+        "nebc__Field__c": "Product2Id",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Product2\"}"
+      },
+      {
+        "MasterLabel": "Asset: Quantity",
+        "DeveloperName": "Asset_Quantity",
+        "nebc__Field__c": "Quantity",
+        "nebc__Value__c": "1"
+      }
+    ]
+  },
+  "Case": {
+    "generator": {
+      "MasterLabel": "Case",
+      "DeveloperName": "Case",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Case"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Case: Contact",
+        "DeveloperName": "Case_Contact",
+        "nebc__Field__c": "ContactId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Contact\"}"
+      },
+      {
+        "MasterLabel": "Case: Account",
+        "DeveloperName": "Case_Account",
+        "nebc__Field__c": "AccountId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Account\"}"
+      }
+    ]
+  },
   "Contact": {
     "generator": {
       "MasterLabel": "Contact",
@@ -40,6 +96,35 @@
       }
     ]
   },
+  "ContentVersion": {
+    "generator": {
+      "MasterLabel": "ContentVersion",
+      "DeveloperName": "ContentVersion",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "ContentVersion"
+    },
+    "fields": [
+      {
+        "MasterLabel": "ContentVersion: Path",
+        "DeveloperName": "ContentVersion_Path",
+        "nebc__Field__c": "PathOnClient",
+        "nebc__Value__c": "/"
+      },
+      {
+        "MasterLabel": "ContentVersion: Title",
+        "DeveloperName": "ContentVersion_Title",
+        "nebc__Field__c": "Title",
+        "nebc__Value__c": "Foo"
+      },
+      {
+        "MasterLabel": "ContentVersion: Data",
+        "DeveloperName": "ContentVersion_Data",
+        "nebc__Field__c": "VersionData",
+        "nebc__Value__c": "foo"
+      }
+    ]
+  },
   "Contract": {
     "generator": {
       "MasterLabel": "Contract",
@@ -61,6 +146,62 @@
         "nebc__Field__c": "AccountId",
         "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
         "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Account\"}"
+      }
+    ]
+  },
+  "Event": {
+    "generator": {
+      "MasterLabel": "Event",
+      "DeveloperName": "Event",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Event"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Event: Description",
+        "DeveloperName": "Event_Description",
+        "nebc__Field__c": "Description",
+        "nebc__Value__c": "Test Event"
+      },
+      {
+        "MasterLabel": "Event: End Time",
+        "DeveloperName": "Event_End_Time",
+        "nebc__Field__c": "EndDateTime",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.Now",
+        "nebc__Apex_Class_Parameters__c": "{\"addDays\": 1, \"addMinutes\": 60}"
+      },
+      {
+        "MasterLabel": "Event: Start Time",
+        "DeveloperName": "Event_Start_Time",
+        "nebc__Field__c": "StartDateTime",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.Now",
+        "nebc__Apex_Class_Parameters__c": "{\"addDays\": 1, \"addMinutes\": 0}"
+      }
+    ]
+  },
+  "Lead": {
+    "generator": {
+      "MasterLabel": "Lead",
+      "DeveloperName": "Lead",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Lead"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Lead: LastName",
+        "DeveloperName": "Lead_LastName",
+        "nebc__Field__c": "LastName",
+        "nebc__Value__c": "Test LastName {0}",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.InsertRandomNumber"
+      },
+      {
+        "MasterLabel": "Lead: Company",
+        "DeveloperName": "Lead_Company",
+        "nebc__Field__c": "Company",
+        "nebc__Value__c": "Company {0}",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.InsertRandomNumber"
       }
     ]
   },
@@ -90,6 +231,67 @@
         "DeveloperName": "Opportunity_CloseDate",
         "nebc__Field__c": "CloseDate",
         "nebc__Apex_Class__c": "nebc.TestFieldFunctions.Today"
+      }
+    ]
+  },
+  "Order": {
+    "generator": {
+      "MasterLabel": "Order",
+      "DeveloperName": "Order",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Order"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Order: Start Date",
+        "DeveloperName": "Order_Start_Date",
+        "nebc__Field__c": "EffectiveDate",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.Today"
+      },
+      {
+        "MasterLabel": "Order: Account",
+        "DeveloperName": "Order_Account",
+        "nebc__Field__c": "AccountId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Account\"}"
+      }
+    ]
+  },
+  "OrderItem": {
+    "generator": {
+      "MasterLabel": "OrderItem",
+      "DeveloperName": "OrderItem",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "OrderItem"
+    },
+    "fields": [
+      {
+        "MasterLabel": "OrderItem: Order",
+        "DeveloperName": "OrderItem_Order",
+        "nebc__Field__c": "OrderId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Order\"}"
+      },
+      {
+        "MasterLabel": "OrderItem: Product",
+        "DeveloperName": "OrderItem_Product",
+        "nebc__Field__c": "Product2Id",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Product2\"}"
+      },
+      {
+        "MasterLabel": "OrderItem: Quantity",
+        "DeveloperName": "OrderItem_Quantity",
+        "nebc__Field__c": "Quantity",
+        "nebc__Value__c": "1"
+      },
+      {
+        "MasterLabel": "OrderItem: UnitPrice",
+        "DeveloperName": "OrderItem_UnitPrice",
+        "nebc__Field__c": "UnitPrice",
+        "nebc__Value__c": "100"
       }
     ]
   },
@@ -180,6 +382,30 @@
         "DeveloperName": "OpportunityLineItem_UnitPrice",
         "nebc__Field__c": "UnitPrice",
         "nebc__Value__c": "5"
+      }
+    ]
+  },
+  "Task": {
+    "generator": {
+      "MasterLabel": "Task",
+      "DeveloperName": "Task",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "Task"
+    },
+    "fields": [
+      {
+        "MasterLabel": "Task: Subject",
+        "DeveloperName": "Task_Subject",
+        "nebc__Field__c": "Subject",
+        "nebc__Value__c": "Test Task"
+      },
+      {
+        "MasterLabel": "Task: Who",
+        "DeveloperName": "Task_Who",
+        "nebc__Field__c": "WhoId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CreateRecord",
+        "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Contact\"}"
       }
     ]
   }

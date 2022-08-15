@@ -285,4 +285,36 @@ private class TestRecordSourceTest {
         System.assert(results[0].Name.startsWith(accountName));
         System.assert(results[1].Name.startsWith(accountName));
     }
+    @IsTest
+    static void asVariantAfterPut() {
+        String accountName = 'Some wacky thing not in the metadata';
+        String accountDescription = 'A description';
+        String accountStreet = '123 Lane';
+        String variantName = 'Derived Account';
+
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0);
+        Test_Record_Generator__mdt recordGeneratorMetadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        Priority__c = 0,
+                        SObject__c = 'Account',
+                        Variant__c = variantName
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = recordGeneratorMetadata.Id,
+                        Field__c = 'Description',
+                        Value__c = accountDescription
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType)
+                .put(Account.BillingStreet, accountStreet)
+                .asVariant(variantName)
+                .withoutInsert();
+
+        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountDescription, result.Description);
+        System.assertEquals(accountStreet, result.BillingStreet);
+    }
 }

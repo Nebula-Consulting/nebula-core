@@ -17,11 +17,19 @@ To speed up creation of test data for standard objects the Nebula Core package c
 Supported standard objects:
 
 - Account
+- Asset
+- Case
 - Contact
+- ContentVersion
+- Event
+- Lead
 - Opportunity
+- OpportunityLineItem
+- Order
+- OrderItem
 - Product2
 - PricebookEntry
-- OpportunityLineItem
+- Task
 
 To create a standard test data record for Account for example the following can be used:
 
