@@ -9,16 +9,20 @@ global class IsEqual implements BooleanFunction {
 
     private FunctionList functions;
 
-    global IsEqual(Object leftFunctionOrValue, Object rightFunctionOrValue) {
-        functions = new FunctionList(leftFunctionOrValue, rightFunctionOrValue);
+    global IsEqual(Object left, Object right) {
+        functions = new FunctionList(left, right);
     }
 
-    global IsEqual(SObjectField field, Object rightFunctionOrValue) {
-        functions = new FunctionList(new FieldFromSObject(field), rightFunctionOrValue);
+    global IsEqual(SObjectField left, Object right) {
+        functions = new FunctionList(new FieldFromSObject(left), right);
     }
 
-    global IsEqual(Object rightFunctionOrValue) {
-        functions = new FunctionList(new IdentityFunction(), rightFunctionOrValue);
+    global IsEqual(SObjectField left, SObjectField right) {
+        functions = new FunctionList(new FieldFromSObject(left), new FieldFromSObject(right));
+    }
+
+    global IsEqual(Object right) {
+        functions = new FunctionList(new IdentityFunction(), right);
     }
 
     global Boolean isTrueFor(Object o) {
