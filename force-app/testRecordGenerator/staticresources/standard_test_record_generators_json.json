@@ -408,5 +408,94 @@
         "nebc__Apex_Class_Parameters__c": "{\"sObjectType\": \"Contact\"}"
       }
     ]
+  },
+  "User": {
+    "generator": {
+      "MasterLabel": "User",
+      "DeveloperName": "User",
+      "nebc__Apex_Class__c": "nebc.TestMetadataRecordGenerator",
+      "nebc__Priority__c": 0,
+      "nebc__SObject__c": "User"
+    },
+    "fields": [
+      {
+        "MasterLabel": "User: Manager",
+        "DeveloperName": "User_Manager",
+        "nebc__Field__c": "ManagerId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.CurrentUserId"
+      },
+      {
+        "MasterLabel": "User: Username",
+        "DeveloperName": "User_Username",
+        "nebc__Field__c": "Username",
+        "nebc__Value__c": "testuser{0}@test.com",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.InsertRandomNumber"
+      },
+      {
+        "MasterLabel": "User: Email Encoding Key",
+        "DeveloperName": "User_Email_Encoding_Key",
+        "nebc__Field__c": "EmailEncodingKey",
+        "nebc__Value__c": "UTF-8"
+      },
+      {
+        "MasterLabel": "User: Locale Sid Key",
+        "DeveloperName": "User_Locale_Sid_Key",
+        "nebc__Field__c": "LocaleSidKey",
+        "nebc__Value__c": "en_US"
+      },
+      {
+        "MasterLabel": "User: Email",
+        "DeveloperName": "User_Email",
+        "nebc__Field__c": "Email",
+        "nebc__Value__c": "testuser{0}@test.com",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.InsertRandomNumber"
+      },
+      {
+        "MasterLabel": "User: Title",
+        "DeveloperName": "User_Title",
+        "nebc__Field__c": "Title",
+        "nebc__Value__c": "Test Title"
+      },
+      {
+        "MasterLabel": "User: Time Zone Sid Key",
+        "DeveloperName": "User_Time_Zone_Sid_Key",
+        "nebc__Field__c": "TimeZoneSidKey",
+        "nebc__Value__c": "Europe/London"
+      },
+      {
+        "MasterLabel": "User: Profile",
+        "DeveloperName": "User_Profile",
+        "nebc__Field__c": "ProfileId",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.NamedObjectId",
+        "nebc__Apex_Class_Parameters__c": "{\r\n  \"sObjectType\": \"Profile\",\r\n  \"name\" : \"System Administrator\"\r\n}"
+      },
+      {
+        "MasterLabel": "User: Company Name",
+        "DeveloperName": "User_Company_Name",
+        "nebc__Field__c": "CompanyName",
+        "nebc__Value__c": "Nebula"
+      },
+      {
+        "MasterLabel": "User: Alias",
+        "DeveloperName": "User_Alias",
+        "nebc__Field__c": "Alias",
+        "nebc__Value__c": "U",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.AppendRandomNumber",
+        "nebc__Apex_Class_Parameters__c": "{\r\n  \"maxLength\" : 7\r\n}"
+      },
+      {
+        "MasterLabel": "User: Language Locale Key",
+        "DeveloperName": "User_Language_Locale_Key",
+        "nebc__Field__c": "LanguageLocaleKey",
+        "nebc__Value__c": "en_US"
+      },
+      {
+        "MasterLabel": "User: Last Name",
+        "DeveloperName": "User_Last_Name",
+        "nebc__Field__c": "LastName",
+        "nebc__Value__c": "User",
+        "nebc__Apex_Class__c": "nebc.TestFieldFunctions.AppendRandomNumber"
+      }
+    ]
   }
 }
