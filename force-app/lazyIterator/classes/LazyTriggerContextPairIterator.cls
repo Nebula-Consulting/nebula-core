@@ -45,6 +45,15 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
         ));
     }
 
+    global LazyTriggerContextPairIterator filterBecameFalse(BooleanFunction matchingFunction) {
+        Function matchingFunctionAsFunction = new BooleanFunctionToFunction(new IsAll(new IsNotNull(), matchingFunction));
+
+        return filterT(new IsAll(
+                new FunctionToBooleanFunction(new Composition(new OldFromTriggerContextPair()).compose(matchingFunctionAsFunction)),
+                new IsNot(new FunctionToBooleanFunction(new Composition(new NewFromTriggerContextPair()).compose(matchingFunctionAsFunction)))
+        ));
+    }
+
     global LazyTriggerContextPairIterator mapValuesT(Function mappingFunction) {
         this.iterator = super.mapValues(mappingFunction);
         return this;
