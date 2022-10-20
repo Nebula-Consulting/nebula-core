@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "Nebula Core",
-            "versionName": "0.77",
-            "versionNumber": "0.77.0.NEXT"
+            "versionName": "0.78",
+            "versionNumber": "0.78.0.NEXT"
         },
         {
             "path": "nebula-triggers",
@@ -33,20 +33,6 @@
         "Nebula Core": "0Ho0J000000XZAHSA4",
         "Nebula Triggers": "0Ho6M0000008OKGSA2",
         "Nebula Triggers@0.1.0-1": "04t6M000000km7LQAQ",
-        "Nebula Core@0.67.0-11": "04t0J000000km0FQAQ",
-        "Nebula Core@0.67.0-12": "04t6M000000km0ZQAQ",
-        "Nebula Core@0.68.0-1": "04t6M000000km63QAA",
-        "Nebula Core@0.68.0-2": "04t6M000000km68QAA",
-        "Nebula Core@0.68.0-3": "04t6M000000km6hQAA",
-        "Nebula Core@0.69.0-1": "04t6M000000km6rQAA",
-        "Nebula Core@0.70.0-1": "04t6M000000km6wQAA",
-        "Nebula Core@0.71.0-1": "04t6M000000km76QAA",
-        "Nebula Core@0.71.0-2": "04t6M000000km7BQAQ",
-        "Nebula Core@0.71.0-3": "04t6M000000km7GQAQ",
-        "Nebula Core@0.72.0-1": "04t6M000000kmCLQAY",
-        "Nebula Core@0.72.0-2": "04t6M000000kmCQQAY",
-        "Nebula Core@0.72.0-3": "04t6M000000kmCVQAY",
-        "Nebula Core@0.72.0-4": "04t6M000000kmD9QAI",
         "Nebula Core@0.73.0-1": "04t6M000000kmDiQAI",
         "Nebula Core@0.73.0-2": "04t6M000000kmDnQAI",
         "Nebula Core@0.73.0-3": "04t6M000000kmDsQAI",
@@ -61,6 +47,7 @@
         "Nebula Core@0.75.0-1": "04t6M000000kmObQAI",
         "Nebula Core@0.75.0-2": "04t6M000000kmPFQAY",
         "Nebula Core@0.76.0-1": "04t6M000000kmPyQAI",
-        "Nebula Core@0.77.0-1": "04t6M000000kmQwQAI"
+        "Nebula Core@0.77.0-1": "04t6M000000kmQwQAI",
+        "Nebula Core@0.78.0-1": "04t6M000000gawPQAQ"
     }
 }

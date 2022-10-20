@@ -108,6 +108,71 @@ private class LazyTriggerContextPairIteratorTest {
         System.assertEquals(10, result[1].NumberOfEmployees);
     }
 
+    @IsTest static void filterBecameTrueNoOldList() {
+        List<Account> newAccounts = oldAccounts.deepClone();
+        newAccounts[1].NumberOfEmployees = 10;
+        newAccounts[3].NumberOfEmployees = 10;
+
+        List<Account> result = new LazyTriggerContextPairIterator(null, newAccounts)
+                .filterBecameTrue(new IsEqual(Account.NumberOfEmployees, 10))
+                .newRecords()
+                .toList(new List<Account>());
+
+        System.assertEquals(2, result.size());
+        System.assertEquals(10, result[0].NumberOfEmployees);
+        System.assertEquals(10, result[1].NumberOfEmployees);
+    }
+
+    @IsTest
+    static void filterBecameFalse() {
+        List<Account> oldList = new List<Account>{
+                new Account(Name = 'Acme'),
+                new Account(Name = 'Acme'),
+                null,
+                new Account(Name = 'Not Acme')
+        };
+
+        List<Account> newList = new List<Account> {
+                new Account(Id = accountIdGenerator.next(), Name = 'Not Acme'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Acme'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Not Acme'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Acme')
+        };
+
+        List<Account> result = new LazyTriggerContextPairIterator(oldList, newList)
+                .filterBecameFalse(new IsSObjectFieldEqual(Account.Name, 'Acme'))
+                .newRecords()
+                .toList();
+
+        System.assertEquals(1, result.size());
+        System.assertEquals(newList[0].Id, result[0].Id);
+    }
+
+    @IsTest
+    static void filterBecameFalseNullOldValues() {
+        List<Account> oldList = new List<Account>{
+                new Account(Name = 'Acme'),
+                new Account(),
+                null,
+                new Account(Name = 'Not Null')
+        };
+
+        List<Account> newList = new List<Account> {
+                new Account(Id = accountIdGenerator.next(), Name = 'Not Acme'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Acme'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Not Acme'),
+                new Account(Id = accountIdGenerator.next())
+        };
+
+        List<Account> result = new LazyTriggerContextPairIterator(oldList, newList)
+                .filterBecameFalse(new IsSObjectFieldEqual(Account.Name, null))
+                .newRecords()
+                .toList();
+
+        System.assertEquals(1, result.size());
+        System.assertEquals(newList[1].Id, result[0].Id);
+    }
+
     private static Integer totalEmployees = 0;
 
     private class SumNumberOfEmployees implements VoidFunction {
