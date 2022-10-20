@@ -108,6 +108,21 @@ private class LazyTriggerContextPairIteratorTest {
         System.assertEquals(10, result[1].NumberOfEmployees);
     }
 
+    @IsTest static void filterBecameTrueNoOldList() {
+        List<Account> newAccounts = oldAccounts.deepClone();
+        newAccounts[1].NumberOfEmployees = 10;
+        newAccounts[3].NumberOfEmployees = 10;
+
+        List<Account> result = new LazyTriggerContextPairIterator(null, newAccounts)
+                .filterBecameTrue(new IsEqual(Account.NumberOfEmployees, 10))
+                .newRecords()
+                .toList(new List<Account>());
+
+        System.assertEquals(2, result.size());
+        System.assertEquals(10, result[0].NumberOfEmployees);
+        System.assertEquals(10, result[1].NumberOfEmployees);
+    }
+
     private static Integer totalEmployees = 0;
 
     private class SumNumberOfEmployees implements VoidFunction {
