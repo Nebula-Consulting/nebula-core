@@ -1,9 +1,7 @@
 # Nebula Core
 
- - [Install on Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000kmQwQAI)
- - [Install on Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6M000000kmQwQAI)
- - Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000kmQwQAI
- - Include in your SFDX project as `"Nebula Core": "04t6M000000kmQwQAI"`
+ - Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04t6M000000gawPQAQ
+ - Include in your SFDX project as `"Nebula Core": "04t6M000000gawPQAQ"`
  
 The base set of classes used by Nebula Consulting. The licence for this code is MIT, see [LICENSE](LICENSE). 
 
