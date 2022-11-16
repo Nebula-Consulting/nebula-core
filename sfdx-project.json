@@ -1,53 +1,55 @@
 {
-    "packageDirectories": [
-        {
-            "path": "force-app",
-            "default": true,
-            "package": "Nebula Core",
-            "versionName": "0.78",
-            "versionNumber": "0.78.0.NEXT"
-        },
-        {
-            "path": "nebula-triggers",
-            "default": false,
-            "package": "Nebula Triggers",
-            "versionName": "0.1",
-            "versionNumber": "0.1.0.NEXT"
-        },
-        {
-            "path": "nebula-test-records",
-            "default": false,
-            "package": "Nebula Test Records",
-            "versionName": "0.1",
-            "versionNumber": "0.1.0.NEXT"
-        },
-        {
-            "path": "examples"
-        }
-    ],
-    "pushPackageDirectoriesSequentially": true,
-    "namespace": "nebc",
-    "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "51.0",
-    "packageAliases": {
-        "Nebula Core": "0Ho0J000000XZAHSA4",
-        "Nebula Triggers": "0Ho6M0000008OKGSA2",
-        "Nebula Triggers@0.1.0-1": "04t6M000000km7LQAQ",
-        "Nebula Core@0.73.0-1": "04t6M000000kmDiQAI",
-        "Nebula Core@0.73.0-2": "04t6M000000kmDnQAI",
-        "Nebula Core@0.73.0-3": "04t6M000000kmDsQAI",
-        "Nebula Core@0.74.0-1": "04t6M000000kmKZQAY",
-        "Nebula Core@0.74.0-2": "04t6M000000kmKeQAI",
-        "Nebula Core@0.74.0-3": "04t6M000000kmKjQAI",
-        "Nebula Core@0.74.0-4": "04t6M000000kmKoQAI",
-        "Nebula Core@0.74.0-5": "04t6M000000kmLXQAY",
-        "Nebula Core@0.74.0-6": "04t6M000000kmLwQAI",
-        "Nebula Core@0.74.0-7": "04t6M000000kmM1QAI",
-        "Nebula Core@0.74.0-8": "04t6M000000kmMQQAY",
-        "Nebula Core@0.75.0-1": "04t6M000000kmObQAI",
-        "Nebula Core@0.75.0-2": "04t6M000000kmPFQAY",
-        "Nebula Core@0.76.0-1": "04t6M000000kmPyQAI",
-        "Nebula Core@0.77.0-1": "04t6M000000kmQwQAI",
-        "Nebula Core@0.78.0-1": "04t6M000000gawPQAQ"
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true,
+      "package": "Nebula Core",
+      "versionName": "0.79",
+      "versionNumber": "0.79.0.NEXT"
+    },
+    {
+      "path": "nebula-triggers",
+      "default": false,
+      "package": "Nebula Triggers",
+      "versionName": "0.1",
+      "versionNumber": "0.1.0.NEXT"
+    },
+    {
+      "path": "nebula-test-records",
+      "default": false,
+      "package": "Nebula Test Records",
+      "versionName": "0.1",
+      "versionNumber": "0.1.0.NEXT"
+    },
+    {
+      "path": "examples"
     }
+  ],
+  "pushPackageDirectoriesSequentially": true,
+  "namespace": "nebc",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "51.0",
+  "packageAliases": {
+    "Nebula Core": "0Ho0J000000XZAHSA4",
+    "Nebula Triggers": "0Ho6M0000008OKGSA2",
+    "Nebula Triggers@0.1.0-1": "04t6M000000km7LQAQ",
+    "Nebula Core@0.73.0-1": "04t6M000000kmDiQAI",
+    "Nebula Core@0.73.0-2": "04t6M000000kmDnQAI",
+    "Nebula Core@0.73.0-3": "04t6M000000kmDsQAI",
+    "Nebula Core@0.74.0-1": "04t6M000000kmKZQAY",
+    "Nebula Core@0.74.0-2": "04t6M000000kmKeQAI",
+    "Nebula Core@0.74.0-3": "04t6M000000kmKjQAI",
+    "Nebula Core@0.74.0-4": "04t6M000000kmKoQAI",
+    "Nebula Core@0.74.0-5": "04t6M000000kmLXQAY",
+    "Nebula Core@0.74.0-6": "04t6M000000kmLwQAI",
+    "Nebula Core@0.74.0-7": "04t6M000000kmM1QAI",
+    "Nebula Core@0.74.0-8": "04t6M000000kmMQQAY",
+    "Nebula Core@0.75.0-1": "04t6M000000kmObQAI",
+    "Nebula Core@0.75.0-2": "04t6M000000kmPFQAY",
+    "Nebula Core@0.76.0-1": "04t6M000000kmPyQAI",
+    "Nebula Core@0.77.0-1": "04t6M000000kmQwQAI",
+    "Nebula Core@0.78.0-1": "04t6M000000gawPQAQ",
+    "Nebula Core@0.79.0-1": "04t6M000000gaxNQAQ",
+    "Nebula Core@0.79.0-2": "04t6M000000gaxSQAQ"
+  }
 }
