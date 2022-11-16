@@ -165,6 +165,17 @@ global inherited sharing class LazySObjectIterator extends LazyIterator {
         return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, SaveResult.newInstance));
     }
 
+    global LazyIterator doUpsert(SObjectField field, Boolean allOrNone) {
+        List<SObject> records = toList();
+        Iterator<Database.UpsertResult> resultIterator = Database.upsert(records, field, allOrNone).iterator();
+        Iterator<SObject> recordIterator = records.iterator();
+        return new LazyIterator(new TupleIterator(new List<Iterator<Object>>{ (Iterator<Object>)resultIterator, (Iterator<Object>)recordIterator}, UpsertResult.newInstance));
+    }
+
+    global LazyIterator doUpsert(SObjectField field) {
+        return doUpsert(field, true);
+    }
+
     global LazySObjectIterator doDelete() {
         List<SObject> records = toList();
         delete records;
