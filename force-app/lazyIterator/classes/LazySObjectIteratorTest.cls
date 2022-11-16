@@ -4,6 +4,7 @@
  */
 
 @IsTest
+@SuppressWarnings('PMD.AvoidDebugStatements')  // We don't mind them in tests
 private class LazySObjectIteratorTest {
 
     private static TestIdGenerator accountIdGenerator = new TestIdGenerator(Account.SObjectType);
@@ -175,6 +176,22 @@ private class LazySObjectIteratorTest {
                 .put(Account.Name, 'ACME')
                 .doInsert(false)
                 .toList(new List<SaveResult>());
+        Test.stopTest();
+
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.debug(String.format('success {0}; record: {1}', new List<Object>{results[i].isSuccess(), results[i].getRecord()}));
+            System.assert(!results[i].isSuccess() || results[i].getRecord().Id != null);
+        }
+    }
+
+    @IsTest
+    static void doUpsert() {
+        Test.startTest();
+        List<UpsertResult> results = (List<UpsertResult>)new LazySObjectIterator(accounts)
+                .put(Account.Id, null)
+                .put(Account.Name, 'ACME')
+                .doUpsert(Account.Id, false)
+                .toList(new List<UpsertResult>());
         Test.stopTest();
 
         for(Integer i=0; i < accounts.size(); i++) {
