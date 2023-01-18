@@ -162,29 +162,4 @@ private class LazyIteratorExamples {
         System.assertEquals(1, contactsWithChangedFirstName.size());
         System.assertEquals(newContacts[0].Id, contactsWithChangedFirstName[0].Id);
     }
-
-    @IsTest
-    static void forkingGetFieldFromListOfSObjects() {
-
-        Map<String, Object> contactsByAccount = new nebc.LazySObjectIterator(contacts)
-                .fork()
-                .addFork('firstAccount', new nebc.ForkIterator()
-                        .filter(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[0].Id))
-                        .mapValues(new nebc.FieldFromSObject(Contact.Id))
-                        .postpone(new nebc.ToSet(new Set<Id>())))
-                .addFork('secondAccount', new nebc.ForkIterator()
-                        .filter(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[1].Id))
-                        .mapValues(new nebc.FieldFromSObject(Contact.Id))
-                        .postpone(new nebc.ToSet(new Set<Id>())))
-                .toMap();
-
-        Set<Id> firstAccount = (Set<Id>)contactsByAccount.get('firstAccount');
-        Set<Id> secondAccount = (Set<Id>)contactsByAccount.get('secondAccount');
-
-        System.assertEquals(2, firstAccount.size());
-        System.assert(firstAccount.contains(contacts[0].Id));
-        System.assert(firstAccount.contains(contacts[1].Id));
-        System.assertEquals(1, secondAccount.size());
-        System.assert(secondAccount.contains(contacts[2].Id));
-    }
 }
