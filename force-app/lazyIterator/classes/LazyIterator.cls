@@ -236,26 +236,6 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction {
         return new LazyAppendIterator(new List<Object>{item}.iterator(), getIteratorForDecorator());
     }
 
-    global ForkManager fork() {
-        return new ForkManager(this);
-    }
-
-    global LazyIterator fork(List<TerminatorFunction> forks) {
-        return new ForkManager(this, forks).evaluateForks();
-    }
-
-    global LazyIterator fork(TerminatorFunction fork1, TerminatorFunction fork2) {
-        return fork(new List<TerminatorFunction>{fork1, fork2});
-    }
-
-    global LazyIterator fork(TerminatorFunction fork1, TerminatorFunction fork2, TerminatorFunction fork3) {
-        return fork(new List<TerminatorFunction>{fork1, fork2, fork3});
-    }
-
-    global TerminatorFunction postpone(TerminatorFunction terminatorFunction) {
-        return terminatorFunction.setIterator(this);
-    }
-
     global LazyIterator flatten() {
         return expand(new LazyIteratorExpansionIterator());
     }
