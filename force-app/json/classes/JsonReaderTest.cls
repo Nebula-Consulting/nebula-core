@@ -18,6 +18,17 @@ private class JsonReaderTest {
     }
 
     @IsTest
+    static void keyWithAHyphen() {
+        String jsonString = '{"a-b": "expected"}';
+
+        Test.startTest();
+        Object result = new JsonReader(jsonString).read('a-b');
+        Test.stopTest();
+
+        System.assertEquals('expected', result);
+    }
+
+    @IsTest
     static void nestedKey() {
         String jsonString = '{"a": { "a2": "expected"} }';
 
@@ -64,13 +75,13 @@ private class JsonReaderTest {
     @IsTest
     static void missingKey() {
         String jsonString = '{"a": { "a2": "expected"} }';
-        final String NO_RESULT = 'no result';
+        final String noResult = 'no result';
         Test.startTest();
         Object result = new JsonReader(jsonString)
-                .setMissingKeyResult(NO_RESULT)
+                .setMissingKeyResult(noResult)
                 .read('a.nope');
         Test.stopTest();
 
-        System.assertEquals(NO_RESULT, result);
+        System.assertEquals(noResult, result);
     }
 }
