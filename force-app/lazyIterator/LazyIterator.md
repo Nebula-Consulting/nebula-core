@@ -54,24 +54,6 @@ expression, to obtain a final result.
  - `List<Object> toList(List<Object> toFill)` iterate until there are no more items, putting them into the provided list
  - `Set<Object> toSet(Set<Object> toFill)` iterate until there are no more items, putting them into the provided set
  - `forEach(VoidFunction callingFunction)` call the supplied function on all items
- 
-Finally, there is an option to fork the iterator into multiple results. This allows you to filter into different 
-streams which can then be handled differently; or obtain multiple results from the same iterator e.g.
-
-    Map<String, Object> accountIds = new LazySObjectIterator(allContacts)
-            .fork()
-            .addFork('noFirstName', new ForkIterator()
-                    .filter(new IsSObjectFieldEqual(Contact.FirstName, null))
-                    .mapValues(new FieldFromSObject(Contact.AccountId))
-                    .postpone(new ToSet(new Set<Id>())))
-            .addFork('withFirstName', new ForkIterator()
-                    .filter(new IsNot(new IsSObjectFieldEqual(Contact.FirstName, null)))
-                    .mapValues(new FieldFromSObject(Contact.AccountId))
-                    .postpone(new ToSet(new Set<Id>())))
-            .toMap();
-
-    Set<Id> accountIdsNoFirstName = (Set<Id>)accountIds.get('noFirstName');
-    Set<Id> accountIdsWithFirstName = (Set<Id>)accountIds.get('withFirstName');
 
 ### Mapping and Boolean Functions
 
@@ -161,4 +143,3 @@ intent.
 
 You could achieve similar clarity in an imperative style (e.g. by breaking into more function and giving them good 
 names), but LazyIterator provides a sort of handrail to go straight to the readable version. 
-
