@@ -15,18 +15,59 @@ global class TestFieldFunctions {
         }
     }
 
-    global class AppendRandomNumber extends TestFieldFunctionWithParent {
-        global Object getValue(String fieldName, Object value) {
-            return value == null ? value : (value + String.valueOf(Math.random()));
+    global class RandomLong extends TestFieldFunctionWithParent {
+
+        global Integer maxLength {
+            get {
+                if(maxLength == null) {
+                    maxLength = 10;
+                }
+                return maxLength;
+            } set; }
+
+        global Long maxValue {
+            get {
+                if(maxValue == null) {
+                    // Note that Math.random() is strictly less than 1, so there's no chance the the result will ever
+                    // be exactly 10^maxLength (which would be too long)
+                    maxValue = (Long)Math.pow(10, maxLength);
+                }
+                return maxValue;
+            } set; }
+
+        global Long getValue(String fieldName, Object value) {
+            return (Long)(Math.random() * maxValue);
         }
     }
 
-    global class InsertRandomNumber extends nebc.TestFieldFunctions.TestFieldFunctionWithParent {
+    global class AppendRandomNumber extends TestFieldFunctionWithParent {
+
+        private RandomLong randomNumber { get {
+            if(randomNumber == null) {
+                randomNumber = new RandomLong();
+            }
+            return randomNumber;
+        } set; }
+
+        global Object getValue(String fieldName, Object value) {
+            return value == null ? value : (value + String.valueOf(randomNumber.getValue(fieldName, value)));
+        }
+    }
+
+    global class InsertRandomNumber extends TestFieldFunctionWithParent {
+
+        private RandomLong randomNumber { get {
+            if(randomNumber == null) {
+                randomNumber = new RandomLong();
+            }
+            return randomNumber;
+        } set; }
+
         global Object getValue(String fieldName, Object value) {
             if(value == null) {
                 return null;
             } else {
-                return String.format((String)value, new List<Object>{String.valueOf(Math.random())});
+                return String.format((String)value, new List<Object>{randomNumber.getValue(fieldName, value)});
             }
         }
     }
