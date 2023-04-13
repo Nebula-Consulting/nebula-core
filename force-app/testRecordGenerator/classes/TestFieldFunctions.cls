@@ -15,34 +15,59 @@ global class TestFieldFunctions {
         }
     }
 
-    global abstract class RandomNumber extends TestFieldFunctionWithParent {
+    global class RandomLong extends TestFieldFunctionWithParent {
 
-        global Integer maxLength;
+        global Integer maxLength {
+            get {
+                if(maxLength == null) {
+                    maxLength = 10;
+                }
+                return maxLength;
+            } set; }
 
-        global virtual String getRandomNumber() {
-            String randomNumber = String.valueOf(Math.random());
-            if (maxLength > 0) {
-                // for lengths less than 3 there is no point returning '0.' or '0' as .random() returns a positive double
-                // that is greater than or equal to 0.0 and less than 1.0. So return a number starting with the mantissa
-                randomNumber = maxLength < 3 ? randomNumber.mid(randomNumber.indexOf('.') + 1, maxLength) : randomNumber.left(maxLength);
+        global Long maxValue {
+            get {
+                if(maxValue == null) {
+                    // Note that Math.random() is strictly less than 1, so there's no chance the the result will ever
+                    // be exactly 10^maxLength (which would be too long)
+                    maxValue = (Long)Math.pow(10, maxLength);
+                }
+                return maxValue;
+            } set; }
+
+        global Long getValue(String fieldName, Object value) {
+            return (Long)(Math.random() * maxValue);
+        }
+    }
+
+    global class AppendRandomNumber extends TestFieldFunctionWithParent {
+
+        private RandomLong randomNumber { get {
+            if(randomNumber == null) {
+                randomNumber = new RandomLong();
             }
             return randomNumber;
-        }
+        } set; }
 
-    }
-
-    global class AppendRandomNumber extends RandomNumber {
         global Object getValue(String fieldName, Object value) {
-            return value == null ? value : (value + getRandomNumber());
+            return value == null ? value : (value + String.valueOf(randomNumber.getValue(fieldName, value)));
         }
     }
 
-    global class InsertRandomNumber extends RandomNumber {
+    global class InsertRandomNumber extends TestFieldFunctionWithParent {
+
+        private RandomLong randomNumber { get {
+            if(randomNumber == null) {
+                randomNumber = new RandomLong();
+            }
+            return randomNumber;
+        } set; }
+
         global Object getValue(String fieldName, Object value) {
             if(value == null) {
                 return null;
             } else {
-                return String.format((String)value, new List<Object>{getRandomNumber()});
+                return String.format((String)value, new List<Object>{randomNumber.getValue(fieldName, value)});
             }
         }
     }

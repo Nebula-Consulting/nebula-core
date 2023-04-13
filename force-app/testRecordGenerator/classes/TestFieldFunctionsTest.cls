@@ -116,7 +116,7 @@ private class TestFieldFunctionsTest {
                         Apex_Class__c = TestFieldFunctions.AppendRandomNumber.class.getName(),
                         Value__c = accountName,
                         Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
-                                'maxLength' => numberLength
+                                'randomNumber' => new Map<String, Object> { 'maxLength' => numberLength }
                         })
                 )
         });
@@ -124,7 +124,7 @@ private class TestFieldFunctionsTest {
         Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
         System.assert(result.Name.contains(accountName));
-        System.assert(result.Name.length() == accountName.length() + numberLength, result.Name);
+        System.assert(result.Name.length() > accountName.length() && result.Name.length() <= accountName.length() + numberLength, result.Name);
     }
 
     @IsTest
@@ -153,6 +153,26 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void numericRandomNumber() {
+        Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
+                new Test_Record_Generator__mdt(
+                        Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                        SObject__c = 'Account'
+                ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+                new Test_Record_Generator_Field__mdt(
+                        Test_Record_Generator__c = metadata.Id,
+                        Field__c = Account.AnnualRevenue.getDescribe().name,
+                        Apex_Class__c = TestFieldFunctions.RandomLong.class.getName()
+                )
+        });
+
+        Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
+
+        System.assertNotEquals(null, result.AnnualRevenue);
+    }
+
+    @IsTest
     static void insertRandomNumberWithLength() {
 
         Integer numberLength = 8;
@@ -171,7 +191,7 @@ private class TestFieldFunctionsTest {
                         Apex_Class__c = TestFieldFunctions.InsertRandomNumber.class.getName(),
                         Value__c = accountName,
                         Apex_Class_Parameters__c = JSON.serialize(new Map<String, Object>{
-                                'maxLength' => numberLength
+                                'randomNumber' => new Map<String, Object> { 'maxLength' => numberLength }
                         })
                 )
         });

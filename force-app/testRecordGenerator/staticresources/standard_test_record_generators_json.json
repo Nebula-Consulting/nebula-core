@@ -481,7 +481,7 @@
         "nebc__Field__c": "Alias",
         "nebc__Value__c": "U",
         "nebc__Apex_Class__c": "nebc.TestFieldFunctions.AppendRandomNumber",
-        "nebc__Apex_Class_Parameters__c": "{\r\n  \"maxLength\" : 7\r\n}"
+        "nebc__Apex_Class_Parameters__c": "{\r\n  \"randomNumber\" : { \"maxLength\" : 7 }\r\n}"
       },
       {
         "MasterLabel": "User: Language Locale Key",
