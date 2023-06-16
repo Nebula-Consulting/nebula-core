@@ -10,40 +10,40 @@ private class BooleanFunctionsTest {
     static void isNull() {
         BooleanFunction isNull = new IsNull();
 
-        System.assert(isNull.isTrueFor(null));
-        System.assert(!isNull.isTrueFor(1));
+        Assert.isTrue(isNull.isTrueFor(null));
+        Assert.isTrue(!isNull.isTrueFor(1));
     }
 
     @IsTest
     static void isNullField() {
         BooleanFunction isNull = new IsNull(Account.Name);
 
-        System.assert(isNull.isTrueFor(new Account()));
-        System.assert(!isNull.isTrueFor(new Account(Name = 'ACME')));
+        Assert.isTrue(isNull.isTrueFor(new Account()));
+        Assert.isTrue(!isNull.isTrueFor(new Account(Name = 'ACME')));
     }
 
     @IsTest
     static void isNotNull() {
         BooleanFunction isNotNull = new IsNotNull();
 
-        System.assert(isNotNull.isTrueFor(1));
-        System.assert(!isNotNull.isTrueFor(null));
+        Assert.isTrue(isNotNull.isTrueFor(1));
+        Assert.isTrue(!isNotNull.isTrueFor(null));
     }
 
     @IsTest
     static void isNotNullField() {
         BooleanFunction isNotNull = new IsNotNull(Account.Name);
 
-        System.assert(!isNotNull.isTrueFor(new Account()));
-        System.assert(isNotNull.isTrueFor(new Account(Name = 'ACME')));
+        Assert.isTrue(!isNotNull.isTrueFor(new Account()));
+        Assert.isTrue(isNotNull.isTrueFor(new Account(Name = 'ACME')));
     }
 
     @IsTest
     static void isNotNotNull() {
         BooleanFunction isNotNotNull = new IsNot(new IsNotNull());
 
-        System.assert(isNotNotNull.isTrueFor(null));
-        System.assert(!isNotNotNull.isTrueFor(1));
+        Assert.isTrue(isNotNotNull.isTrueFor(null));
+        Assert.isTrue(!isNotNotNull.isTrueFor(1));
     }
 
     @IsTest
@@ -53,15 +53,15 @@ private class BooleanFunctionsTest {
                 new IsNotNull()
         });
 
-        System.assert(isAllAgree.isTrueFor(1));
-        System.assert(!isAllAgree.isTrueFor(null));
+        Assert.isTrue(isAllAgree.isTrueFor(1));
+        Assert.isTrue(!isAllAgree.isTrueFor(null));
 
         BooleanFunction isAllDisagree = new IsAll(new List<BooleanFunction>{
                 new IsNotNull(),
                 new IsNull()
         });
 
-        System.assert(!isAllDisagree.isTrueFor(1));
+        Assert.isTrue(!isAllDisagree.isTrueFor(1));
     }
 
     @IsTest
@@ -71,16 +71,16 @@ private class BooleanFunctionsTest {
                 new IsNotNull()
         });
 
-        System.assert(isAnyAgree.isTrueFor(1));
-        System.assert(!isAnyAgree.isTrueFor(null));
+        Assert.isTrue(isAnyAgree.isTrueFor(1));
+        Assert.isTrue(!isAnyAgree.isTrueFor(null));
 
         BooleanFunction isAnyDisagree = new IsAny(new List<BooleanFunction>{
                 new IsNotNull(),
                 new IsNull()
         });
 
-        System.assert(isAnyDisagree.isTrueFor(1));
-        System.assert(isAnyDisagree.isTrueFor(null));
+        Assert.isTrue(isAnyDisagree.isTrueFor(1));
+        Assert.isTrue(isAnyDisagree.isTrueFor(null));
     }
 
     @IsTest
@@ -91,86 +91,86 @@ private class BooleanFunctionsTest {
                         .putAll(new List<Account>{new Account(Name = accountName)})
         );
 
-        System.assert(isInIndex.isTrueFor(new Account(Name = accountName)));
-        System.assert(!isInIndex.isTrueFor(new Account(Name = accountName + '!')));
+        Assert.isTrue(isInIndex.isTrueFor(new Account(Name = accountName)));
+        Assert.isTrue(!isInIndex.isTrueFor(new Account(Name = accountName + '!')));
     }
 
     @IsTest
     static void isTriggerChanged() {
         TriggerContextBooleanFunction isTriggerChanged = new IsFieldChangedInTrigger(Account.Name);
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
-        System.assert(!isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'a')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
+        Assert.isTrue(!isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'a')));
     }
 
     @IsTest
     static void isTriggerChangedString() {
         TriggerContextBooleanFunction isTriggerChanged = new IsFieldChangedInTrigger('Name');
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
-        System.assert(!isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'a')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
+        Assert.isTrue(!isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'a')));
     }
 
     @IsTest
     static void isTriggerChanged2() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(Account.Name, Account.Description);
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
     }
 
     @IsTest
     static void isTriggerChanged3() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(Account.Name, Account.Description, Account.Industry);
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
     }
 
     @IsTest
     static void isTriggerChangedList() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(new List<SObjectField>{Account.Name, Account.Description, Account.Industry});
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
     }
 
     @IsTest
     static void isTriggerChanged2String() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger('Name', 'Description');
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
     }
 
     @IsTest
     static void isTriggerChanged3String() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger('Name', 'Description', 'Industry');
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
     }
 
     @IsTest
     static void isTriggerChangedListString() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(new List<String>{'Name', 'Description', 'Industry'});
 
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
-        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        Assert.isTrue(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
     }
 
     @IsTest
     static void isSObjectFieldEqual() {
         BooleanFunction isSObjectFieldEqual = new IsSObjectFieldEqual(Account.Name, 'a');
 
-        System.assert(isSObjectFieldEqual.isTrueFor(new Account(Name = 'a')));
-        System.assert(!isSObjectFieldEqual.isTrueFor(new Account(Name = 'b')));
+        Assert.isTrue(isSObjectFieldEqual.isTrueFor(new Account(Name = 'a')));
+        Assert.isTrue(!isSObjectFieldEqual.isTrueFor(new Account(Name = 'b')));
     }
 
 
@@ -178,10 +178,10 @@ private class BooleanFunctionsTest {
     static void isUniqueOnSObjectField() {
         BooleanFunction isUniqueOnSObjectField = new IsUniqueOn(Account.Name);
 
-        System.assert(isUniqueOnSObjectField.isTrueFor(new Account(Name = 'a')));
-        System.assert(!isUniqueOnSObjectField.isTrueFor(new Account(Name = 'a')));
-        System.assert(isUniqueOnSObjectField.isTrueFor(new Account(Name = 'b')));
-        System.assert(!isUniqueOnSObjectField.isTrueFor(new Account(Name = 'b')));
+        Assert.isTrue(isUniqueOnSObjectField.isTrueFor(new Account(Name = 'a')));
+        Assert.isTrue(!isUniqueOnSObjectField.isTrueFor(new Account(Name = 'a')));
+        Assert.isTrue(isUniqueOnSObjectField.isTrueFor(new Account(Name = 'b')));
+        Assert.isTrue(!isUniqueOnSObjectField.isTrueFor(new Account(Name = 'b')));
     }
 
     @IsTest
@@ -190,8 +190,8 @@ private class BooleanFunctionsTest {
 
         Database.SaveResult successfulSave = (Database.SaveResult)JSON.deserialize('{"success" : true}', Database.SaveResult.class);
         Database.SaveResult unsuccessfulSave = (Database.SaveResult)JSON.deserialize('{"success" : false}', Database.SaveResult.class);
-        System.assert(isSuccess.isTrueFor(new SaveResult(successfulSave, null)));
-        System.assert(!isSuccess.isTrueFor(new SaveResult(unsuccessfulSave, null)));
+        Assert.isTrue(isSuccess.isTrueFor(new SaveResult(successfulSave, null)));
+        Assert.isTrue(!isSuccess.isTrueFor(new SaveResult(unsuccessfulSave, null)));
     }
 
     @IsTest
@@ -200,8 +200,8 @@ private class BooleanFunctionsTest {
 
         Database.SaveResult successfulSave = (Database.SaveResult)JSON.deserialize('{"success" : true}', Database.SaveResult.class);
         Database.SaveResult unsuccessfulSave = (Database.SaveResult)JSON.deserialize('{"success" : false}', Database.SaveResult.class);
-        System.assert(!isNotSuccess.isTrueFor(new SaveResult(successfulSave, null)));
-        System.assert(isNotSuccess.isTrueFor(new SaveResult(unsuccessfulSave, null)));
+        Assert.isTrue(!isNotSuccess.isTrueFor(new SaveResult(successfulSave, null)));
+        Assert.isTrue(isNotSuccess.isTrueFor(new SaveResult(unsuccessfulSave, null)));
     }
 
 }
