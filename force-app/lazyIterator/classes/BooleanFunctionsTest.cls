@@ -105,6 +105,15 @@ private class BooleanFunctionsTest {
     }
 
     @IsTest
+    static void isTriggerChangedString() {
+        TriggerContextBooleanFunction isTriggerChanged = new IsFieldChangedInTrigger('Name');
+
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        System.assert(isTriggerChanged.isTrueFor(null, new Account(Name = 'b')));
+        System.assert(!isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'a')));
+    }
+
+    @IsTest
     static void isTriggerChanged2() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(Account.Name, Account.Description);
 
@@ -124,6 +133,32 @@ private class BooleanFunctionsTest {
     @IsTest
     static void isTriggerChangedList() {
         TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(new List<SObjectField>{Account.Name, Account.Description, Account.Industry});
+
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
+    }
+
+    @IsTest
+    static void isTriggerChanged2String() {
+        TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger('Name', 'Description');
+
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+    }
+
+    @IsTest
+    static void isTriggerChanged3String() {
+        TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger('Name', 'Description', 'Industry');
+
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
+        System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c', Industry = 'Tech'), new Account(Name = 'a', Description = 'c', Industry = 'Agriculture')));
+    }
+
+    @IsTest
+    static void isTriggerChangedListString() {
+        TriggerContextBooleanFunction isTriggerChanged = new IsAnyFieldChangedInTrigger(new List<String>{'Name', 'Description', 'Industry'});
 
         System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a'), new Account(Name = 'b')));
         System.assert(isTriggerChanged.isTrueFor(new Account(Name = 'a', Description = 'c'), new Account(Name = 'a', Description = 'd')));
