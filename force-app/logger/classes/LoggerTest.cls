@@ -7,9 +7,10 @@
 public class LoggerTest {
 
     public static List<String> logs = new List<String>();
+    public static List<String> relatedTos = new List<String>();
     public static List<String> logs2 = new List<String>();
     public static List<Integer> integerLog = new List<Integer>();
-
+    static TestIdGenerator accountIdGenerator = new TestIdGenerator(Account.SObjectType);
     @IsTest
     static void testBehavior() {
         Logger.logSettings = new List<Log_Setting__mdt>{ new Log_Setting__mdt(
@@ -63,6 +64,54 @@ public class LoggerTest {
     }
 
     @IsTest
+    static void logFunctionRelatedToFunction() {
+        Logger.logSettings = new List<Log_Setting__mdt>{ new Log_Setting__mdt(
+                Level__c = LoggingLevel.DEBUG.name(),
+                Component__c = null,
+                LogMethod_Class__c = LoggerImplementation.class.getName()
+        )};
+        List<Account> accounts = new List<Account> {
+                new Account(Id = accountIdGenerator.next(), Name = 'Account 1'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Account 2')
+        };
+        new LazyIterator(accounts)
+                .mapValues(new Log('{0}')
+                        .setMapBeforeOutput(new FieldFromSObject(Account.Name))
+                        .setRelatedTo(new FieldFromSObject(Account.Id))
+                )
+                .forEach();
+
+        System.assertEquals(accounts[0].Name, logs[0]);
+        System.assertEquals(accounts[0].Id, relatedTos[0]);
+        System.assertEquals(accounts[1].Name, logs[1]);
+        System.assertEquals(accounts[1].Id, relatedTos[1]);
+    }
+
+    @IsTest
+    static void logFunctionRelatedToObject() {
+        Logger.logSettings = new List<Log_Setting__mdt>{ new Log_Setting__mdt(
+                Level__c = LoggingLevel.DEBUG.name(),
+                Component__c = null,
+                LogMethod_Class__c = LoggerImplementation.class.getName()
+        )};
+        List<Account> accounts = new List<Account> {
+                new Account(Id = accountIdGenerator.next(), Name = 'Account 1'),
+                new Account(Id = accountIdGenerator.next(), Name = 'Account 2')
+        };
+        new LazyIterator(accounts)
+                .mapValues(new Log('{0}')
+                        .setMapBeforeOutput(new FieldFromSObject(Account.Name))
+                        .setRelatedTo(accounts[0].Id)
+                )
+                .forEach();
+
+        System.assertEquals(accounts[0].Name, logs[0]);
+        System.assertEquals(accounts[0].Id, relatedTos[0]);
+        System.assertEquals(accounts[1].Name, logs[1]);
+        System.assertEquals(accounts[0].Id, relatedTos[1]);
+    }
+
+    @IsTest
     static void logFunctionWithConfig() {
         Logger.logSettings = new List<Log_Setting__mdt>{ new Log_Setting__mdt(
                 Level__c = LoggingLevel.ERROR.name(),
@@ -106,8 +155,10 @@ public class LoggerTest {
 
         public void log(LoggingLevel logLevel, String component, String body, Id relatedTo) {
             LoggerTest.logs.add(body);
+            LoggerTest.relatedTos.add(relatedTo);
         }
 
+        @SuppressWarnings('PMD.EmptyStatementBlock') // This is a test class
         public void commitLogs() {
         }
     }
@@ -118,6 +169,7 @@ public class LoggerTest {
             LoggerTest.logs2.add(body);
         }
 
+        @SuppressWarnings('PMD.EmptyStatementBlock') // This is a test class
         public void commitLogs() {
         }
     }
@@ -125,10 +177,10 @@ public class LoggerTest {
     public class IntegerLoggerImplementation implements LogMethodObject {
 
         public void log(LoggingLevel logLevel, String component, Object body, Id relatedTo) {
-            System.debug('IntegerLoggerImplementation');
             LoggerTest.integerLog.add((Integer)body);
         }
 
+        @SuppressWarnings('PMD.EmptyStatementBlock') // This is a test class
         public void commitLogs() {
         }
     }

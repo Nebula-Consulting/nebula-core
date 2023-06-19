@@ -8,8 +8,9 @@ global class Log implements Function {
 
     private LoggingLevel level = LoggingLevel.DEBUG;
     private String component;
-    private String formatString;
+    private final String formatString;
     private Function mapBeforeOutput = new IdentityFunction();
+    private Function relatedTo = new ConstantFunction(null);
 
     global Log(String formatString) {
         this.formatString = formatString;
@@ -25,13 +26,28 @@ global class Log implements Function {
         return this;
     }
 
+    global Log setRelatedTo(Function relatedTo) {
+        this.relatedTo = relatedTo;
+        return this;
+    }
+
+    global Log setRelatedTo(Object relatedTo) {
+        this.relatedTo = new ConstantFunction(relatedTo);
+        return this;
+    }
+
     global Log setLoggingLevel(LoggingLevel level) {
         this.level = level;
         return this;
     }
 
     global Object call(Object o) {
-        Logger.log(level, component, String.format(formatString, new List<Object>{mapBeforeOutput.call(o)}));
+        Logger.log(
+                level,
+                component,
+                String.format(formatString, new List<Object>{mapBeforeOutput.call(o)}),
+                String.valueOf(relatedTo.call(o))
+        );
         return o;
     }
 }
