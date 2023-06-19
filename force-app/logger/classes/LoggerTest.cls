@@ -77,7 +77,7 @@ public class LoggerTest {
         new LazyIterator(accounts)
                 .mapValues(new Log('{0}')
                         .setMapBeforeOutput(new FieldFromSObject(Account.Name))
-                        .setRelatedTo(new FieldFromSObject(Account.Id))
+                        .setRelatedTo(new IdFromSObject())
                 )
                 .forEach();
 

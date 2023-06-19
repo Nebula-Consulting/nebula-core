@@ -270,6 +270,19 @@ private class LazySObjectIteratorTest {
     }
 
     @IsTest
+    static void getIds() {
+        Test.startTest();
+        Set<Id> results = new LazySObjectIterator(accounts)
+                .getIds(new Set<Id>());
+        Test.stopTest();
+
+        System.assertEquals(accounts.size(), results.size());
+        for(Integer i=0; i < accounts.size(); i++) {
+            System.assert(results.contains(accounts[i].Id));
+        }
+    }
+
+    @IsTest
     static void observeSetId() {
         Test.startTest();
         Set<Id> results = new Set<Id>();

@@ -105,6 +105,11 @@ global inherited sharing class LazySObjectIterator extends LazyIterator {
                 .toSet(toFill);
     }
 
+    global Set<Id> getIds(Set<Id> toFill) {
+        return mapValues(new IdFromSObject())
+                .toSet(toFill);
+    }
+
     global Set<String> get(SObjectField field, Set<String> toFill) {
         return mapValues(new FieldFromSObject(field))
                 .toSet(toFill);
