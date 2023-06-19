@@ -21,7 +21,7 @@ public class LoggerTest {
         String theMessage = 'A message';
         Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), theMessage);
 
-        System.assertEquals(theMessage, logs[0]);
+        Assert.areEqual(theMessage, logs[0]);
     }
 
     @IsTest
@@ -33,7 +33,7 @@ public class LoggerTest {
         )};
         Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), 123);
 
-        System.assertEquals(String.valueOf(123), logs[0]);
+        Assert.areEqual(String.valueOf(123), logs[0]);
     }
 
     @IsTest
@@ -45,7 +45,7 @@ public class LoggerTest {
         )};
         Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), 123);
 
-        System.assertEquals(123, integerLog[0]);
+        Assert.areEqual(123, integerLog[0]);
     }
 
     @IsTest
@@ -60,7 +60,7 @@ public class LoggerTest {
                 .mapValues(new Log('{0}'))
                 .forEach();
 
-        System.assertEquals(theMessage, logs[0]);
+        Assert.areEqual(theMessage, logs[0]);
     }
 
     @IsTest
@@ -81,10 +81,10 @@ public class LoggerTest {
                 )
                 .forEach();
 
-        System.assertEquals(accounts[0].Name, logs[0]);
-        System.assertEquals(accounts[0].Id, relatedTos[0]);
-        System.assertEquals(accounts[1].Name, logs[1]);
-        System.assertEquals(accounts[1].Id, relatedTos[1]);
+        Assert.areEqual(accounts[0].Name, logs[0]);
+        Assert.areEqual(accounts[0].Id, relatedTos[0]);
+        Assert.areEqual(accounts[1].Name, logs[1]);
+        Assert.areEqual(accounts[1].Id, relatedTos[1]);
     }
 
     @IsTest
@@ -105,10 +105,10 @@ public class LoggerTest {
                 )
                 .forEach();
 
-        System.assertEquals(accounts[0].Name, logs[0]);
-        System.assertEquals(accounts[0].Id, relatedTos[0]);
-        System.assertEquals(accounts[1].Name, logs[1]);
-        System.assertEquals(accounts[0].Id, relatedTos[1]);
+        Assert.areEqual(accounts[0].Name, logs[0]);
+        Assert.areEqual(accounts[0].Id, relatedTos[0]);
+        Assert.areEqual(accounts[1].Name, logs[1]);
+        Assert.areEqual(accounts[0].Id, relatedTos[1]);
     }
 
     @IsTest
@@ -127,7 +127,7 @@ public class LoggerTest {
         )
                 .forEach();
 
-        System.assertEquals('"' + theMessage + '"!', logs[0]);
+        Assert.areEqual('"' + theMessage + '"!', logs[0]);
     }
 
     @IsTest
@@ -147,8 +147,8 @@ public class LoggerTest {
         String theMessage = 'A message';
         Logger.log(LoggingLevel.DEBUG, LoggerTest.class.getName(), theMessage);
 
-        System.assertEquals(theMessage, logs[0]);
-        System.assertEquals(theMessage, logs2[0]);
+        Assert.areEqual(theMessage, logs[0]);
+        Assert.areEqual(theMessage, logs2[0]);
     }
 
     public class LoggerImplementation implements LogMethod {
