@@ -23,9 +23,7 @@ private class LazyIteratorExamples {
     @IsTest
     static void getFieldFromListOfSObjects() {
         Set<Id> accountsIds = new nebc.LazySObjectIterator(contacts)
-                .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
-                .filter(new nebc.IsNotNull())
-                .toSet(new Set<Id>());
+                .get(Contact.AccountId, new Set<Id>());
 
         System.assertEquals(2, accountsIds.size());
         System.assert(accountsIds.contains(accounts[0].Id));
@@ -35,7 +33,8 @@ private class LazyIteratorExamples {
     @IsTest
     static void copyFieldInListOfSObjects() {
         new nebc.LazySObjectIterator(contacts)
-                .forEach(new SObjectPutField(Contact.FirstName, new nebc.FieldFromSObject(Contact.LastName)));
+                .putField(Contact.FirstName, Contact.LastName)
+                .forEach();
 
         for(Contact thisContact : contacts) {
             System.assertEquals(thisContact.LastName, thisContact.FirstName);
@@ -45,7 +44,7 @@ private class LazyIteratorExamples {
     @IsTest
     static void find() {
         Contact foundContact = (Contact)new nebc.LazySObjectIterator(contacts)
-                .filter(new nebc.IsSObjectFieldEqual(Contact.LastName, contacts[1].LastName))
+                .filterOnField(Contact.LastName, contacts[1].LastName)
                 .firstOrDefault(nebc.NoResult.NO_RESULT);
 
         System.assertEquals(contacts[1].Id, foundContact.Id);
@@ -54,9 +53,8 @@ private class LazyIteratorExamples {
     @IsTest
     static void getFieldFromListOfSObjectsFilter() {
         Set<Id> accountsIds = new nebc.LazySObjectIterator(contacts)
-                .filter(new nebc.IsNull(new FieldFromSObject(Contact.FirstName)))
-                .mapValues(new nebc.FieldFromSObject(Contact.AccountId))
-                .toSet(new Set<Id>());
+                .filterT(new nebc.IsNull(Contact.FirstName))
+                .get(Contact.AccountId, new Set<Id>());
 
         System.assertEquals(1, accountsIds.size());
         System.assert(accountsIds.contains(accounts[0].Id));
@@ -65,8 +63,9 @@ private class LazyIteratorExamples {
     @IsTest
     static void modifySObjects() {
         new nebc.LazySObjectIterator(contacts)
-                .mapValues(new nebc.SObjectPutField(Contact.LeadSource, 'Web'))
+                .put(Contact.LeadSource, 'Web')
                 .forEach();
+
         for(Contact thisContact : contacts) {
             System.assertEquals('Web', thisContact.LeadSource);
         }
@@ -76,7 +75,7 @@ private class LazyIteratorExamples {
     static void mapSObjectsToOtherSObjects() {
         List<Task> tasks = new nebc.LazySObjectIterator(contacts)
                 .mapValues(new nebc.SObjectFromPrototype(new Task(ActivityDate = Date.today().addDays(7)))
-                        .put(Task.WhoId, new nebc.FieldFromSObject(Contact.Id))
+                        .putField(Task.WhoId, Contact.Id)
                         .put(Task.Subject, new nebc.Add('Follow up with ', new nebc.FieldFromSObject(Contact.LastName)))
                 )
                 .toList(new List<Task>());
@@ -92,8 +91,8 @@ private class LazyIteratorExamples {
     @IsTest
     static void modifySObjectsConditionally() {
         new nebc.LazySObjectIterator(contacts)
-                .mapValues(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[0].Id), new nebc.SObjectPutField(Contact.LeadSource, 'Web'))
-                .mapValues(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[1].Id), new nebc.SObjectPutField(Contact.LeadSource, 'Other'))
+                .putIf(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[0].Id), Contact.LeadSource, 'Web')
+                .putIf(new nebc.IsSObjectFieldEqual(Contact.AccountId, accounts[1].Id), Contact.LeadSource, 'Other')
                 .forEach();
 
         for(Contact thisContact : contacts) {
@@ -110,10 +109,12 @@ private class LazyIteratorExamples {
         Map<Id, Account> accountMap = new Map<Id, Account>(accounts);
 
         new nebc.LazySObjectIterator(contacts)
-                .forEach(new nebc.SObjectPutField(
-                Contact.MailingStreet,
-                new nebc.Composition(new nebc.FieldFromSObject(Contact.AccountId), new nebc.GetFrom(accountMap))
-                        .compose(new nebc.FieldFromSObject(Account.BillingStreet))));
+                .put(
+                        Contact.MailingStreet,
+                        new nebc.Composition(Contact.AccountId)
+                                .compose(new nebc.GetFrom(accountMap))
+                                .compose(new nebc.FieldFromSObject(Account.BillingStreet)))
+                .forEach();
 
         for(Contact thisContact : contacts) {
             if(thisContact.AccountId == accounts[0].Id) {
@@ -131,11 +132,11 @@ private class LazyIteratorExamples {
         new nebc.LazySObjectIterator(contacts)
                 .mapValues(new nebc.ToPair(new nebc.Composition(new nebc.FieldFromSObject(Contact.AccountId), new nebc.GetFrom(accountMap))))
                 .forEach(
-                new BinaryComposition(
-                        new nebc.SObjectPutField(Contact.MailingStreet, new nebc.FieldFromSObject(Account.BillingStreet)),
-                        new nebc.SObjectPutField(Contact.MailingCity, new nebc.FieldFromSObject(Account.BillingCity))
-                )
-        );
+                        new BinaryComposition(
+                                new nebc.SObjectPutField(Contact.MailingStreet, new nebc.FieldFromSObject(Account.BillingStreet)),
+                                new nebc.SObjectPutField(Contact.MailingCity, new nebc.FieldFromSObject(Account.BillingCity))
+                        )
+                );
 
         for(Contact thisContact : contacts) {
             if(thisContact.AccountId == accounts[0].Id) {
@@ -155,9 +156,9 @@ private class LazyIteratorExamples {
         newContacts[0].FirstName = 'Test First Name';
 
         List<Contact> contactsWithChangedFirstName = new nebc.LazyTriggerContextPairIterator(oldContacts, newContacts)
-                .filter(new nebc.IsFieldChangedInTrigger(Contact.FirstName))
-                .mapValues(new nebc.NewFromTriggerContextPair())
-                .toList(new List<Contact>());
+                .filterT(new nebc.IsFieldChangedInTrigger(Contact.FirstName))
+                .newRecords()
+                .toList();
 
         System.assertEquals(1, contactsWithChangedFirstName.size());
         System.assertEquals(newContacts[0].Id, contactsWithChangedFirstName[0].Id);
