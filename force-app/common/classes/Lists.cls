@@ -20,7 +20,8 @@ global class Lists {
     }
 
     global static List<Object> sort(List<Object> toSort, Comparator comparator) {
-        return new QuickSort(comparator).sort(toSort);
+        toSort.sort(comparator);
+        return toSort;
     }
 
     global static List<Object> filter(List<Object> toFilter, FilterFunction filterFunction) {
@@ -32,50 +33,5 @@ global class Lists {
             }
         }
         return returnVal;
-    }
-
-    private class QuickSort {
-
-        private Comparator comparator;
-
-        public QuickSort(Comparator comparator) {
-            this.comparator = comparator;
-        }
-
-        // Sorts in-place, and returns the original array
-        public List<Object> sort(List<Object> toSort) {
-            sort(toSort, 0, toSort.size()-1);
-            return toSort;
-        }
-
-        private void sort(List<Object> toSort, Integer low, Integer high) {
-            if(low < high) {
-                Integer newPivot = partition(toSort, low, high);
-                sort(toSort, low, newPivot);
-                sort(toSort, newPivot + 1, high);
-            }
-        }
-
-        @SuppressWarnings('PMD.WhileLoopsMustUseBraces, PMD.EmptyWhileStmt') // low-level algorithm using whiles
-        private Integer partition(List<Object> toSort, Integer low, Integer high) {
-            Object pivotVal = toSort[low];
-            Integer upwards = low - 1;
-            Integer downwards = high + 1;
-
-            while(true) {
-                while(comparator.compare(toSort[++upwards], pivotVal) < 0);
-
-                while(comparator.compare(toSort[--downwards], pivotVal) > 0);
-
-                if(upwards >= downwards) {
-                    return downwards;
-                }
-
-                Object tmp = toSort[upwards];
-                toSort[upwards] = toSort[downwards];
-                toSort[downwards] = tmp;
-            }
-            return null;
-        }
     }
 }

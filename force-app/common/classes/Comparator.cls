@@ -5,6 +5,6 @@
  * first argument is less than, equal to, or greater than the second.
  */
 
-global interface Comparator {
+global interface Comparator extends System.Comparator<Object> {
     Integer compare(Object object1, Object object2);
 }
