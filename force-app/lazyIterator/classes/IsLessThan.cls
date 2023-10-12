@@ -17,6 +17,10 @@ global class IsLessThan implements BooleanFunction {
         functions = new FunctionList(new FieldFromSObject(left), right);
     }
 
+    global IsLessThan(SObjectField left, SObjectField right) {
+        functions = new FunctionList(new FieldFromSObject(left), new FieldFromSObject(right));
+    }
+
     global IsLessThan(Object right) {
         functions = new FunctionList(new IdentityFunction(), right);
     }
