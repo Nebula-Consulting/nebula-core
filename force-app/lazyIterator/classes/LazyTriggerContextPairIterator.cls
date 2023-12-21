@@ -54,6 +54,14 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
         ));
     }
 
+    global LazyTriggerContextPairIterator filterFieldBecameEqual(SObjectField field, Object value) {
+        return filterBecameTrue(new IsSObjectFieldEqual(field, value));
+    }
+
+    global LazyTriggerContextPairIterator filterFieldBecameNotEqual(SObjectField field, Object value) {
+        return filterBecameFalse(new IsSObjectFieldEqual(field, value));
+    }
+
     global LazyTriggerContextPairIterator mapValuesT(Function mappingFunction) {
         this.iterator = super.mapValues(mappingFunction);
         return this;

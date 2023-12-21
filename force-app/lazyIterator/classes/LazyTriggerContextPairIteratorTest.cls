@@ -108,6 +108,49 @@ private class LazyTriggerContextPairIteratorTest {
         System.assertEquals(10, result[1].NumberOfEmployees);
     }
 
+    @IsTest static void filterFieldBecameEqual() {
+        List<Account> newAccounts = oldAccounts.deepClone();
+        newAccounts[1].NumberOfEmployees = 10;
+        newAccounts[3].NumberOfEmployees = 10;
+
+        List<Account> result = new LazyTriggerContextPairIterator(oldAccounts, newAccounts)
+                .filterFieldBecameEqual(Account.NumberOfEmployees, 10)
+                .newRecords()
+                .toList(new List<Account>());
+
+        Assert.areEqual(2, result.size());
+        Assert.areEqual(10, result[0].NumberOfEmployees);
+        Assert.areEqual(10, result[1].NumberOfEmployees);
+    }
+
+    @IsTest static void filterFieldBecameEqualNull() {
+        List<Account> newAccounts = oldAccounts.deepClone();
+        newAccounts[1].NumberOfEmployees = null;
+        newAccounts[3].NumberOfEmployees = null;
+
+        List<Account> result = new LazyTriggerContextPairIterator(oldAccounts, newAccounts)
+                .filterFieldBecameEqual(Account.NumberOfEmployees, null)
+                .newRecords()
+                .toList(new List<Account>());
+
+        Assert.areEqual(2, result.size());
+        Assert.areEqual(null, result[0].NumberOfEmployees);
+        Assert.areEqual(null, result[1].NumberOfEmployees);
+    }
+
+    @IsTest static void filterFieldBecameNotEqual() {
+        List<Account> newAccounts = oldAccounts.deepClone();
+        newAccounts[4].NumberOfEmployees = 10;
+
+        List<Account> result = new LazyTriggerContextPairIterator(oldAccounts, newAccounts)
+                .filterFieldBecameNotEqual(Account.NumberOfEmployees, 5)
+                .newRecords()
+                .toList(new List<Account>());
+
+        Assert.areEqual(1, result.size());
+        Assert.areEqual(10, result[0].NumberOfEmployees);
+    }
+
     @IsTest static void filterBecameTrueNoOldList() {
         List<Account> newAccounts = oldAccounts.deepClone();
         newAccounts[1].NumberOfEmployees = 10;
