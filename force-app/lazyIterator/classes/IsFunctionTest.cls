@@ -7,10 +7,17 @@
 private class IsFunctionTest {
 
     static nebc.TestIdGenerator accountIdGenerator = new nebc.TestIdGenerator(Account.SObjectType);
+    static nebc.TestIdGenerator eventIdGenerator = new nebc.TestIdGenerator(Event.SObjectType);
 
     static List<Account> accounts = new List<Account> {
             new Account(Id = accountIdGenerator.next(), Name = 'Account One', NumberOfEmployees = 0),
             new Account(Id = accountIdGenerator.next(), Name = 'Account Two', NumberOfEmployees = 1)
+    };
+
+    static List<Event> events = new List<Event> {
+            new Event(Id = eventIdGenerator.next(), ActivityDate = Date.today(), RecurrenceEndDateOnly = Date.today().addDays(1)),
+            new Event(Id = eventIdGenerator.next(), ActivityDate = Date.today(), RecurrenceEndDateOnly = Date.today().addDays(-1)),
+            new Event(Id = eventIdGenerator.next(), ActivityDate = Date.today(), RecurrenceEndDateOnly = Date.today())
     };
 
     @IsTest
@@ -23,6 +30,17 @@ private class IsFunctionTest {
         System.assertEquals(0, result[0]);
         System.assertEquals(1, result[1]);
         System.assertEquals(2, result[2]);
+    }
+
+    @IsTest
+    static void lessThanSObjectFields() {
+        List<Event> result = new LazySObjectIterator(events)
+                .filterT(new IsLessThan(Event.ActivityDate, Event.RecurrenceEndDateOnly))
+                .toList();
+
+        System.assertEquals(1, result.size());
+        System.assertEquals(events[0].Id, result[0].Id);
+
     }
 
     @IsTest
@@ -84,6 +102,17 @@ private class IsFunctionTest {
     }
 
     @IsTest
+    static void greaterThanSObjectFields() {
+        List<Event> result = new LazySObjectIterator(events)
+                .filterT(new IsGreaterThan(Event.ActivityDate, Event.RecurrenceEndDateOnly))
+                .toList();
+
+        System.assertEquals(1, result.size());
+        System.assertEquals(events[1].Id, result[0].Id);
+
+    }
+
+    @IsTest
     static void equalFunction() {
         List<Account> result = new LazySObjectIterator(accounts)
                 .filter(new IsEqual(new FieldFromSObject(Account.NumberOfEmployees), new LazyIterator(new List<Object>{0, 1})))
@@ -106,4 +135,15 @@ private class IsFunctionTest {
 
         System.assertEquals(0, result.size());
     }
+
+    @IsTest
+    static void equalSObjectFields() {
+        List<Event> result = new LazySObjectIterator(events)
+                .filterT(new IsEqual(Event.ActivityDate, Event.RecurrenceEndDateOnly))
+                .toList();
+
+        System.assertEquals(1, result.size());
+        System.assertEquals(events[2].Id, result[0].Id);
+    }
+
 }

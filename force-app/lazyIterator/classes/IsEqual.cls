@@ -17,6 +17,10 @@ global class IsEqual implements BooleanFunction {
         functions = new FunctionList(new FieldFromSObject(field), rightFunctionOrValue);
     }
 
+    global IsEqual(SObjectField left, SObjectField right) {
+        functions = new FunctionList(new FieldFromSObject(left), new FieldFromSObject(right));
+    }
+
     global IsEqual(Object rightFunctionOrValue) {
         functions = new FunctionList(new IdentityFunction(), rightFunctionOrValue);
     }
