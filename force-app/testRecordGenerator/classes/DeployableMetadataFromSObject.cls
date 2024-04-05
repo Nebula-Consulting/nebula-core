@@ -4,7 +4,7 @@
  * @description Converts a custom metadata SObject record into a Metadata.CustomMetadata representation so that it can
  * be deployed
  */
-
+@NamespaceAccessible
 public class DeployableMetadataFromSObject implements Function {
 
     private SObject metadataRecord;
@@ -41,7 +41,9 @@ public class DeployableMetadataFromSObject implements Function {
                 DisplayType.TEXTAREA,
                 DisplayType.DOUBLE,
                 DisplayType.BOOLEAN,
-                DisplayType.PICKLIST
+                DisplayType.PICKLIST,
+                DisplayType.REFERENCE,
+                DisplayType.URL
         };
 
         public IsWriteableType(DescribeSObjectResult metadataRecordDescribe) {
