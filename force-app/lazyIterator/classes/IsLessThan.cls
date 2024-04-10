@@ -29,6 +29,10 @@ global class IsLessThan implements BooleanFunction {
         Object leftValue = functions.functions[0].call(o);
         Object rightValue = functions.functions[1].call(o);
 
+        if (leftValue == null) {
+            return rightValue != null;
+        }
+
         if(leftValue instanceof String) {
             return (String)leftValue < (String)rightValue;
         } else if (leftValue instanceof Integer) {
