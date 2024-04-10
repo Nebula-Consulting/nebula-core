@@ -75,6 +75,24 @@ private class IsFunctionTest {
                 .toList(new List<Account>());
 
         System.assertEquals(0, result.size());
+
+        result = new LazySObjectIterator(accounts)
+                .put(Account.NumberOfEmployees, null)
+                .filter(new IsLessThan(Account.NumberOfEmployees, 2))
+                .toList(new List<Account>());
+
+        System.assertEquals(2, result.size());
+
+        Integer nullInteger;
+
+        result = new LazySObjectIterator(accounts)
+                .put(Account.NumberOfEmployees, null)
+                .filter(new IsLessThan(Account.NumberOfEmployees, nullInteger))
+                .toList(new List<Account>());
+
+        System.assertEquals(0, result.size());
+
+
     }
 
     @IsTest
@@ -99,6 +117,22 @@ private class IsFunctionTest {
                 .toList(new List<Account>());
 
         System.assertEquals(0, result.size());
+
+        result = new LazySObjectIterator(accounts)
+                .put(Account.NumberOfEmployees, null)
+                .filter(new IsGreaterThan(Account.NumberOfEmployees, 1))
+                .toList(new List<Account>());
+
+        System.assertEquals(0, result.size());
+
+        Integer nullInteger;
+        result = new LazySObjectIterator(accounts)
+                .put(Account.NumberOfEmployees, null)
+                .filter(new IsGreaterThan(new FieldFromSObject(Account.NumberOfEmployees), nullInteger))
+                .toList(new List<Account>());
+
+        System.assertEquals(0, result.size());
+
     }
 
     @IsTest
@@ -109,6 +143,21 @@ private class IsFunctionTest {
 
         System.assertEquals(1, result.size());
         System.assertEquals(events[1].Id, result[0].Id);
+
+        result = new LazySObjectIterator(events)
+                .put(Event.ActivityDate, null)
+                .filterT(new IsGreaterThan(Event.ActivityDate, Event.RecurrenceEndDateOnly))
+                .toList();
+
+        System.assertEquals(0, result.size());
+
+        result = new LazySObjectIterator(events)
+                .put(Event.ActivityDate, Date.today())
+                .put(Event.RecurrenceEndDateOnly, null)
+                .filterT(new IsGreaterThan(Event.ActivityDate, Event.RecurrenceEndDateOnly))
+                .toList();
+
+        System.assertEquals(3, result.size());
 
     }
 
