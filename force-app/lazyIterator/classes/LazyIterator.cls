@@ -441,7 +441,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      * @param callingFunction a function to call for each item in the iterator.
      */
     global void forEach(Function callingFunction) {
-        while (hasNext()) {
+        while(hasNext()) {
             callingFunction.call(next());
         }
     }
