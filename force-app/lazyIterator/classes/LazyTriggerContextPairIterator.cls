@@ -157,10 +157,38 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
         ));
     }
 
+    /** Filters the iterator by determining whether a field has become equal to a supplied <code>Function</code> or value.
+     * The value must not be equal in the old record and must be equal in the new record.
+     *
+     * @example //returns a list of opportunity records where the stage has changed to 'Closed Won'
+     * new nebc.LazyTriggerContextPairIterator(oldOpportunity, newOpportunity)
+     *      .filterFieldBecameEqual(Opportunity.StageName, 'Closed Won')
+     *      .newRecords()
+     *      .toList();
+     *
+     * @param field The field who's value is being evaluated
+     * @param valueOrFunction the value or function that the field must be equal to in the new record
+     *
+     * @return a filtered version of the <code>LazyTriggerContextPairIterator</code>
+     */
     global LazyTriggerContextPairIterator filterFieldBecameEqual(SObjectField field, Object valueOrFunction) {
         return filterBecameTrue(new IsSObjectFieldEqual(field, valueOrFunction));
     }
 
+    /** Filters the iterator by determining whether a field has become not equal to a supplied <code>Function</code> or value.
+     * The value must be equal in the old record and must not be equal in the new record.
+     *
+     * @example //returns a list of opportunity records where the stage has changed away from 'Prospecting'
+     * new nebc.LazyTriggerContextPairIterator(oldOpportunity, newOpportunity)
+     *      .filterFieldBecameNotEqual(Opportunity.StageName, 'Prospecting')
+     *      .newRecords()
+     *      .toList();
+     *
+     * @param field The field who's value is being evaluated
+     * @param valueOrFunction the value or function that the field must be not equal to in the new record
+     *
+     * @return a filtered version of the <code>LazyTriggerContextPairIterator</code>
+     */
     global LazyTriggerContextPairIterator filterFieldBecameNotEqual(SObjectField field, Object valueOrFunction) {
         return filterBecameFalse(new IsSObjectFieldEqual(field, valueOrFunction));
     }
