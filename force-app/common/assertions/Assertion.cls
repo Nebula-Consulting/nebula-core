@@ -3,7 +3,6 @@
  * @date 27/04/2021
  * @description Unlike System.assert, these methods throw catchable exceptions and have a fluent interface
  */
-
 global class Assertion {
 
     global static DescribedAssertion is {get {

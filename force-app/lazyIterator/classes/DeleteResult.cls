@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 10/09/2020
  */
-
 global class DeleteResult extends TwoTuple implements DatabaseResult {
 
     global Database.DeleteResult deleteResult {get {return (Database.DeleteResult)left;} set; }

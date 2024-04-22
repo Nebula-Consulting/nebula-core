@@ -3,7 +3,6 @@
  * @date 30/08/2019
  * @description Works like the + operator, but implements Function so it can be evaluated later
  */
-
 global class Add implements Function {
 
     private FunctionList functions;

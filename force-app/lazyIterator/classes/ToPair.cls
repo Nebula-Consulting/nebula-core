@@ -4,7 +4,6 @@
  * @description A function which creates instances of Pair. When created with function f, calling on object o returns
  * the pair <o, f(o)>
  */
-
 global class ToPair implements Function {
 
     private Function mapO1ToO2Function;

@@ -4,7 +4,6 @@
  * @description Wraps up callouts so that they return consistently return errors via an Exception i.e. HTTP outside
  * 200-299 will throw an Exception. Also tracks total callout time
  */
-
 global abstract class NebulaApi {
 
     global static Long getTotalCalloutTimeInMs() {

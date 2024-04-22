@@ -4,7 +4,6 @@
  * @description Expansion function which uses each item from setValue() to produce an iterator over the results from an
  * SObjectIndex
  */
-
 global class SObjectsFromIndex implements ExpansionFunction {
 
     private SObjectIndex sObjectIndex;

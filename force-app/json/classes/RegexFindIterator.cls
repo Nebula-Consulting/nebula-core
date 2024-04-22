@@ -4,7 +4,6 @@
  * @description Repeatedly calls Matcher.find(), returning the whole matching result (i.e. Matcher.group()) via
  * an Iterator interface. Note: does not iterate the groups within each find
  */
-
 global class RegexFindIterator implements Iterator<String> {
 
     private Matcher matcher;

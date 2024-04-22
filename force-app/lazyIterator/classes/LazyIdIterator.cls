@@ -3,7 +3,6 @@
  * @date 2019-07-12
  * @description Id-typed version of LazyIterator
  */
-
 global class LazyIdIterator extends LazyIterator {
 
     global LazyIdIterator(Iterator<Id> iterator) {

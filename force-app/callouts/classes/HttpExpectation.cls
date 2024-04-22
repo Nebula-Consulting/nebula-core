@@ -3,7 +3,6 @@
  * @date 24/11/2021
  * @description An expectation for mocking callouts
  */
-
 global class HttpExpectation {
 
     private BooleanFunction endpointMatcher;

@@ -3,7 +3,6 @@
  * @date 14/09/2020
  * @description Function to extract child SObject lists from relationship fields on SObject instances
  */
-
 global virtual class SObjectsFromSObject implements ExpansionIterator, Function {
 
     private String field;

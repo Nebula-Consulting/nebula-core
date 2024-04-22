@@ -3,7 +3,6 @@
  * @date 15/05/2020
  * @description Function to extract SObjects from reference fields on SObject instances
  */
-
 global class SObjectFromSObject implements Function {
 
     private SObjectField field;

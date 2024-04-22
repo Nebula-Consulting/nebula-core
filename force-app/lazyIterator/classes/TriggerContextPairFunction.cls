@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 2019-06-28
  */
-
 global abstract class TriggerContextPairFunction implements Function {
 
     global Object call(Object o) {
