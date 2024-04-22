@@ -46,14 +46,16 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
         return this;
     }
 
-    /** Returns the first member from the iterator if the iterator has member available. If it does not then
+    /** Returns the first item from the <code>LazyIterator</code> if the <code>LazyIterator</code> has item available. If it does not,
      * then the provided defaultValue is returned.
      *
-     * @example
+     * @example //from an iterator of dates, it returns a the first in the iterator or a date 1 year from today.
+     * Date nextRenewalDate = (Date) new nebc.LazyIterator(contractRenewalDates)
+     *      .firstOrDefault(Date.today().addDays(365))
      *
-     * @param defaultValue the value returned if the iterator has no members.
+     * @param defaultValue the value returned if the iterator has no items.
      *
-     * @return the first member from the iterator if it has one, if it does not then the default value is returned.
+     * @return the first item from the <code>LazyIterator</code> if it has one, if it does not then the default value is returned.
      */
     global Object firstOrDefault(Object defaultValue) {
         if(hasNext()) {
@@ -63,6 +65,19 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
         }
     }
 
+    /** Returns the first item from the <code>LazyIterator</code> that meets the matching function criteria. If it does not
+     * have any items that meet the critera, then the provided defaultValue is returned.
+     *
+     * @example //from an iterator of accounts, find the first one where the account name is 'Group Account'
+     * //If there are none, then return the defaultAccount
+     * Account billingAccount = new nebc.LazySObjectIterator(accounts)
+     *      .findOrDefault(new nebc.IsSObjectFieldEqual(Account.Name, 'Group Account'), defaultAccount);
+     *
+     * @param matchingFunction a <code>BooleanFunction</code> instance used to filter the iterator
+     * @param defaultValue the value returned if the filtered iterator has no items.
+     *
+     * @return the first item from the <code>LazyIterator</code> if it has one, if it does not then the default value is returned.
+     */
     global Object findOrDefault(BooleanFunction matchingFunction, Object defaultValue) {
         return filter(matchingFunction).firstOrDefault(defaultValue);
     }
@@ -175,9 +190,9 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     }
 
     /**
-     * Removes members from the iterator that do not pass the filter conditions. The filter conditions are
+     * Removes items from the iterator that do not pass the filter conditions. The filter conditions are
      * provided by a <code>BooleanFunction</code>. If the <code>BooleanFunction</code>'s <code>isTrueFor</code> method
-     * evaluates to false when called on the member Object, the member is removed.
+     * evaluates to false when called on the item, the item is removed.
      *
      * @example //Counts the number of accounts where BillingCity is London
      * Integer numberOfLondonAccounts = new nebc.LazyIterator(accounts)
@@ -186,7 +201,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .toList()
      *      .size();
      *
-     * @param matchingFunction a <code>BooleanFunction</code> to apply to all members within the iterator, to determine
+     * @param matchingFunction a <code>BooleanFunction</code> to apply to all items within the iterator, to determine
      * whether they should remain in the iterator
      * @return a filtered version of the <code>LazyIterator</code>
      */
@@ -195,9 +210,9 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     }
 
     /**
-     * Removes members from the iterator that do not pass the filter conditions. The filter conditions are
+     * Removes items from the iterator that do not pass the filter conditions. The filter conditions are
      * provided by a <code>BooleanFunction</code>. If the <code>BooleanFunction</code>'s <code>isTrueFor</code> method
-     * evaluates to false when called on the member Object, the member is removed.
+     * evaluates to false when called on the item, the item is removed.
      *
      * @example //Counts the number of accounts where BillingCity is London
      * Integer numberOfLondonAccounts = new nebc.LazyIterator(accounts)
@@ -205,8 +220,8 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .toList()
      *      .size();
      *
-     * @param mappingFunction a <code>Function</code> to modify the member being evaluated
-     * @param matchingFunction a <code>BooleanFunction</code> to apply to all member within the iterator, to determine
+     * @param mappingFunction a <code>Function</code> to modify the item being evaluated
+     * @param matchingFunction a <code>BooleanFunction</code> to apply to all item within the iterator, to determine
      * whether they should remain in the iterator
      * @return a filtered version of the <code>LazyIterator</code>
      */
@@ -223,14 +238,14 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     }
 
     /**
-     * Reduces all of the iterator members into a single object by applying the same accumulator function to each member.
+     * Reduces all of the iterator items into a single object by applying the same accumulator function to each item.
      *
      * //Returns a total of the Amount field on records in opportunities.
      * @example Decimal total = new nebc.LazySObjectIterator(opportunities)
      *      .get(Opportunity.Amount)
      *      .reduce(new SumDecimalField(), 0)
      * 
-     * @param accumulatorFunction the accumulator function to apply to each member in the iterator
+     * @param accumulatorFunction the accumulator function to apply to each item in the iterator
      * @param initialValue the starting value for the accumulator
      * @return the end result of the accumulation.
      */
@@ -243,8 +258,8 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     }
 
     /**
-     * Reduces all of the iterator members into a single object by calling the accumulate function on a provided 
-     * <code>AccumulatorObject</code>, for each member.
+     * Reduces all of the iterator items into a single object by calling the accumulate function on a provided
+     * <code>AccumulatorObject</code>, for each item.
      * 
      * @example //summing the Amount field on opportunity. Assumes SumDecimalField is a user-written class implementing AccumulatorObject
      * SumDecimalField accumulator = new SumDecimalField(Opportunity.Amount, 0)
@@ -252,7 +267,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .reduce(accumulator)
      * 
      * @param accumulatorObject an <code>AccumulatorObject</code> instance that will have it's accumulate method called 
-     * on every iterator member
+     * on every iterator item
      * @return the provided accumulator object
      */
     global Object reduce(AccumulatorObject accumulatorObject) {
@@ -263,8 +278,8 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     }
 
     /**
-     * Reduces all of the iterator members into a single object by calling the accumulate function on a provided 
-     * <code>VoidFunction</code>, for each member.
+     * Reduces all of the iterator items into a single object by calling the accumulate function on a provided
+     * <code>VoidFunction</code>, for each item.
      * 
      * @example //summing the Amount field on opportunity. Assumes SumDecimalField is a user-written class implementing VoidFunction
      * SumDecimalField accumulator = new SumDecimalField(Opportunity.Amount, 0)
@@ -272,7 +287,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .reduce(accumulator)
      * 
      * @param accumulatorObject an <code>VoidFunction</code> instance that will have it's accumulate method called 
-     * on every iterator member
+     * on every iterator item
      * @return the provided accumulator object
      */
     global Object reduce(VoidFunction accumulatorObject) {
@@ -473,6 +488,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .take(4)
      *      .toList(List<Account>());
      *
+     * @param nItemsToTake the number of items to take
      * @return a <code>LazyIterator</code> of <code>nItemsToTake</code> length
      */
     global LazyIterator take(Integer nItemsToTake) {
@@ -487,6 +503,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .prepend(new nebc.LazyIterator(otherAccounts))
      *      .toList(List<Account>());
      *
+     * @param other the other iterator to prepend
      * @return a <code>LazyIterator</code> of the combined iterators
      */
     global LazyIterator prepend(LazyIterator other) {
@@ -501,6 +518,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .append(new nebc.LazyIterator(otherAccounts))
      *      .toList(List<Account>());
      *
+     * @param other the other iterator to append
      * @return a <code>LazyIterator</code> of the combined iterators
      */
     global LazyIterator append(LazyIterator other) {
@@ -515,6 +533,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .append(otherAccount)
      *      .toList(List<Account>());
      *
+     * @param item the item to append to the iterator
      * @return a <code>LazyIterator</code> of the iterator and the appended record
      */
     global LazyIterator append(Object item) {
@@ -529,6 +548,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      *      .prepend(otherAccount)
      *      .toList(List<Account>());
      *
+     * @param item the item to prepend to the iterator
      * @return a <code>LazyIterator</code> of the prepended record and the iterator
      */
     global LazyIterator prepend(Object item) {
