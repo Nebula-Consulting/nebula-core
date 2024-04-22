@@ -133,7 +133,7 @@ global inherited sharing class LazySObjectIterator extends LazyIterator {
     }
 
     /**
-    * Applies the mapping function to every record in the LazySObjectIterator.
+    * Applies the mapping function to every record in the LazySObjectIterator that meets the filter criteria.
     *
     * @example
     * //For every account that has a billing address a contact is created using
