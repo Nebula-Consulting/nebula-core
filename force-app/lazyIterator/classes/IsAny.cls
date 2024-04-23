@@ -86,8 +86,8 @@ global class IsAny implements BooleanFunction {
   * @return if any of the BooleanFunctions evaluate to true, the IsAny will return true. If all fail, then false is returned
   */
     global Boolean isTrueFor(Object o) {
-        for (BooleanFunction thisBooleanFunction : booleanFunctions) {
-            if (thisBooleanFunction.isTrueFor(o)) {
+        for(BooleanFunction thisBooleanFunction : booleanFunctions) {
+            if(thisBooleanFunction.isTrueFor(o)) {
                 return true;
             }
         }
