@@ -3,7 +3,6 @@
  * @date 03/09/2018
  * @description For measuring governor limit usage, each subclass represents a particular limit to measure
  */
-
 global abstract class LimitDatum {
 
     global Long headroom;

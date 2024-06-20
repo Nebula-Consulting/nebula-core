@@ -4,7 +4,6 @@
  * @description Simplifies making dynamic queries by handling FieldSets, and sorting out sets of fields to remove 
  * duplicates
  */
-
 global inherited sharing class QueryBuilder {
 
     private String typeName;

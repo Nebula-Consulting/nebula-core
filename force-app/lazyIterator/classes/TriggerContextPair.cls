@@ -3,7 +3,6 @@
  * @date 2019-03-22
  * @description A pair of SObject records (old and new) from a trigger context
  */
-
 global class TriggerContextPair extends TwoTuple {
 
     global SObject oldRecord {get {return (SObject)left;} private set;}

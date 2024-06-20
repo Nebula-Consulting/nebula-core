@@ -3,7 +3,6 @@
  * @date 09/09/2020
  * @description A 2-Tuple of Database.SaveResult and SObject
  */
-
 global class SaveResult extends TwoTuple implements DatabaseResult {
 
     global Database.SaveResult saveResult {get {return (Database.SaveResult)left;} set; }

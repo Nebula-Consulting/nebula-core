@@ -3,7 +3,6 @@
  * @date 02/07/2021
  * @description A tuple for just two items. If possible, use this instead of ListTuple with two items.
  */
-
 global virtual class TwoTuple implements Tuple {
 
     global Object left {get; private set;}

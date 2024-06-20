@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 2019-07-10
  */
-
 global class IsUniqueOn implements BooleanFunction {
 
     private Function function;

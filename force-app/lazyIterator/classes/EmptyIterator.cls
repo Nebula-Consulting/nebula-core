@@ -3,7 +3,6 @@
  * @date 29/04/2020
  * @description An iterator representing no data/results
  */
-
 global class EmptyIterator implements Iterator<Object> {
 
     private static EmptyIterator instance;

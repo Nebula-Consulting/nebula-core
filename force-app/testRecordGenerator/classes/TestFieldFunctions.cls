@@ -3,7 +3,6 @@
  * @date 2019-03-04
  * @description Some standard implementations of TestFieldFunction
  */
-
 global class TestFieldFunctions {
 
     global abstract class TestFieldFunctionWithParent implements TestFieldFunction {

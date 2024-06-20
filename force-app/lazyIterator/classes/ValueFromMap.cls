@@ -4,7 +4,6 @@
  * @description Get a value from a Map<String, Object> (note that we cannot fully generalise to all maps without access
  * to generic types)
  */
-
 global class ValueFromMap implements Function {
 
     private final String key;

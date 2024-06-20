@@ -3,7 +3,6 @@
  * @date 14/09/2020
  * @description Expects to be called on an Iterator<Object>. Returns next() if available, else defaultObject
  */
-
 global class FirstOrDefault implements Function {
 
     private Object defaultObject;

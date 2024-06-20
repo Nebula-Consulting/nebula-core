@@ -4,7 +4,6 @@
  * @description Generates a record for TestRecords by using the Parameters__c field of Test_Record_Generator__mdt to
  * define constants or functions for each field
  */
-
 global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
     private Map<SObjectField, FieldValueGenerator> fieldValueGenerators = new Map<SObjectField, FieldValueGenerator>();

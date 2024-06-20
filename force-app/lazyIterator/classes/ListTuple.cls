@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 10/09/2020
  */
-
 global virtual class ListTuple implements Tuple {
 
     private List<Object> entries;

@@ -4,7 +4,6 @@
  * @description Describe calls are expensive - stores the results in a cache for fast access,
  * and access by name/token
  */
-
 global class DescribeCache {
 
     global static Map<String, Schema.SObjectType> globalDescribe {

@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 05/09/2019
  */
-
 global class ConstantBooleanFunction implements BooleanFunction {
 
     private Boolean value;

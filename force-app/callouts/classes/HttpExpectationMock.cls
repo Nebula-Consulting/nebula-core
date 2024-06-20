@@ -3,7 +3,6 @@
  * @date 24/11/2021
  * @description A generic mock for HTTP Callouts
  */
-
 global class HttpExpectationMock implements HttpCalloutMock {
 
     private List<HttpExpectation> expectations = new List<HttpExpectation>();

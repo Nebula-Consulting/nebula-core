@@ -3,7 +3,6 @@
  * @date 2019-03-22
  * @description Iterates over the pair of lists that you get from a Trigger context, returning them in Pairs
  */
-
 global class TriggerContextIterator implements Iterator<TriggerContextPair> {
 
     private Iterator<SObject> newIterator;
