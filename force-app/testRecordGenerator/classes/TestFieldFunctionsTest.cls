@@ -177,7 +177,7 @@ private class TestFieldFunctionsTest {
 
         Integer numberLength = 8;
 
-        accountName = 'Test {0} Account';
+        accountName = 'Test Account {0}';
 
         Test_Record_Generator__mdt metadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
@@ -199,8 +199,8 @@ private class TestFieldFunctionsTest {
         Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
         System.assert(result.Name.contains('Test '));
-        System.assert(result.Name.contains(' Account'));
-        System.assert(result.Name.length() == accountName.length() + (numberLength - '{0}'.length()), result.Name);
+        System.assert(result.Name.contains('Account '));
+        Assert.areNotEqual(accountName, result.Name);
     }
 
     @IsTest

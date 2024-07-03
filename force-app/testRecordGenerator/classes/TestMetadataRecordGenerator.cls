@@ -24,7 +24,7 @@ global class TestMetadataRecordGenerator extends TestRecordGenerator {
 
     public override SObject generateRecord() {
         Map<String, Object> concreteObjectDescription = new Map<String, Object>();
-        Type sObjectClass = TypeLoader.getType(metadata.SObject__c);
+        Type sObjectClass = TypeLoader.getType('Schema.' + metadata.SObject__c);
         Map<String, SObjectField> fields = ((SObject)sObjectClass.newInstance()).getSObjectType().getDescribe().fields.getMap();
         Map<String, Blob> fieldToBlobValue = new Map<String, Blob>();
 

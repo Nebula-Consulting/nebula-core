@@ -317,4 +317,20 @@ private class TestRecordSourceTest {
         System.assertEquals(accountDescription, result.Description);
         System.assertEquals(accountStreet, result.BillingStreet);
     }
+
+    @IsTest
+    static void createLocation() {
+
+        testRecordSource.addTemporaryMetadataFromInstance(new Schema.Location(Name = 'Example Location'), 1);
+
+        Test.startTest();
+
+        testRecordSource.getRecord(Schema.Location.SObjectType).withInsert();
+
+        Test.stopTest();
+
+        Assert.isTrue(true);
+
+    }
+
 }
