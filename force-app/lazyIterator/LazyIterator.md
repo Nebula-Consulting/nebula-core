@@ -103,7 +103,7 @@ updateAccountRollUps(accountIds);
 
 The declarative implementation, using LazyIterator, is [ContactNumberOfContactsRollUpDeclarative](examples/main/default/classes/ContactNumberOfContactsRollUpDeclarative.cls).
 In that implementation, finding the set of account ids where we need to re-process the roll-ups 
-is as follows (note: it's actually spread across two functions in the orignal code, but I've put it together below, for 
+is as follows (note: it's actually spread across two functions in the original code, but I've put it together below, for 
 clarity/brevity):
 ```
 Set<Id> accountIds = new LazyTriggerContextPairIterator(oldList, newList)
