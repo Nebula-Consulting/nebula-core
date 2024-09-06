@@ -401,6 +401,56 @@ private class TestFieldFunctionsTest {
     }
 
     @IsTest
+    static void createRecordLocation() {
+        // Create a standard variant of Location
+        Test_Record_Generator__mdt metadataLocation = testRecordSource.addTemporaryMetadata(
+            new Test_Record_Generator__mdt(
+                Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                SObject__c = 'Location'
+            ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+            new Test_Record_Generator_Field__mdt(
+                Test_Record_Generator__c = metadataLocation.Id,
+                Field__c = 'Name',
+                Apex_Class__c = TestFieldFunctions.AppendRandomNumber.class.getName(),
+                Value__c = 'Test Location'
+            )
+        });
+
+        Schema.Location locationResult = (Schema.Location)testRecordSource.getRecord(Schema.Location.SObjectType).withoutInsert();
+
+        Test_Record_Generator__mdt metadataLocationWithParent = testRecordSource.addTemporaryMetadata(
+            new Test_Record_Generator__mdt(
+                Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
+                SObject__c = 'Location',
+                Variant__c = 'With Parent'
+            ));
+        testRecordSource.addTemporaryMetadataFields(new List<Test_Record_Generator_Field__mdt>{
+            new Test_Record_Generator_Field__mdt(
+                Test_Record_Generator__c = metadataLocationWithParent.Id,
+                Field__c = 'Name',
+                Apex_Class__c = TestFieldFunctions.AppendRandomNumber.class.getName(),
+                Value__c = 'Test Location'
+            ),
+            new Test_Record_Generator_Field__mdt(
+                Test_Record_Generator__c = metadataLocationWithParent.Id,
+                Field__c = 'ParentLocationId',
+                Apex_Class__c = TestFieldFunctions.CreateRecord.class.getName(),
+                Apex_Class_Parameters__c = '{"sObjectType": "Location"}'
+            )
+        });
+
+        Schema.Location testLocation = (Schema.Location)testRecordSource
+            .getRecord(Schema.Location.SObjectType)
+            .asVariant('With Parent')
+            .withInsert();
+
+        Schema.Location parent = [SELECT Id FROM Location WHERE Id != :testLocation.Id LIMIT 1];
+
+        System.assertEquals(parent.Id, testLocation.ParentLocationId);
+    }
+
+    @IsTest
     static void createRecordWithParameterVariant() {
         // Create a standard variant of Account
         appendRandomNumber();
