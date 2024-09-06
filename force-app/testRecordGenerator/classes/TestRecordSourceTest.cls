@@ -62,7 +62,7 @@ private class TestRecordSourceTest {
             System.assert(message.contains(className));
             return;
         }
-        System.assert(false, 'Should have thrown exception');
+        System.assert(false, 'Should have thrown exception - This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
     }
 
     @IsTest
@@ -73,7 +73,7 @@ private class TestRecordSourceTest {
 
         Account result = (Account)testRecordSource.getRecord(Account.SObjectType).withoutInsert();
 
-        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountName, result.Name, 'This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
     }
 
     @IsTest
@@ -100,7 +100,7 @@ private class TestRecordSourceTest {
 
         Account result = (Account)testRecordSource.getRecord(Account.SObjectType).asVariant(variantName).withoutInsert();
 
-        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountName, result.Name, 'This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
         System.assertEquals(accountDescription, result.Description);
     }
     @IsTest
@@ -146,7 +146,7 @@ private class TestRecordSourceTest {
 
         System.assertEquals(accountWebsite, result.Website);
         System.assertEquals(accountDescription, result.Description);
-        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountName, result.Name, 'This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
     }
 
     @IsTest
@@ -255,7 +255,7 @@ private class TestRecordSourceTest {
         List<Account> results = testRecordSource.getRecord(Account.SObjectType).withoutInsert(2);
 
         System.assertEquals(2, results.size());
-        System.assertNotEquals(results[0].Name, results[1].Name);
+        System.assertNotEquals(results[0].Name, results[1].Name, 'This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
         System.assert(results[0].Name.startsWith(accountName));
         System.assert(results[1].Name.startsWith(accountName));
     }
@@ -281,7 +281,7 @@ private class TestRecordSourceTest {
         List<Account> results = testRecordSource.getRecord(Account.SObjectType).withInsert(2);
 
         System.assertEquals(2, results.size());
-        System.assertNotEquals(results[0].Name, results[1].Name);
+        System.assertNotEquals(results[0].Name, results[1].Name, 'This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
         System.assert(results[0].Name.startsWith(accountName));
         System.assert(results[1].Name.startsWith(accountName));
     }
@@ -292,11 +292,11 @@ private class TestRecordSourceTest {
         String accountStreet = '123 Lane';
         String variantName = 'Derived Account';
 
-        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0);
+        testRecordSource.addTemporaryMetadataFromInstance(new Account(Name = accountName), 0.0);
         Test_Record_Generator__mdt recordGeneratorMetadata = testRecordSource.addTemporaryMetadata(
                 new Test_Record_Generator__mdt(
                         Apex_Class__c = TestMetadataRecordGenerator.class.getName(),
-                        Priority__c = 0,
+                        Priority__c = 0.0,
                         SObject__c = 'Account',
                         Variant__c = variantName
                 ));
@@ -313,7 +313,7 @@ private class TestRecordSourceTest {
                 .asVariant(variantName)
                 .withoutInsert();
 
-        System.assertEquals(accountName, result.Name);
+        System.assertEquals(accountName, result.Name, 'This might fail if there is already an Account in the metadata. It shouldnt fail when building.');
         System.assertEquals(accountDescription, result.Description);
         System.assertEquals(accountStreet, result.BillingStreet);
     }
