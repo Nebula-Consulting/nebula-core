@@ -1,7 +1,7 @@
 # Nebula Core
 
- - Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04tQB000000FUx3YAG
- - Include in your SFDX project as `"Nebula Core": "04tQB000000FUx3YAG"`
+ - Paste this onto the end of your My Domain URL: /packaging/installPackage.apexp?p0=04tQB000000Vrb7YAC
+ - Include in your SFDX project as `"Nebula Core": "04tQB000000Vrb7YAC"`
  
 The base set of classes used by Nebula Consulting. The licence for this code is MIT, see [LICENSE](LICENSE). 
 
