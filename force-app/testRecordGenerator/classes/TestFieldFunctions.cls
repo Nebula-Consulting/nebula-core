@@ -84,7 +84,7 @@ global class TestFieldFunctions {
         global String name;
 
         global Object getValue(String fieldName, Object value) {
-            SObjectType sObjectType = ((SObject) TypeLoader.getType((String) sObjectType).newInstance()).getSObjectType();
+            SObjectType sObjectType = ((SObject) TypeLoader.getType('Schema.'+ sObjectType).newInstance()).getSObjectType();
             return new NamedSObjectCache(sObjectType, name).getObject().Id;
         }
     }
@@ -103,7 +103,7 @@ global class TestFieldFunctions {
         global Integer numberOfRecords;
 
         global Object getValue(String fieldName, Object value) {
-            SObject targetInstance = (SObject) TypeLoader.getType((String) sObjectType).newInstance();
+            SObject targetInstance = (SObject) TypeLoader.getType('Schema.'+ sObjectType).newInstance();
             if(variantParameter != null) {
                 variant = (String)parentGenerator.getParameter(variantParameter);
             }

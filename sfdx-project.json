@@ -8,24 +8,9 @@
       "versionNumber": "0.81.0.NEXT"
     },
     {
-      "path": "nebula-triggers",
-      "default": false,
-      "package": "Nebula Triggers",
-      "versionName": "0.1",
-      "versionNumber": "0.1.0.NEXT"
-    },
-    {
-      "path": "nebula-test-records",
-      "default": false,
-      "package": "Nebula Test Records",
-      "versionName": "0.1",
-      "versionNumber": "0.1.0.NEXT"
-    },
-    {
       "path": "examples"
     }
   ],
-  "pushPackageDirectoriesSequentially": true,
   "namespace": "nebc",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "59.0",
