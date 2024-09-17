@@ -4,7 +4,6 @@
  * @description Emails the given address with the results of a metadata deployment (see
  * Metadata.Operations.enqueueDeployment)
  */
-
 global class EmailResultsMetadataDeployCallback implements Metadata.DeployCallback{
 
     private String emailAddress;

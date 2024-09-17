@@ -3,7 +3,6 @@
  * @date 15/10/2019
  * @description Calls JSON.deserialize
  */
-
 global class JsonDeserialize implements Function {
 
     private Type outputType;

@@ -4,7 +4,6 @@
  * @description Custom exceptions do not include stack traces (https://success.salesforce.com/issues_view?id=a1p300000008dVIAAY)
  * This works around that
  */
-
 global abstract class StackTraceException extends Exception {
 
     private String stackTrackString = createStackTraceString();

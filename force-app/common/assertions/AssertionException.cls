@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 27/04/2021
  */
-
 global class AssertionException extends Exception {
 
     public Object actual;

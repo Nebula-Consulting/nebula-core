@@ -3,7 +3,6 @@
  * @date 10/11/2021
  * @description Puts values into map-like objects e.g. Map, SObjectIndex, SObject. Call with a 2-tuple of <key, value>
  */
-
 global class PutTo implements nebc.Function {
 
     private Puttable target;

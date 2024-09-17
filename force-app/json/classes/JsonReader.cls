@@ -4,7 +4,6 @@
  * @description Read keys from a JSON object by specifying the path. Suitable for only a small number of reads as
  * each one is found independently
  */
-
 global class JsonReader {
 
         private Object theData;

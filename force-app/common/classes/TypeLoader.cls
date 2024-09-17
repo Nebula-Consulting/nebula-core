@@ -3,7 +3,6 @@
  * @date 04/09/2018
  * @description Functions for loading/instantiating types
  */
-
 global class TypeLoader {
 
     /**

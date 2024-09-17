@@ -3,7 +3,6 @@
  * @date 11/05/2018
  * @description Utilities around getting stack traces and error messages
  */
-
 global class StackTraces {
 
     /**

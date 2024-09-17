@@ -5,7 +5,6 @@
  * a reserved word). This is a class instead of an enum so that we can have custom values that match the strings expected
  * by HtttpRequest
  */
-
 global class HttpMethod {
 
     global static HttpMethod HTTP_POST = new HttpMethod('POST');

@@ -4,7 +4,6 @@
  * @description Function to extract field values from SObject instances using a string and SObjectGetter, so you can
  * follow through relationship fields
  */
-
 global class FieldFromSObjectString implements Function {
 
     private String field;

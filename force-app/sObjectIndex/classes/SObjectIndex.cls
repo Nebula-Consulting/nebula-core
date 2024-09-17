@@ -4,7 +4,6 @@
  * @description Container for SObjects, indexed by one or more of the SObject's fields. Fields can be references to
  * related objects, and a case-insensitive mode is available.
  */
-
 global class SObjectIndex implements SObjectIndexI, Container {
 
     global SObjectIndex(String fieldName)  {

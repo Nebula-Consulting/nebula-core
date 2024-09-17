@@ -4,7 +4,6 @@
  * @description Calls String.format() on the given format string. The string should contains {0} to inject
  * the value provided to call(Object o)
  */
-
 global class StringFormat implements Function {
 
     private String formatString;

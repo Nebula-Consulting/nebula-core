@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 24/11/2021
  */
-
 global class IsRegexMatch implements BooleanFunction {
 
     private Pattern regexToMatch;

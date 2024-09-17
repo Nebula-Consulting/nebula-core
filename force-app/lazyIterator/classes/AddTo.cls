@@ -4,7 +4,6 @@
  * @description Adds the given value to a collection-like class supporting add(). Note that this is not a terminator
  * function
  */
-
 global with sharing class AddTo implements Function {
 
     private Addable addable;

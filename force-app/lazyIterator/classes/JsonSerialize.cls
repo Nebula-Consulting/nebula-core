@@ -3,7 +3,6 @@
  * @date 11/10/2019
  * @description Calls JSON.serialize()
  */
-
 global class JsonSerialize implements Function, Serializer {
 
     private Boolean suppressApexObjectNulls;

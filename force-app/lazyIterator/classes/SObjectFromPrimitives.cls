@@ -4,7 +4,6 @@
  * @description A mapping function which creates a series of SObjects based on the provided prototype, also setting
  * the given field to the value coming from the iterator
  */
-
 global class SObjectFromPrimitives implements Function {
 
     private SObject prototype;

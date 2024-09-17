@@ -3,7 +3,6 @@
  * @date 10/09/2020
  * @description For iterating over a tuple of iterators. Stops when the first iterator returns hasNext()=false
  */
-
 global class TupleIterator implements Iterator<Tuple> {
 
     private Tuple iterators;

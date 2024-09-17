@@ -3,7 +3,6 @@
  * @date 2019-05-13
  * @description Generates fake Ids that look like real ids for records that never get inserted
  */
-
 global class TestIdGenerator implements Iterator<Id> {
 
     private String keyPrefix;

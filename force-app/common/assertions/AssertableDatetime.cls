@@ -3,7 +3,6 @@
  * @date 29/11/2021
  * @description A Datetime that can be asserted in various ways, for use with Assertion
  */
-
 global class AssertableDatetime {
 
     public Datetime actual {get; private set;}

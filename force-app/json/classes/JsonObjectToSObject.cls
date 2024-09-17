@@ -3,7 +3,6 @@
  * @date 2019-03-06
  * @description Converts a typical JSON.deserialize() result into an SObject or SObjects in a configurable way
  */
-
 global class JsonObjectToSObject {
 
     private Schema.SObjectType objectType;

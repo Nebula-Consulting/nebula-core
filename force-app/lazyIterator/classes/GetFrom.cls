@@ -3,7 +3,6 @@
  * @date 18/10/2019
  * @description Get values from map-like objects e.g. Map, SObjectIndex, SObject
  */
-
 global class GetFrom implements Function {
 
     private Gettable theGettable;

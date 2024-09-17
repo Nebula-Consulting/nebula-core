@@ -3,7 +3,6 @@
  * @date 29/11/2021
  * @description A String that can be asserted in various ways, for use with Assertion
  */
-
 global class AssertableString {
 
     private String actual;

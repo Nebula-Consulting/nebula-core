@@ -4,7 +4,6 @@
  * @description Applies two functions to the corresponding elements of a tuple (at least size 2) i.e. given a tuple,
  * <o1, o2, ...>,  and a pair of functions, f1 and f2, returns a two-tuple as <f1(o1), f2(o1)>
  */
-
 global class TwoTupleMapValues implements Function {
 
     private Function function1;

@@ -4,7 +4,6 @@
  * @description A ternary for composing functions. If the condition function evaluates to true, then calls thenFunction.
  * Otherwise, calls elseFunction (which defaults to nebc.IdentityFunction if absent)
  */
-
 global class IfThen implements Function {
 
     private BooleanFunction condition;

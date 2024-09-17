@@ -3,7 +3,6 @@
  * @date 2019-06-21
  * @description Note that the string version does not support nested fields - you'd never get these from a trigger context
  */
-
 global class IsFieldChangedInTrigger extends TriggerContextBooleanFunction {
 
     final private String field;

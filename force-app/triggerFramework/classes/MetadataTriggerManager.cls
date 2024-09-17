@@ -14,7 +14,6 @@
 * 	link it to the trigger by creating a Trigger_Handler__mdt custom metadata record for each
 *	event when you handler needs to run.
 */
-
 global with sharing class MetadataTriggerManager {
 
     // Don't really want this to be global, but other packages in the nebc namespace need to use it
