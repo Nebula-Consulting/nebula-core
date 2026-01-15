@@ -178,6 +178,7 @@ global class SObjectIndex implements SObjectIndexI, Container {
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
     global List<SObject> getAll(Map<String, Object> spec) {
+        validateKeys(spec);
         if(spec.containsKey(thisIndexField)) {
             SObjectIndexI thisIndex = children.get(getKeyFrom(spec));
             return thisIndex != null ? thisIndex.getAll(spec) : new List<SObject>();
@@ -274,6 +275,7 @@ global class SObjectIndex implements SObjectIndexI, Container {
     * @return the list of objects removed, or an empty list if there were no matches
     */
     global List<SObject> remove(Map<String, Object> spec) {
+        validateKeys(spec);
         if(spec.containsKey(thisIndexField)) {
             SObjectIndexI thisIndex = children.get(getKeyFrom(spec));
             return thisIndex != null ? thisIndex.remove(spec) : new List<SObject>();
@@ -284,6 +286,17 @@ global class SObjectIndex implements SObjectIndexI, Container {
                 removedValues.addAll(subIndices[i].remove(spec));
             }
             return removedValues;
+        }
+    }
+
+    private void validateKeys(Map<String, Object> spec) {
+        if(thisIndexDepth == 0) {
+            Set<String> validFields = new Set<String>(allIndexFields);
+            for(String key : spec.keySet()) {
+                if(!validFields.contains(key)) {
+                    throw new IllegalArgumentException('Key ' + key + ' is not in the index fields: ' + allIndexFields);
+                }
+            }
         }
     }
 
