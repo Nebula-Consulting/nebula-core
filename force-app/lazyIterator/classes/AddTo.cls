@@ -1,8 +1,8 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 14/07/2021
- * @description Adds the given value to a collection-like class supporting add(). Note that this is not a terminator
- * function
+ * @description Adds the given value to a collection-like class supporting add(). Supports Set, List, SObjectIndex,
+ * and Map (using TwoTuple for key-value pairs). Note that this is not a terminator function
  */
 
 global with sharing class AddTo implements Function {
