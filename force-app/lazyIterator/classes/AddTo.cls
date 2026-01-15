@@ -25,6 +25,10 @@ global with sharing class AddTo implements Function {
         addable = new SObjectIndexAddable(container);
     }
 
+    global AddTo(Map<Object, Object> container) {
+        addable = new MapObjectAddable(container);
+    }
+
     global Object call(Object o) {
         addable.add(o);
         return o;
@@ -78,6 +82,20 @@ global with sharing class AddTo implements Function {
 
         public void add(Object o) {
             container.put((SObject)o);
+        }
+    }
+
+    private class MapObjectAddable implements Addable {
+
+        private Map<Object, Object> container;
+
+        public MapObjectAddable(Map<Object, Object> container) {
+            this.container = container;
+        }
+
+        public void add(Object o) {
+            TwoTuple tuple = (TwoTuple)o;
+            container.put(tuple.left, tuple.right);
         }
     }
 }

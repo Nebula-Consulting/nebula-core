@@ -63,4 +63,48 @@ private class AddToTest {
             System.assert(nameToAccount.contains(thisAccount.Name));
         }
     }
+
+    @IsTest
+    static void mapObjectObject() {
+        Map<Object, Object> accountNameToId = new Map<Object, Object>();
+        new LazySObjectIterator(accounts)
+                .get(Account.Name)
+                .mapValues(new ToPair(new FieldFromSObject(Account.Id)))
+                .forEach(new AddTo(accountNameToId));
+
+        for(Account thisAccount : accounts) {
+            System.assert(accountNameToId.containsKey(thisAccount.Name));
+            System.assertEquals(thisAccount.Id, accountNameToId.get(thisAccount.Name));
+        }
+        System.assertEquals(accounts.size(), accountNameToId.size());
+    }
+
+    @IsTest
+    static void mapStringString() {
+        Map<Object, Object> accountIdToName = new Map<Object, Object>();
+        new LazySObjectIterator(accounts)
+                .get(Account.Id)
+                .mapValues(new ToPair(new FieldFromSObject(Account.Name)))
+                .forEach(new AddTo(accountIdToName));
+
+        for(Account thisAccount : accounts) {
+            System.assert(accountIdToName.containsKey(thisAccount.Id));
+            System.assertEquals(thisAccount.Name, accountIdToName.get(thisAccount.Id));
+        }
+        System.assertEquals(accounts.size(), accountIdToName.size());
+    }
+
+    @IsTest
+    static void mapIdSObject() {
+        Map<Object, Object> idToAccount = new Map<Object, Object>();
+        new LazySObjectIterator(accounts)
+                .mapValues(new ToTwoTuple(new FieldFromSObject(Account.Id), new FieldFromSObject(Account.Name)))
+                .forEach(new AddTo(idToAccount));
+
+        for(Account thisAccount : accounts) {
+            System.assert(idToAccount.containsKey(thisAccount.Id));
+            System.assertEquals(thisAccount.Name, idToAccount.get(thisAccount.Id));
+        }
+        System.assertEquals(accounts.size(), idToAccount.size());
+    }
 }
