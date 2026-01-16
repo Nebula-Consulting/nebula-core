@@ -68,8 +68,7 @@ private class AddToTest {
     static void mapObjectObject() {
         Map<Object, Object> accountNameToId = new Map<Object, Object>();
         new LazySObjectIterator(accounts)
-                .get(Account.Name)
-                .mapValues(new ToPair(new FieldFromSObject(Account.Id)))
+                .mapValues(new ToTwoTuple(new FieldFromSObject(Account.Name), new FieldFromSObject(Account.Id)))
                 .forEach(new AddTo(accountNameToId));
 
         for(Account thisAccount : accounts) {
@@ -83,8 +82,7 @@ private class AddToTest {
     static void mapStringString() {
         Map<Object, Object> accountIdToName = new Map<Object, Object>();
         new LazySObjectIterator(accounts)
-                .get(Account.Id)
-                .mapValues(new ToPair(new FieldFromSObject(Account.Name)))
+                .mapValues(new ToTwoTuple(new FieldFromSObject(Account.Id), new FieldFromSObject(Account.Name)))
                 .forEach(new AddTo(accountIdToName));
 
         for(Account thisAccount : accounts) {
