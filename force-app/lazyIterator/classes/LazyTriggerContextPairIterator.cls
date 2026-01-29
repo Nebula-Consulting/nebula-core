@@ -39,7 +39,7 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
     /** Retrieves just the old records from the Trigger Context Pair
      * @example
      * List<Account> oldAccounts = new nebc.LazyTriggerContextPairIterator(Trigger.old, Trigger.new)
-     *      .newRecords()
+     *      .oldRecords()
      *      .toList();
      *
      * @return <code>LazySObjectIterator</code> of the Trigger.old records from the TriggerContextPair
@@ -81,7 +81,7 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
 
     /**
      * Removes TriggerContextPair instances from the iterator that do not pass the filter conditions after the mapping function
-     * hass been applied to it. The filter conditions areprovided by a <code>BooleanFunction</code>. If the
+     * has been applied to it. The filter conditions are provided by a <code>BooleanFunction</code>. If the
      * <code>BooleanFunction</code>'s <code>isTrueFor</code> method evaluates to false when called on the TriggerContextPair,
      * the instance is removed.
      *
@@ -89,7 +89,7 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
      * new nebc.LazyTriggerContextPairIterator(trigger.old, trigger.new)
      *              .filterT(new nebc.IsFieldChangedInTrigger(Account.Name))
      *              .filterT(
-     *                  new nebc.Composition(new nebc.NewFromTriggerContextPair(), new nebc.FieldFromSObject(Account.Name))
+     *                  new nebc.Composition(new nebc.NewFromTriggerContextPair(), new nebc.FieldFromSObject(Account.Name)),
      *                  new nebc.IsEqual('To Archive')
      *              )
      *              .toList();
@@ -245,7 +245,7 @@ global class LazyTriggerContextPairIterator extends LazyIterator {
      * //The StringFormat function will put 'Closed - ' in front of the name from the old record.
      * new nebc.LazyTriggerContextPairIterator(trigger.old, trigger.new)
      *      .filterBecameTrue(new nebc.IsSObjectFieldEqual(Opportunity.StageName, 'Closed Won'))
-     *      .mapNewFromOld(Opportunity.Name, Opportunity.Name, new nebc.StringFormat('Closed - {0}')
+     *      .mapNewFromOld(Opportunity.Name, Opportunity.Name, new nebc.StringFormat('Closed - {0}'))
      *      .forEach();
      *
      * @param destinationField the field on the new record where the calculated value will be put

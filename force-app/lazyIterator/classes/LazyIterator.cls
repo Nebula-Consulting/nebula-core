@@ -156,7 +156,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     *      .mapValues(new nebc.FieldFromSObject(Account.BillingState))
     *      .toSet(new Set<String>());
     *
-    * @param toFill a set of Strings fill with the values from the iterator
+    * @param toFill a set of Strings to fill with the values from the iterator
     *
     * @return a Set of Strings derived from the <code>LazyIterator</code>
     */
@@ -177,7 +177,7 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
     *      .mapValues(new nebc.FieldFromSObject(Opportunity.CloseDate))
     *      .toSet(new Set<Date>());
     *
-    * @param toFill a set of Object fill with the values from the iterator
+    * @param toFill a set of Object to fill with the values from the iterator
     *
     * @return a Set of Object derived from the <code>LazyIterator</code>
     */
@@ -372,9 +372,9 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      * @example //filters a list of dates for those that are older than 30 days then adds them to a set, before filtering again
      * Set<Date> datesOlderThan30Days = new Set<Date>()
      * Set<Date> datesOlderThan90Days = (Set<Date>) new nebc.LazyIterator(dates)
-     *      .filter(new nebc.IsLessThan(Date.today().addDays(-30))
+     *      .filter(new nebc.IsLessThan(Date.today().addDays(-30)))
      *      .observeValues(new nebc.AddTo(datesOlderThan30Days))
-     *      .filter(new nebc.IsLessThan(Date.today().addDays(-90))
+     *      .filter(new nebc.IsLessThan(Date.today().addDays(-90)))
      *      .toSet(new Set<Date>());
      *
      * @param observerFunction a function to call on each item, should not modify them
@@ -392,10 +392,10 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
      * also processing them another way later.
      *
      * @example //filters a list of dates for those that are older than 30 days then adds them to a set, before filtering again
-     * Set<Date> datesOlderThan30Days = new Set<Date>()
+     * Set<Date> datesOlderThan30Days = new Set<Date>();
      * Set<Date> datesOlderThan90Days = (Set<Date>) new nebc.LazyIterator(dates)
      *      .observeValues(new nebc.IsLessThan(Date.today().addDays(-30), new nebc.AddTo(datesOlderThan30Days))
-     *      .filter(new nebc.IsLessThan(Date.today().addDays(-90))
+     *      .filter(new nebc.IsLessThan(Date.today().addDays(-90)))
      *      .toSet(new Set<Date>());
      *
      * @param filterFunction a filter on which items to observe

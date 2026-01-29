@@ -52,7 +52,7 @@ global class IsEqual implements BooleanFunction {
         functions = new FunctionList(new FieldFromSObject(left), new FieldFromSObject(right));
     }
 
-    /** Constructs a boolean function that when called will evaluate whether the current iterator member is greater than right
+    /** Constructs a boolean function that when called will evaluate whether the current iterator member is equal to right
      * @example
      * //getting a count of the number of accounts with name 'Test Account'
      * Integer numberOfTestAccounts = new nebc.LazySObjectIterator(accounts)
@@ -61,7 +61,7 @@ global class IsEqual implements BooleanFunction {
      *      .toList(new List<String>())
      *      .size();
      *
-     * @param rightFunctionOrValue object that right will be evaluated for being greater than
+     * @param rightFunctionOrValue object that right will be evaluated for being equal to
      */
     global IsEqual(Object rightFunctionOrValue) {
         functions = new FunctionList(new IdentityFunction(), rightFunctionOrValue);
