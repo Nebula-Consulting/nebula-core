@@ -58,9 +58,9 @@ define expectations for specific requests, and the mock returns the appropriate 
 static void testCallout() {
     // Set up expectations
     HttpExpectationMock mock = new HttpExpectationMock();
-    mock.addExpectation(new HttpExpectation('GET', 'https://api.example.com/data')
+    mock.addExpectation(new HttpExpectation('https://api.example.com/.*', HttpMethod.HTTP_GET)
         .setResponseBody('{"status": "success"}')
-        .setStatusCode(200));
+        .setResponseStatusCode(200));
     
     NebulaApi.setMock(mock);
     
@@ -79,17 +79,17 @@ static void testCallout() {
 [HttpExpectation](classes/HttpExpectation.cls) defines what request to match and what response to return:
 
 ```apex
-// Basic expectation - matches method and endpoint
-HttpExpectation expectation = new HttpExpectation('POST', 'https://api.example.com/submit');
+// Basic expectation - matches endpoint regex and HTTP method
+HttpExpectation expectation = new HttpExpectation('https://api.example.com/submit', HttpMethod.HTTP_POST);
 
 // Configure the response
 expectation
     .setResponseBody('{"id": "12345"}')
-    .setStatusCode(201)
-    .setHeader('Content-Type', 'application/json');
+    .setResponseStatusCode(201)
+    .setResponseHeader('Content-Type', 'application/json');
 
-// Match on request body content
-expectation.addBodyParameter('username', 'testuser');
+// Verify request body content with a custom matcher
+expectation.setBodyVerification(new IsRegexMatch('.*username.*'));
 ```
 
 ### ExceptionMock
