@@ -48,10 +48,20 @@ global class GetFrom implements Function {
         this.theGettable = customGettable;
     }
 
+    /**
+     * @description Gets a value from the underlying map-like object using the provided key
+     * @param o The key to look up
+     * @return The value for the key, or default if not found
+     */
     global Object call(Object o) {
         return theGettable.get(o);
     }
 
+    /**
+     * @description Sets a default value to return when a key is not found
+     * @param defaultIfMissing The default value
+     * @return This GetFrom instance for method chaining
+     */
     global GetFrom setDefaultIfMissing(Object defaultIfMissing) {
         theGettable.setDefaultIfMissing(defaultIfMissing);
         return this;
