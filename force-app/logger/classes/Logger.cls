@@ -1,13 +1,27 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 2019-03-19
+ * @description Flexible logging framework that uses custom metadata to configure logging methods and levels
  */
 global without sharing class Logger {
 
+    /**
+     * @description Logs a message with the specified logging level and component
+     * @param logLevel The logging level (e.g., DEBUG, INFO, ERROR)
+     * @param component The component name for categorizing logs
+     * @param body The message or object to log
+     */
     global static void log(System.LoggingLevel logLevel, String component, Object body) {
         log(logLevel, component, body, null);
     }
 
+    /**
+     * @description Logs a message with the specified logging level, component, and related record
+     * @param logLevel The logging level (e.g., DEBUG, INFO, ERROR)
+     * @param component The component name for categorizing logs
+     * @param body The message or object to log
+     * @param relatedTo Optional Id of a related record
+     */
     global static void log(System.LoggingLevel logLevel, String component, Object body, Id relatedTo) {
         new LazySObjectIterator(componentToLogSetting.getAll(component))
                 .setDefaultIfEmpty(new Log_Setting__mdt(LogMethod_Class__c = DebugLogger.class.getName(), Level__c = logLevel.name()))
@@ -49,6 +63,9 @@ global without sharing class Logger {
         }
     }
 
+    /**
+     * @description Commits all pending logs to their respective log methods
+     */
     global static void commitLogs() {
         for(LogMethodObject thisActiveMethod : activeLogMethods.values()) {
             thisActiveMethod.commitLogs();
