@@ -18,11 +18,23 @@ global class Lists {
         }
     }
 
+    /**
+     * @description Sorts a list using the provided comparator
+     * @param toSort The list to sort
+     * @param comparator The comparator to use for sorting
+     * @return The sorted list
+     */
     global static List<Object> sort(List<Object> toSort, Comparator comparator) {
         toSort.sort(comparator);
         return toSort;
     }
 
+    /**
+     * @description Filters a list based on the provided filter function
+     * @param toFilter The list to filter
+     * @param filterFunction The filter function to apply
+     * @return A new list containing only matching elements
+     */
     global static List<Object> filter(List<Object> toFilter, FilterFunction filterFunction) {
         List<Object> returnVal = new List<Object>();
         for(Integer i=0; i < toFilter.size(); i++) {
