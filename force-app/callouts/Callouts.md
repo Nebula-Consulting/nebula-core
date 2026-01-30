@@ -58,7 +58,7 @@ define expectations for specific requests, and the mock returns the appropriate 
 static void testCallout() {
     // Set up expectations
     HttpExpectationMock mock = new HttpExpectationMock();
-    mock.addExpectation(new HttpExpectation('https://api.example.com/.*', HttpMethod.HTTP_GET)
+    mock.expect(new HttpExpectation('https://api.example.com/.*', HttpMethod.HTTP_GET)
         .setResponseBody('{"status": "success"}')
         .setResponseStatusCode(200));
     
