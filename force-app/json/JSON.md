@@ -32,15 +32,15 @@ Path expressions support:
 receiving data from external APIs and needing to create or update Salesforce records.
 
 ```apex
-// Define field mappings from JSON keys to SObject fields
-Map<String, SObjectField> jsonToField = new Map<String, SObjectField>{
-    'firstName' => Contact.FirstName,
-    'lastName' => Contact.LastName,
-    'emailAddress' => Contact.Email
+// Define field mappings from JSON keys to SObject field names
+Map<String, String> jsonToField = new Map<String, String>{
+    'firstName' => 'FirstName',
+    'lastName' => 'LastName',
+    'emailAddress' => 'Email'
 };
 
-JsonObjectToSObject mapper = new JsonObjectToSObject(Contact.SObjectType, jsonToField);
-
+JsonObjectToSObject mapper = new JsonObjectToSObject(Contact.SObjectType);
+mapper.setObjectFieldToSObjectField(jsonToField);
 // Convert JSON to SObject
 Map<String, Object> jsonData = new Map<String, Object>{
     'firstName' => 'John',
