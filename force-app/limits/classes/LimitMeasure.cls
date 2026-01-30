@@ -69,6 +69,10 @@ global class LimitMeasure {
 
     private Map<String, LimitDatum> limitData;
 
+    /**
+     * @description Creates a LimitMeasure with the specified limit data to monitor
+     * @param limitData List of LimitDatum instances to track
+     */
     global LimitMeasure(List<LimitDatum> limitData) {
         this.limitData = new Map<String, LimitDatum>();
         for(LimitDatum thisLimitDatum : limitData) {
@@ -77,6 +81,10 @@ global class LimitMeasure {
         clear();
     }
 
+    /**
+     * @description Combines limit headroom from another LimitMeasure
+     * @param other The other LimitMeasure to sum with
+     */
     global void sumLimits(LimitMeasure other) {
         for(String thisLimitType : other.limitData.keySet()) {
             LimitDatum otherLimitDatum = other.limitData.get(thisLimitType);
@@ -89,6 +97,10 @@ global class LimitMeasure {
         }
     }
 
+    /**
+     * @description Checks if there is enough headroom for another iteration
+     * @return True if all limits have sufficient headroom, false otherwise
+     */
     global Boolean hasEnoughForAnotherIteration() {
         for(LimitDatum thisLimitDatum : limitData.values()) {
             thisLimitDatum.updateValue();
@@ -99,6 +111,9 @@ global class LimitMeasure {
         return true;
     }
 
+    /**
+     * @description Clears all limit measurements
+     */
     global void clear() {
         for(LimitDatum thisLimitDatum : limitData.values()) {
             thisLimitDatum.clear();

@@ -17,6 +17,11 @@ global inherited sharing class NamedSObjectCache {
     private String andClause;
     private Set<String> extraFields;
 
+    /**
+     * @description Creates a cache for a named SObject
+     * @param typeName The SObjectType to cache
+     * @param name The name of the record to retrieve
+     */
     global NamedSObjectCache(SObjectType typeName, String name) {
         this.typeName = typeName;
         this.nameToObject = getNameToObject(typeName);
@@ -25,29 +30,57 @@ global inherited sharing class NamedSObjectCache {
         this.extraFields = new Set<String>();
     }
 
+    /**
+     * @description Sets the field to use for name matching
+     * @param nameField The SObjectField to use as the name field
+     * @return This NamedSObjectCache instance for method chaining
+     */
     global NamedSObjectCache setNameField(SObjectField nameField) {
         return setNameField(nameField.getDescribe().getName());
     }
 
+    /**
+     * @description Sets the field to use for name matching
+     * @param nameField The API name of the field to use as the name field
+     * @return This NamedSObjectCache instance for method chaining
+     */
     global NamedSObjectCache setNameField(String nameField) {
         this.nameFieldName = nameField;
         return this;
     }
 
+    /**
+     * @description Sets an additional WHERE clause filter
+     * @param andClause Additional WHERE clause conditions (without AND keyword)
+     * @return This NamedSObjectCache instance for method chaining
+     */
     global NamedSObjectCache setAndClause(String andClause) {
         this.andClause = andClause;
         return this;
     }
 
+    /**
+     * @description Sets additional fields to query beyond the name field
+     * @param extraFields Set of field API names to include in the query
+     * @return This NamedSObjectCache instance for method chaining
+     */
     global NamedSObjectCache setExtraFields(Set<String> extraFields) {
         this.extraFields = extraFields;
         return this;
     }
 
+    /**
+     * @description Retrieves the cached SObject by name
+     * @return The SObject matching the name, or null if not found
+     */
     global SObject getObject() {
         return getObjects().get(names.iterator().next());
     }
 
+    /**
+     * @description Retrieves multiple cached SObjects by name
+     * @return Map of names to SObjects
+     */
     global Map<String, SObject> getObjects() {
         Map<String, SObject> returnValue = new Map<String, SObject>();
         Set<String> toQuery = populateCachedResultsAndReturnMisses(returnValue);

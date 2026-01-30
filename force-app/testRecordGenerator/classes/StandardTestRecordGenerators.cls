@@ -15,6 +15,9 @@ global without sharing class StandardTestRecordGenerators {
     @TestVisible
     private Map<String, StandardTestRecordGenerator> allStandardGenerators;
 
+    /**
+     * @description Creates a StandardTestRecordGenerators instance by loading generator definitions from a static resource
+     */
     global StandardTestRecordGenerators() {
         StaticResource sr = [SELECT Id, Body FROM StaticResource WHERE Name = 'standard_test_record_generators_json' LIMIT 1];
 
@@ -23,10 +26,20 @@ global without sharing class StandardTestRecordGenerators {
                 Map<String, StandardTestRecordGenerator>.class);
     }
 
+    /**
+     * @description Deploys a standard generator for the specified SObject type
+     * @param sObjectType The SObject type to deploy a generator for
+     * @return This StandardTestRecordGenerators for method chaining
+     */
     global StandardTestRecordGenerators deploy(SObjectType sObjectType) {
         return deploy(sObjectType.getDescribe().getName());
     }
 
+    /**
+     * @description Deploys a standard generator by name
+     * @param name The name of the generator definition to deploy
+     * @return This StandardTestRecordGenerators for method chaining
+     */
     global StandardTestRecordGenerators deploy(String name) {
         Metadata.Operations.enqueueDeployment(
                 getDeployContainerFor(name),

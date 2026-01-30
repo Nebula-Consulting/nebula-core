@@ -30,6 +30,11 @@ global class PutTo implements nebc.Function {
         }
     }
 
+    /**
+     * @description Puts the key-value pair from a Tuple into the target container
+     * @param o A Tuple containing [key, value] where key is a String path
+     * @return The same Tuple passed in
+     */
     global Object call(Object o) {
         Tuple keyValue = (Tuple) o;
         target.put((String)keyValue.get(0), keyValue.get(1));
