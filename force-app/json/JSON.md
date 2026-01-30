@@ -68,11 +68,11 @@ Contact newContact = (Contact)mapper.toSObject(jsonData);
 JSON-compatible Map structures. This is useful for API responses and external integrations.
 
 ```apex
-// Define field mappings from SObject fields to JSON keys
-Map<SObjectField, String> fieldToJson = new Map<SObjectField, String>{
-    Contact.FirstName => 'firstName',
-    Contact.LastName => 'lastName',
-    Contact.Email => 'emailAddress'
+// Define field mappings from SObject field API names to JSON keys
+Map<String, String> fieldToJson = new Map<String, String>{
+    'FirstName' => 'firstName',
+    'LastName' => 'lastName',
+    'Email' => 'emailAddress'
 };
 
 SObjectToJsonObject mapper = new SObjectToJsonObject(fieldToJson);
