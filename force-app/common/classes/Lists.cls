@@ -3,7 +3,6 @@
  * @date 2019-03-07
  * @description Functions on Lists
  */
-
 global class Lists {
 
     global abstract class FilterFunction {

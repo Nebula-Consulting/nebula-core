@@ -3,7 +3,6 @@
  * @date 24/04/2020
  * @description Drop a logger in wherever a function might go. Passes through the data and logs it
  */
-
 global class Log implements Function {
 
     private LoggingLevel level = LoggingLevel.DEBUG;

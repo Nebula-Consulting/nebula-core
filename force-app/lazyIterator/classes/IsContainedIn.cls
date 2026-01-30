@@ -4,7 +4,6 @@
  * @description Construct with a container (Set, SObjectIndex, List), then isTrueFor() delegates to contains() for
  * the container
  */
-
 global class IsContainedIn implements BooleanFunction {
 
     private Container theContainer;

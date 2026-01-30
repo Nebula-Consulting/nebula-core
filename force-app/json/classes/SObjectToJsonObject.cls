@@ -3,7 +3,6 @@
  * @date 2019-03-06
  * @description Converts an SObject to a Map<String, Object>, as typically sent to JSON.serialize()
  */
-
 global class SObjectToJsonObject {
 
     private Map<String, String> sObjectFieldToJsonObjectField;

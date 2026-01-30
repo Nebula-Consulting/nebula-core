@@ -2,7 +2,6 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 2019-03-19
  */
-
 global without sharing class Logger {
 
     global static void log(System.LoggingLevel logLevel, String component, Object body) {

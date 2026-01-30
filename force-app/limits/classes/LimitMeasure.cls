@@ -5,7 +5,6 @@
  * iteration in a Queueable, or we need to break and and requeue to start a fresh transaction
  *
  */
-
 global class LimitMeasure {
 
     global class CalloutLimitDatum extends LimitDatum {

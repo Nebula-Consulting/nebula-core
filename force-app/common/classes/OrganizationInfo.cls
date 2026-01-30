@@ -3,7 +3,6 @@
  * @date 2019-08-16
  * @description Cached access to Organization info
  */
-
 global with sharing class OrganizationInfo {
 
     global static Organization organization;

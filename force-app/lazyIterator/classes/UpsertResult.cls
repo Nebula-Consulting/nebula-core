@@ -3,7 +3,6 @@
  * @date 16/11/2022
  * @description A 2-Tuple of Database.UpsertResult and SObject
  */
-
 global class UpsertResult extends TwoTuple implements DatabaseResult {
 
     public static NewInstance newInstance = new NewUpsertResult();

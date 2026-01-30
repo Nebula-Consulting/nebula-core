@@ -5,7 +5,6 @@
  * for standard objects. Results are emailed to the current user. Beware, this will overwrite existing definitions if
  * they have the same name
  */
-
 global without sharing class StandardTestRecordGenerators {
 
     private class StandardTestRecordGenerator {

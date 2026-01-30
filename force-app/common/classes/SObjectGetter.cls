@@ -4,7 +4,6 @@
  * @description Allows the retrieval of fields on related objects using calls such as get('Related__r.Field__c') which 
  * are not directly possible on SObject
  */
-
 global class SObjectGetter {
     
     global static Object get(SObject obj, String field) {

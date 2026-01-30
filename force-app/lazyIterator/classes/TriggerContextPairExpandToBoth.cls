@@ -3,7 +3,6 @@
  * @date 2019-07-12
  * @description Expands a TriggerContextPair to both records by themselves
  */
-
 global class TriggerContextPairExpandToBoth implements ExpansionFunction {
 
     private Iterator<Object> iterator;

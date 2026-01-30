@@ -4,7 +4,6 @@
  * @description A boolean function which takes two Functions/Objects that can be applied to the test values before
  * comparing with <.
  */
-
 global class IsLessThan implements BooleanFunction {
 
     private FunctionList functions;

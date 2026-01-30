@@ -3,7 +3,6 @@
  * @date 2019-04-10
  * @description Function to extract field values from SObject instances
  */
-
 global class FieldFromSObject implements Function {
 
     private SObjectField field;

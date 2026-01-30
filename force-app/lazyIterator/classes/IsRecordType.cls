@@ -4,7 +4,6 @@
  * @description For testing SObjects against record types. If constructed with just the developer name, each object to
  * test can be a different SObjectType. However, this is less efficient.
  */
-
 global class IsRecordType implements BooleanFunction {
 
     private String developerName;
