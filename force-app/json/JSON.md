@@ -54,11 +54,12 @@ Contact newContact = (Contact)mapper.toSObject(jsonData);
 // newContact.Email = 'john.smith@example.com'
 ```
 
-The mapper can also work with JSON strings directly:
+The mapper can also work with JSON strings by first deserializing them into a `Map<String, Object>`:
 
 ```apex
 String jsonString = '{"firstName": "John", "lastName": "Smith"}';
-Contact newContact = (Contact)mapper.toSObject(jsonString);
+Map<String, Object> jsonData = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+Contact newContact = (Contact)mapper.toSObject(jsonData);
 ```
 
 ### SObjectToJsonObject
