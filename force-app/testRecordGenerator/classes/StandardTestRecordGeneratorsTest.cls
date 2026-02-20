@@ -87,7 +87,7 @@ private class StandardTestRecordGeneratorsTest {
         Test.stopTest();
 
         List<Metadata.Metadata> resultMetadata = result.getMetadata();
-        System.assertEquals(13, resultMetadata.size());
+        Assert.areEqual(13, resultMetadata.size());
 
         for (Metadata.Metadata metadata : resultMetadata) {
             if (metadata.fullName == 'nebc__Test_Record_Generator_Field.User_Language_Locale_Key') {
