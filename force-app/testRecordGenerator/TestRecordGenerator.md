@@ -12,7 +12,7 @@ TestRecordSource resolves these issues by moving the test data to custom metadat
 
 ## Importing Test Data for Standard Objects
 
-To speed up creation of test data for standard objects the Nebula Core package contains a [JSON static resource](https://bitbucket.org/nebulaconsulting/nebula-core/src/051855f904e8/force-app/testRecordGenerator/staticresources/?at=master) of frequently used objects.
+To speed up creation of test data for standard objects the Nebula Core package contains a [JSON static resource](https://github.com/Nebula-Consulting/nebula-core/blob/main/force-app/testRecordGenerator/staticresources/standard_test_record_generators_json.json) of frequently used objects.
 
 Supported standard objects:
 
