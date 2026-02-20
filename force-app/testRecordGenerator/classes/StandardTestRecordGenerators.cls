@@ -23,6 +23,12 @@ global without sharing class StandardTestRecordGenerators {
                 Map<String, StandardTestRecordGenerator>.class);
     }
 
+    global StandardTestRecordGenerators(String testRecordGeneratorJson) {
+        allStandardGenerators = (Map<String, StandardTestRecordGenerator>)JSON.deserialize(
+                testRecordGeneratorJson,
+                Map<String, StandardTestRecordGenerator>.class);
+    }
+
     global StandardTestRecordGenerators deploy(SObjectType sObjectType) {
         return deploy(sObjectType.getDescribe().getName());
     }
@@ -35,12 +41,46 @@ global without sharing class StandardTestRecordGenerators {
         return this;
     }
 
+    global StandardTestRecordGenerators deployWithFieldOverride(String name, Map<String, String> testRecordFieldsToOverride) {
+        Metadata.Operations.enqueueDeployment(
+                getDeployContainerFor(name, testRecordFieldsToOverride),
+                new EmailResultsMetadataDeployCallback(UserInfo.getUserEmail())
+        );
+        return this;
+    }
+
     public Metadata.DeployContainer getDeployContainerFor(String name) {
         Assertion.is(
                 String.format('No standard metadata generators found for {0}. Existing definitions are: {1}',
                         new List<String>{ name, String.join(new List<String>(allStandardGenerators.keySet()), ',') }))
                 .that(allStandardGenerators.containsKey(name));
         return getDeployContainerFor(allStandardGenerators.get(name));
+    }
+
+    public Metadata.DeployContainer getDeployContainerFor(String name, Map<String, String> testRecordFieldsToOverride) {
+        Assertion.is(
+                String.format('No standard metadata generators found for {0}. Existing definitions are: {1}',
+                        new List<String>{ name, String.join(new List<String>(allStandardGenerators.keySet()), ',') }))
+                .that(allStandardGenerators.containsKey(name));
+
+        nebc.StandardTestRecordGenerators.StandardTestRecordGenerator testRecord = allStandardGenerators.get(name);
+
+        Set<String> fieldValues = new LazySObjectIterator(testRecord.fields).get(Test_Record_Generator_Field__mdt.Field__c, new Set<String>());
+
+        for (String fieldName : testRecordFieldsToOverride.keySet()) {
+            Assertion.is(
+                    String.format('No field named "{0}" found for test record object "{1}"',
+                            new List<String>{ fieldName, name }))
+                    .that(fieldValues.contains(fieldName));
+
+            for (Test_Record_Generator_Field__mdt field : testRecord.fields) {
+                if (field.Field__c == fieldName) {
+                    field.Value__c = testRecordFieldsToOverride.get(fieldName);
+                }
+            }
+        }
+
+        return getDeployContainerFor(testRecord);
     }
 
     private Metadata.DeployContainer getDeployContainerFor(StandardTestRecordGenerator standardTestRecordGenerator) {
