@@ -20,20 +20,21 @@ global with sharing class MetadataTriggerManager {
     global static List<Trigger_Handler__mdt> mockMetadata;
 
     private SObjectIndex theseTriggers;
-    private static SObjectIndex sObjectTypeNameToEventToTriggerList { get {
-        if (sObjectTypeNameToEventToTriggerList == null) {
-            sObjectTypeNameToEventToTriggerList = new SObjectIndex(Trigger_Handler__mdt.SObject__c, Trigger_Handler__mdt.Event__c)
-                    .putAll(mockMetadata != null ? mockMetadata :
-                            [
-                                    SELECT DeveloperName, NamespacePrefix, Event__c, SObject__c, Apex_Class__c, Order__c,
-                                            Parameters__c
-                                    FROM Trigger_Handler__mdt
-                                    WHERE Active__c = TRUE
-                                    ORDER BY Order__c ASC
-                            ]);
-        }
-        return sObjectTypeNameToEventToTriggerList;
-    } set;}
+    private static SObjectIndex sObjectTypeNameToEventToTriggerList {
+        get {
+            if (sObjectTypeNameToEventToTriggerList == null) {
+                sObjectTypeNameToEventToTriggerList = new SObjectIndex(Trigger_Handler__mdt.SObject__c, Trigger_Handler__mdt.Event__c, Trigger_Handler__mdt.DeveloperName)
+                        .putAll(mockMetadata != null ? mockMetadata : [
+                                SELECT DeveloperName, NamespacePrefix, Event__c, SObject__c, Apex_Class__c, Order__c,
+                                        Parameters__c
+                                FROM Trigger_Handler__mdt
+                                WHERE Active__c = TRUE
+                                ORDER BY Order__c ASC
+                        ]);
+            }
+            return sObjectTypeNameToEventToTriggerList;
+        } set;
+    }
 
     global MetadataTriggerManager(SObjectType objectType) {
         String sObjectName = objectType.getDescribe().getName();
@@ -95,5 +96,30 @@ global with sharing class MetadataTriggerManager {
                 handleInstance(handlerInstance, triggerOperation, oldList, newList);
             }
         }
+    }
+
+    global static Map<String, Object> getTriggerHandlerParameters(String developerName) {
+        Trigger_Handler__mdt handlerMetadata = getHandlerMetadata(developerName);
+        return (Map<String, Object>) JSON.deserializeUntyped(handlerMetadata.Parameters__c);
+    }
+
+    global static void setTriggerHandlerParameters(String developerName, Map<String, Object> parameters) {
+        setTriggerHandlerParameters(developerName, JSON.serialize(parameters));
+    }
+
+    global static void setTriggerHandlerParameters(String developerName, String parameters) {
+        getHandlerMetadata(developerName).Parameters__c = parameters;
+    }
+
+    private static Trigger_Handler__mdt getHandlerMetadata(String developerName){
+        Trigger_Handler__mdt handlerMetadata = (Trigger_Handler__mdt) sObjectTypeNameToEventToTriggerList.get(new Map<String, Object>{
+                'DeveloperName' => developerName
+        });
+
+        if(handlerMetadata == null){
+            throw new MetadataNotFoundException('Handler metadata "' + developerName + '" was not found');
+        }
+
+        return handlerMetadata;
     }
 }

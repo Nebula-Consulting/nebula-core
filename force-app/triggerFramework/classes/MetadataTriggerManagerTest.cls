@@ -149,4 +149,88 @@ private class MetadataTriggerManagerTest {
         manager.handle(TriggerOperation.AFTER_UPDATE, contactList, contactList);
         // no result
     }
+
+    @IsTest
+    public static void getsMetadataParameters(){
+        MetadataTriggerManager.mockMetadata = new List<Trigger_Handler__mdt>{
+                new Trigger_Handler__mdt(
+                        Event__c = TriggerOperation.BEFORE_INSERT.name(),
+                        SObject__c = 'Contact',
+                        Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName(),
+                        Order__c = 0,
+                        DeveloperName = 'TestBI',
+                        Parameters__c = JSON.serialize(new Map<String, Object>{
+                                'a' => 'test',
+                                'b' => 'value'
+                        })
+                )
+        };
+
+        Test.startTest();
+
+        Map<String, Object> parameters = MetadataTriggerManager.getTriggerHandlerParameters('TestBI');
+
+        Test.stopTest();
+
+        Assert.areEqual(2, parameters.keySet().size());
+        Assert.areEqual('test', parameters.get('a'));
+        Assert.areEqual('value', parameters.get('b'));
+    }
+
+    @IsTest
+    public static void setsMetadataParameters(){
+        MetadataTriggerManager.mockMetadata = new List<Trigger_Handler__mdt>{
+                new Trigger_Handler__mdt(
+                        Event__c = TriggerOperation.BEFORE_INSERT.name(),
+                        SObject__c = 'Contact',
+                        Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName(),
+                        Order__c = 0,
+                        DeveloperName = 'TestBI',
+                        Parameters__c = JSON.serialize(new Map<String, Object>{
+                                'a' => 'test',
+                                'b' => 'value'
+                        })
+                )
+        };
+
+        Test.startTest();
+
+        MetadataTriggerManager.setTriggerHandlerParameters('TestBI', new Map<String, Object>{
+                        'c' => 'other'
+                }
+        );
+
+        Test.stopTest();
+
+        Map<String, Object> parameters = MetadataTriggerManager.getTriggerHandlerParameters('TestBI');
+
+        Assert.areEqual(1, parameters.size());
+        Assert.areEqual('other', parameters.get('c'));
+        Assert.isFalse(parameters.containsKey('a'));
+        Assert.isFalse(parameters.containsKey('b'));
+    }
+
+    @IsTest
+    public static void cannotFindMetadata(){
+        MetadataTriggerManager.mockMetadata = new List<Trigger_Handler__mdt>{
+                new Trigger_Handler__mdt(
+                        Event__c = TriggerOperation.BEFORE_INSERT.name(),
+                        SObject__c = 'Contact',
+                        DeveloperName = 'TestBI',
+                        Apex_Class__c = MetadataTriggerManagerTest.TestHandler.class.getName(),
+                        Order__c = 0
+                )
+        };
+
+        Test.startTest();
+
+        try {
+            MetadataTriggerManager.getTriggerHandlerParameters('TestBU');
+            Assert.fail();
+        } catch (MetadataNotFoundException e) {
+            Assert.isTrue(e.getMessage().contains('Handler metadata "TestBU" was not found'));
+        }
+
+        Test.stopTest();
+    }
 }
