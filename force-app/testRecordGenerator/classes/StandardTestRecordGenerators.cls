@@ -23,9 +23,14 @@ global without sharing class StandardTestRecordGenerators {
                 Map<String, StandardTestRecordGenerator>.class);
     }
 
-    global StandardTestRecordGenerators(String testRecordGeneratorJson) {
+    /**
+     * @description Constructor for StandardTestRecordGenerators that accepts a JSON string.
+     *              Deserializes the provided JSON into a map of standard test record generators.
+     * @param testRecordJson JSON string representing the map of standard test record generators.
+     */
+    global StandardTestRecordGenerators(String testRecordJson) {
         allStandardGenerators = (Map<String, StandardTestRecordGenerator>)JSON.deserialize(
-                testRecordGeneratorJson,
+                testRecordJson,
                 Map<String, StandardTestRecordGenerator>.class);
     }
 
