@@ -24,6 +24,11 @@ global with sharing class AddTo implements Function {
         addable = new SObjectIndexAddable(container);
     }
 
+    /**
+     * @description Adds the value to the container and returns it unchanged
+     * @param o The value to add
+     * @return The same value passed in
+     */
     global Object call(Object o) {
         addable.add(o);
         return o;

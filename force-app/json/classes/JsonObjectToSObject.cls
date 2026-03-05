@@ -11,11 +11,20 @@ global class JsonObjectToSObject {
     private Map<String, Function> fieldToFunction;
     private Set<String> fieldsToIgnore;
 
+    /**
+     * @description Creates a converter for the specified SObjectType
+     * @param objectType The SObjectType to convert JSON into
+     */
     global JsonObjectToSObject(Schema.SObjectType objectType) {
         this.objectType = objectType;
         this.fieldMap = objectType.getDescribe().fields.getMap();
     }
 
+    /**
+     * @description Maps JSON field names to SObject field names
+     * @param objectFieldToSObjectField Map of JSON field names to SObject field API names
+     * @return This JsonObjectToSObject instance for method chaining
+     */
     global JsonObjectToSObject setObjectFieldToSObjectField(Map<String, String> objectFieldToSObjectField) {
         this.objectFieldToSObjectField = new Map<String, String>();
 
@@ -25,11 +34,21 @@ global class JsonObjectToSObject {
         return this;
     }
 
+    /**
+     * @description Sets custom functions to transform field values during conversion
+     * @param fieldToFunction Map of field names to transformation functions
+     * @return This JsonObjectToSObject instance for method chaining
+     */
     global JsonObjectToSObject setFieldToFunction(Map<String, Function> fieldToFunction) {
         this.fieldToFunction = fieldToFunction;
         return this;
     }
 
+    /**
+     * @description Sets fields to ignore during conversion
+     * @param fieldsToIgnore Set of field names to skip
+     * @return This JsonObjectToSObject instance for method chaining
+     */
     global JsonObjectToSObject setFieldsToIgnore(Set<String> fieldsToIgnore) {
         this.fieldsToIgnore = new Set<String>();
         for(String f : fieldsToIgnore) {
@@ -38,6 +57,11 @@ global class JsonObjectToSObject {
         return this;
     }
 
+    /**
+     * @description Converts a list of JSON objects to SObjects
+     * @param jsonObjects List of deserialized JSON objects (Maps)
+     * @return List of SObjects populated from the JSON
+     */
     global List<SObject> toSObjects(List<Object> jsonObjects) {
         List<SObject> returnVal = new List<SObject>();
         for(Object o : jsonObjects) {
@@ -46,6 +70,11 @@ global class JsonObjectToSObject {
         return returnVal;
     }
 
+    /**
+     * @description Converts a single JSON object to an SObject
+     * @param jsonObject The deserialized JSON object as a Map
+     * @return An SObject populated from the JSON
+     */
     global SObject toSObject(Map<String, Object> jsonObject) {
         SObject returnVal = objectType.newSObject();
         return jsonToSobject(jsonObject, returnVal, null);

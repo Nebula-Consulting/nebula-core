@@ -68,10 +68,19 @@ global with sharing class MetadataTriggerManager {
         }
     }
 
+    /**
+     * @description Handles the current trigger context using Trigger.operationType, Trigger.old, and Trigger.new
+     */
     global void handle() {
         handle(Trigger.operationType, Trigger.old, Trigger.new);
     }
 
+    /**
+     * @description Handles a trigger event with the specified operation and record lists
+     * @param triggerOperation The trigger operation type (BEFORE_INSERT, AFTER_UPDATE, etc.)
+     * @param oldList The old version of the records (for update/delete operations)
+     * @param newList The new version of the records (for insert/update/undelete operations)
+     */
     global void handle(TriggerOperation triggerOperation, List<SObject> oldList, List<SObject> newList) {
         if(theseTriggers == null) {
             return;

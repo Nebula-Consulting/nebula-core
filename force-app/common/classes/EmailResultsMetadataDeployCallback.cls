@@ -8,10 +8,19 @@ global class EmailResultsMetadataDeployCallback implements Metadata.DeployCallba
 
     private String emailAddress;
 
+    /**
+     * @description Creates a callback that will email deployment results
+     * @param emailAddress The email address to send results to
+     */
     global EmailResultsMetadataDeployCallback(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
+    /**
+     * @description Handles the deployment result by sending an email with the results
+     * @param deployResult The result of the metadata deployment
+     * @param context The deployment callback context
+     */
     global void handleResult(metadata.DeployResult deployResult, Metadata.DeployCallbackContext context) {
         Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
         message.setToAddresses(new List<String>{emailAddress});

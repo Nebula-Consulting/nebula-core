@@ -7,6 +7,10 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
 
     protected Iterator<Object> iterator;
 
+    /**
+     * @description Creates a LazyIterator from an Iterator or Iterable
+     * @param iterableOrIterator Either an Iterator<Object> or Iterable<Object>
+     */
     global LazyIterator(Object iterableOrIterator) {
         if(iterableOrIterator == null) {
             iterator = EmptyIterator.getInstance();
@@ -24,24 +28,44 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
         }
     }
 
+    /**
+     * @description Creates a LazyIterator from an Iterable
+     * @param iterable The Iterable to wrap
+     */
     global LazyIterator(Iterable<Object> iterable) {
         this.iterator = iterable.iterator();
     }
 
+    /**
+     * @description Creates a LazyIterator from an Iterator
+     * @param iterator The Iterator to wrap
+     */
     global LazyIterator(Iterator<Object> iterator) {
         this.iterator = iterator;
     }
 
     protected LazyIterator() {}
 
+    /**
+     * @description Checks if there are more elements in the iterator
+     * @return True if more elements exist, false otherwise
+     */
     global virtual Boolean hasNext() {
         return iterator.hasNext();
     }
 
+    /**
+     * @description Returns the next element in the iterator
+     * @return The next element
+     */
     global virtual Object next() {
         return iterator.next();
     }
 
+    /**
+     * @description Returns this LazyIterator as an Iterator
+     * @return This iterator
+     */
     global Iterator<Object> iterator() {
         return this;
     }
@@ -229,10 +253,20 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
         return new LazyFilterIterator(getIteratorForDecorator(), mappingFunction, matchingFunction);
     }
 
+    /**
+     * @description Expands each element into multiple elements using an expansion function
+     * @param expansionFunction Function that returns an iterator of expanded elements
+     * @return A LazyIterator with expanded elements
+     */
     global LazyIterator expand(ExpansionFunction expansionFunction) {
         return new LazyExpansionIterator(getIteratorForDecorator(), expansionFunction);
     }
 
+    /**
+     * @description Expands each element into multiple elements using an expansion iterator
+     * @param expansionIterator Iterator that provides expanded elements
+     * @return A LazyIterator with expanded elements
+     */
     global LazyIterator expand(ExpansionIterator expansionIterator) {
         return new LazyExpansionIterator(getIteratorForDecorator(), expansionIterator);
     }
@@ -571,10 +605,19 @@ global virtual class LazyIterator implements Iterator<Object>, NullaryFunction, 
         return expand(new LazyIteratorExpansionIterator());
     }
 
+    /**
+     * @description Returns the next element (implements NullaryFunction)
+     * @return The next element in the iterator
+     */
     global Object call() {
         return next();
     }
 
+    /**
+     * @description Returns the next element, ignoring the parameter (implements Function)
+     * @param o Ignored parameter
+     * @return The next element in the iterator
+     */
     global Object call(Object o) {
         return call();
     }

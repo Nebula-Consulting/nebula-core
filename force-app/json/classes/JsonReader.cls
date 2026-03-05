@@ -11,19 +11,37 @@ global class JsonReader {
 
         private static final Pattern JSON_SEARCH_PATH_PATTERN = Pattern.compile('(\\[\\d+])|([\\w-]+)');
 
+        /**
+         * @description Creates a JsonReader from a JSON string
+         * @param jsonString The JSON string to parse
+         */
         global JsonReader(String jsonString) {
                 theData = JSON.deserializeUntyped(jsonString);
         }
 
+        /**
+         * @description Creates a JsonReader from an already-parsed JSON object
+         * @param untypedJsonObject The deserialized JSON object
+         */
         global JsonReader(Object untypedJsonObject) {
                 theData = untypedJsonObject;
         }
 
+        /**
+         * @description Sets the value to return when a key is not found
+         * @param missingKeyResult The value to return for missing keys (default is null)
+         * @return This JsonReader instance for method chaining
+         */
         global JsonReader setMissingKeyResult(Object missingKeyResult) {
                 this.missingKeyResult = missingKeyResult;
                 return this;
         }
 
+        /**
+         * @description Reads a value from the JSON using a path expression
+         * @param jsonPath The path to read (e.g., 'data.items[0].name')
+         * @return The value at the path, or missingKeyResult if not found
+         */
         global Object read(String jsonPath) {
                 return read(new RegexFindIterator(JSON_SEARCH_PATH_PATTERN, jsonPath), theData);
         }

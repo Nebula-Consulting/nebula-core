@@ -1,6 +1,8 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 09/11/2018
+ * @description Factory for test records using custom metadata configuration. Reads Test_Record_Generator__mdt
+ * to determine which generator class to use for each SObject type, supporting variants and inheritance.
  */
 global inherited sharing class TestRecordSource {
 
@@ -35,6 +37,9 @@ global inherited sharing class TestRecordSource {
 
     private Map<Id, TestRecordGenerator> generators;
 
+    /**
+     * @description Creates a new TestRecordSource instance
+     */
     global TestRecordSource() {
         generators = new Map<Id, TestRecordGenerator>();
     }
@@ -98,10 +103,18 @@ global inherited sharing class TestRecordSource {
         }
     }
 
+    /**
+     * @description Starts building a test record request for the specified SObject type
+     * @param sObjectType The SObject type to generate
+     * @return A GetBuilder for configuring and retrieving the test record
+     */
     global GetBuilder getRecord(SObjectType sObjectType) {
         return new GetBuilder(this, sObjectType);
     }
 
+    /**
+     * @description Builder class for fluently configuring and retrieving test records
+     */
     global class GetBuilder {
         private TestRecordSource parent;
         private SObjectType sObjectType;
@@ -122,16 +135,32 @@ global inherited sharing class TestRecordSource {
             this.sObjectType = sObjectType;
         }
 
+        /**
+         * @description Specifies a variant of the generator to use
+         * @param variant The variant name defined in custom metadata
+         * @return This GetBuilder for method chaining
+         */
         global GetBuilder asVariant(String variant) {
             this.variant = variant;
             return this;
         }
 
+        /**
+         * @description Sets parameters to pass to the generator
+         * @param parameters Map of parameter names to values
+         * @return This GetBuilder for method chaining
+         */
         global GetBuilder useParameters(Map<String, Object> parameters) {
             this.parameters = parameters;
             return this;
         }
 
+        /**
+         * @description Sets a single parameter to pass to the generator
+         * @param parameterName The parameter name
+         * @param value The parameter value
+         * @return This GetBuilder for method chaining
+         */
         global GetBuilder useParameter(String parameterName, Object value) {
             if(parameters == null) {
                 parameters = new Map<String, Object> {parameterName => value};
@@ -141,34 +170,69 @@ global inherited sharing class TestRecordSource {
             return this;
         }
 
+        /**
+         * @description Sets a field value on the generated record
+         * @param field The SObjectField to set
+         * @param value The value to set
+         * @return This GetBuilder for method chaining
+         */
         global GetBuilder put(SObjectField field, Object value) {
             recordInstanceValues.put(field, value);
             return this;
         }
 
+        /**
+         * @description Gets the record and inserts it
+         * @return The inserted SObject
+         */
         global SObject withInsert() {
             generator.putAll(recordInstanceValues);
             return generator.getRecordWithInsert(parameters);
         }
 
+        /**
+         * @description Gets the record without inserting
+         * @return The generated SObject (not inserted)
+         */
         global SObject withoutInsert() {
             generator.putAll(recordInstanceValues);
             return generator.getRecordWithoutInsert(parameters);
         }
 
+        /**
+         * @description Gets multiple records without inserting
+         * @param numberOfRecords The number of records to generate
+         * @return List of generated SObjects (not inserted)
+         */
         global List<SObject> withoutInsert(Integer numberOfRecords) {
             generator.putAll(recordInstanceValues);
             return generator.getRecordsWithoutInsert(numberOfRecords, parameters);
         }
+
+        /**
+         * @description Gets multiple records and inserts them
+         * @param numberOfRecords The number of records to generate
+         * @return List of inserted SObjects
+         */
         global List<SObject> withInsert(Integer numberOfRecords) {
             generator.putAll(recordInstanceValues);
             return generator.getRecordsWithInsert(numberOfRecords, parameters);
         }
     }
 
+    /**
+     * @description Sets a record as the cached record for a specific variant
+     * @param record The record to cache
+     * @param variant The variant name
+     */
     global void setRecordAsVariant(SObject record, String variant) {
         getGenerator(record.getSObjectType(), variant).setRecord(record);
     }
+
+    /**
+     * @description Sets a record as the cached record for the default variant
+     * @param record The record to cache
+     */
     global void setRecord(SObject record) {
         setRecordAsVariant(record, null);
     }
