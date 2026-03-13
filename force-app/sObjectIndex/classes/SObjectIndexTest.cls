@@ -2,13 +2,13 @@
  * @author aidan@nebulaconsulting.co.uk
  * @date 09/11/2018
  */
-
 @IsTest
 private class SObjectIndexTest {
 
     private final static String DOE = 'Doe';
     private final static String ACCOUNT_ID = Contact.AccountId.getDescribe().getName();
     private final static String LAST_NAME = Contact.LastName.getDescribe().getName();
+    private final static String BIRTHDATE = Contact.Birthdate.getDescribe().getName();
 
     private static Account togAccount = new Account(Name = 'ACME', Id = new TestIdGenerator(Account.SObjectType).next());
 
@@ -16,8 +16,8 @@ private class SObjectIndexTest {
     static void emptyIndex() {
         SObjectIndex theIndex = new SObjectIndex(new List<String>{ ACCOUNT_ID, LAST_NAME });
 
-        System.assertEquals(null, theIndex.get(new Contact()));
-        System.assert(theIndex.isEmpty());
+        Assert.isNull(theIndex.get(new Contact()));
+        Assert.isTrue(theIndex.isEmpty());
     }
 
     @IsTest
@@ -27,10 +27,10 @@ private class SObjectIndexTest {
         try {
             theIndex.setIsCaseInsensitive(true);
         } catch (IllegalStateException e) {
-            System.assertEquals(Label.SObjectIndex_Case_Insensitive_Error, e.getMessage());
+            Assert.areEqual(Label.SObjectIndex_Case_Insensitive_Error, e.getMessage());
             return;
         }
-        System.assert(false, 'Should have thrown IllegalStateException');
+        Assert.isTrue(false, 'Should have thrown IllegalStateException');
     }
 
     @IsTest
@@ -49,11 +49,11 @@ private class SObjectIndexTest {
         List<Account> group1 = theIndex.getAll(1);
         List<Account> group2 = theIndex.getAll(3);
 
-        System.assertEquals(2, group1.size());
-        System.assertEquals('0', group1[0].Name);
-        System.assertEquals('1', group1[1].Name);
-        System.assertEquals(1, group2.size());
-        System.assertEquals('2', group2[0].Name);
+        Assert.areEqual(2, group1.size());
+        Assert.areEqual('0', group1[0].Name);
+        Assert.areEqual('1', group1[1].Name);
+        Assert.areEqual(1, group2.size());
+        Assert.areEqual('2', group2[0].Name);
     }
 
     @IsTest
@@ -72,11 +72,11 @@ private class SObjectIndexTest {
         List<Account> group1 = theIndex.getAll(1);
         List<Account> group2 = theIndex.getAll(3);
 
-        System.assertEquals(2, group1.size());
-        System.assertEquals('0', group1[0].Name);
-        System.assertEquals('1', group1[1].Name);
-        System.assertEquals(1, group2.size());
-        System.assertEquals('2', group2[0].Name);
+        Assert.areEqual(2, group1.size());
+        Assert.areEqual('0', group1[0].Name);
+        Assert.areEqual('1', group1[1].Name);
+        Assert.areEqual(1, group2.size());
+        Assert.areEqual('2', group2[0].Name);
     }
 
     @IsTest
@@ -84,7 +84,7 @@ private class SObjectIndexTest {
         SObjectIndex theIndex = new SObjectIndex(Account.ParentId.getDescribe().getName()).put(togAccount);
         Account indexAccount = (Account)theIndex.get((Id)null);
 
-        System.assertEquals(togAccount.Id, indexAccount.Id);
+        Assert.areEqual(togAccount.Id, indexAccount.Id);
     }
 
     @IsTest
@@ -94,24 +94,24 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.isTrue(!theIndex.isEmpty());
 
         Set<Object> accountIdKeySet = theIndex.keySet(ACCOUNT_ID);
-        System.assertEquals(1, accountIdKeySet.size());
-        System.assert(accountIdKeySet.contains(togAccount.Id));
+        Assert.areEqual(1, accountIdKeySet.size());
+        Assert.isTrue(accountIdKeySet.contains(togAccount.Id));
 
         Set<Object> lastNameKeySet = theIndex.keySet(LAST_NAME);
-        System.assertEquals(1, lastNameKeySet.size());
-        System.assert(lastNameKeySet.contains(DOE));
+        Assert.areEqual(1, lastNameKeySet.size());
+        Assert.isTrue(lastNameKeySet.contains(DOE));
 
         List<Contact> values = (List<Contact>)theIndex.values();
-        System.assertEquals(1, values.size());
-        System.assertEquals(togContact, values[0]);
+        Assert.areEqual(1, values.size());
+        Assert.areEqual(togContact, values[0]);
 
         Iterator<Object> valuesIterator = theIndex.valueIterator();
-        System.assert(valuesIterator.hasNext());
-        System.assertEquals(togContact, valuesIterator.next());
+        Assert.isTrue(valuesIterator.hasNext());
+        Assert.areEqual(togContact, valuesIterator.next());
     }
 
     @IsTest
@@ -123,12 +123,12 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.isTrue(!theIndex.isEmpty());
 
         List<Id> accountIdKeyList = (List<Id>)theIndex.keyList(new List<Id>());
-        System.assertEquals(1, accountIdKeyList.size());
-        System.assert(accountIdKeyList.contains(togAccount.Id));
+        Assert.areEqual(1, accountIdKeyList.size());
+        Assert.isTrue(accountIdKeyList.contains(togAccount.Id));
     }
 
     @IsTest
@@ -140,12 +140,12 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.isTrue(!theIndex.isEmpty());
 
         Iterator<Object> accountIds = theIndex.keyIterator();
-        System.assert(accountIds.hasNext());
-        System.assertEquals(togAccount.Id, accountIds.next());
+        Assert.isTrue(accountIds.hasNext());
+        Assert.areEqual(togAccount.Id, accountIds.next());
     }
 
     @IsTest
@@ -157,12 +157,12 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.isTrue(!theIndex.isEmpty());
 
         Set<Id> accountIds = theIndex.keySet(new Set<Id>());
-        System.assertEquals(1, accountIds.size());
-        System.assert(accountIds.contains(togAccount.Id));
+        Assert.areEqual(1, accountIds.size());
+        Assert.isTrue(accountIds.contains(togAccount.Id));
     }
 
     @IsTest
@@ -173,8 +173,8 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE.toLowerCase())).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE.toLowerCase())).size());
+        Assert.isTrue(!theIndex.isEmpty());
     }
 
     @IsTest
@@ -185,10 +185,10 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Map<String, String> {
+        Assert.areEqual(1, theIndex.getAll(new Map<String, String> {
                 ACCOUNT_ID  => togAccount.Id,
                 LAST_NAME => DOE.toLowerCase()}).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.isTrue(!theIndex.isEmpty());
     }
 
     @IsTest
@@ -199,8 +199,8 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(AccountId = togAccount.Id, LastName = DOE.toLowerCase());
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(DOE).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(DOE).size());
+        Assert.isTrue(!theIndex.isEmpty());
     }
 
     private static SObjectIndex getTwoHitsIndex() {
@@ -217,15 +217,15 @@ private class SObjectIndexTest {
     static void twoHits() {
         SObjectIndex theIndex = getTwoHitsIndex();
 
-        System.assertEquals(2, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(2, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.isTrue(!theIndex.isEmpty());
         Set<Object> accountKeySet = theIndex.keySet(ACCOUNT_ID);
-        System.assertEquals(1, accountKeySet.size());
-        System.assert(accountKeySet.contains(togAccount.Id));
+        Assert.areEqual(1, accountKeySet.size());
+        Assert.isTrue(accountKeySet.contains(togAccount.Id));
         Set<Object> nameKeySet = theIndex.keySet('LastName');
-        System.assertEquals(2, nameKeySet.size());
-        System.assert(nameKeySet.contains(DOE));
-        System.assert(nameKeySet.contains('Deer'));
+        Assert.areEqual(2, nameKeySet.size());
+        Assert.isTrue(nameKeySet.contains(DOE));
+        Assert.isTrue(nameKeySet.contains('Deer'));
     }
 
     @IsTest
@@ -235,7 +235,7 @@ private class SObjectIndexTest {
         theIndex.put(new Contact(AccountId = togAccount.Id, FirstName = 'John', LastName = DOE));
         theIndex.put(new Contact(AccountId = togAccount.Id, FirstName = 'Jane', LastName = DOE + 2));
 
-        System.assertEquals(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.areEqual(1, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
     }
 
     @IsTest
@@ -247,15 +247,15 @@ private class SObjectIndexTest {
 
         SObjectIndex theIndex = new SObjectIndex(ACCOUNT_ID).putAll(data);
 
-        System.assertEquals(2, theIndex.getAll(togAccount.Id).size());
+        Assert.areEqual(2, theIndex.getAll(togAccount.Id).size());
 
         Set<Object> ks2 = theIndex.keySet();
-        System.assertEquals(1, ks2.size());
-        System.assert(ks2.contains(togAccount.Id));
+        Assert.areEqual(1, ks2.size());
+        Assert.isTrue(ks2.contains(togAccount.Id));
 
         theIndex.get(togAccount.Id);
-        System.assertEquals(null, theIndex.get('null'));
-        System.assert(theIndex.getAll('null').isEmpty());
+        Assert.isNull(theIndex.get('null'));
+        Assert.isTrue(theIndex.getAll('null').isEmpty());
     }
 
     @IsTest
@@ -265,12 +265,12 @@ private class SObjectIndexTest {
         Contact togContact = new Contact(Account = togAccount,  LastName = DOE);
         theIndex.put(togContact);
 
-        System.assertEquals(1, theIndex.getAll(new Contact(Account = new Account(Name = togAccount.Name), LastName = DOE)).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Contact(Account = new Account(Name = togAccount.Name), LastName = DOE)).size());
+        Assert.isTrue(!theIndex.isEmpty());
 
         List<Contact> values = (List<Contact>)theIndex.values();
-        System.assertEquals(1, values.size());
-        System.assertEquals(togContact, values[0]);
+        Assert.areEqual(1, values.size());
+        Assert.areEqual(togContact, values[0]);
     }
 
     @IsTest
@@ -279,8 +279,8 @@ private class SObjectIndexTest {
 
         theIndex.put(new Contact(AccountId = togAccount.Id, LastName = DOE));
 
-        System.assertEquals(1, theIndex.getAll(new Map<String, Object>{ACCOUNT_ID => togAccount.Id, LAST_NAME => DOE}).size());
-        System.assert(!theIndex.isEmpty());
+        Assert.areEqual(1, theIndex.getAll(new Map<String, Object>{ACCOUNT_ID => togAccount.Id, LAST_NAME => DOE}).size());
+        Assert.isTrue(!theIndex.isEmpty());
     }
 
     @IsTest
@@ -292,13 +292,13 @@ private class SObjectIndexTest {
                 });
 
         List<Contact> fetchedContacts = theIndex.getAll(new Map<String, Object>{LAST_NAME => DOE});
-        System.assertEquals(2, fetchedContacts.size());
-        System.assert(fetchedContacts[0].AccountId == null);
-        System.assert(fetchedContacts[1].AccountId == togAccount.Id);
-        System.assert(fetchedContacts[0].FirstName == 'John');
-        System.assert(fetchedContacts[1].FirstName == 'Jane');
-        System.assertEquals(DOE, fetchedContacts[0].LastName);
-        System.assertEquals(DOE, fetchedContacts[1].LastName);
+        Assert.areEqual(2, fetchedContacts.size());
+        Assert.isTrue(fetchedContacts[0].AccountId == null);
+        Assert.isTrue(fetchedContacts[1].AccountId == togAccount.Id);
+        Assert.isTrue(fetchedContacts[0].FirstName == 'John');
+        Assert.isTrue(fetchedContacts[1].FirstName == 'Jane');
+        Assert.areEqual(DOE, fetchedContacts[0].LastName);
+        Assert.areEqual(DOE, fetchedContacts[1].LastName);
     }
 
     @IsTest
@@ -311,10 +311,10 @@ private class SObjectIndexTest {
 
         SObjectIndex subIndex = theIndex.getSubIndex(togAccount.Id);
         List<Contact> fetchedContacts = subIndex.getAll(new Map<String, Object>{LAST_NAME => DOE});
-        System.assertEquals(1, fetchedContacts.size());
-        System.assert(fetchedContacts[0].AccountId == togAccount.Id);
-        System.assert(fetchedContacts[0].FirstName == 'Jane');
-        System.assertEquals(DOE, fetchedContacts[0].LastName);
+        Assert.areEqual(1, fetchedContacts.size());
+        Assert.isTrue(fetchedContacts[0].AccountId == togAccount.Id);
+        Assert.isTrue(fetchedContacts[0].FirstName == 'Jane');
+        Assert.areEqual(DOE, fetchedContacts[0].LastName);
     }
 
     @IsTest
@@ -322,13 +322,13 @@ private class SObjectIndexTest {
         SObjectIndex theIndex = getTwoHitsIndex();
 
         theIndex.remove(new Contact(AccountId = togAccount.Id, FirstName = 'John', LastName = DOE));
-        System.assertEquals(0, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
+        Assert.areEqual(0, theIndex.getAll(new Contact(AccountId = togAccount.Id, LastName = DOE)).size());
         Set<Object> keySetName = theIndex.keySet(LAST_NAME);
-        System.assertEquals(2, keySetName.size());
-        System.assert(keySetName.contains('Deer'));
-        System.assert(keySetName.contains(DOE));
+        Assert.areEqual(2, keySetName.size());
+        Assert.isTrue(keySetName.contains('Deer'));
+        Assert.isTrue(keySetName.contains(DOE));
 
-        System.assert(theIndex.remove(new Contact()).isEmpty());
+        Assert.isTrue(theIndex.remove(new Contact()).isEmpty());
     }
 
     @IsTest
@@ -340,14 +340,12 @@ private class SObjectIndexTest {
                 new Contact(AccountId = togAccount.Id, FirstName = 'Fred', LastName = 'Deer')
         });
         theIndex.remove(new Map<String, Object> { 'FirstName' => 'John'});
-        System.assertEquals(1, theIndex.getAll(new Map<String, Object>{ACCOUNT_ID => togAccount.Id, LAST_NAME => DOE}).size());
+        Assert.areEqual(1, theIndex.getAll(new Map<String, Object>{ACCOUNT_ID => togAccount.Id, LAST_NAME => DOE}).size());
         Set<Object> keySetName = theIndex.keySet(LAST_NAME);
-        System.assertEquals(2, keySetName.size());
-        System.assert(keySetName.contains(DOE));
-        System.assert(keySetName.contains('Deer'));
+        Assert.areEqual(2, keySetName.size());
+        Assert.isTrue(keySetName.contains(DOE));
+        Assert.isTrue(keySetName.contains('Deer'));
     }
-
-    private static final String BIRTHDATE = Contact.Birthdate.getDescribe().getName();
 
     @IsTest
     static void indexOnDate() {
@@ -361,18 +359,45 @@ private class SObjectIndexTest {
                 new Contact(LastName = 'Contact3', Birthdate = date3)
         };
 
-        SObjectIndex theIndex = new SObjectIndex(BIRTHDATE).putAll(contacts);
+        SObjectIndex theIndex = new SObjectIndex(Contact.Birthdate).setNormalizeKeys(true).putAll(contacts);
 
         List<Contact> result1 = theIndex.getAll(date1);
         List<Contact> result2 = theIndex.getAll(date2);
         List<Contact> result3 = theIndex.getAll(date3);
+        
+        Assert.areEqual(1, result1.size());
+        Assert.areEqual('Contact1', result1[0].LastName);
+        Assert.areEqual(1, result2.size());
+        Assert.areEqual('Contact2', result2[0].LastName);
+        Assert.areEqual(1, result3.size());
+        Assert.areEqual('Contact3', result3[0].LastName);
 
-        System.assertEquals(1, result1.size());
-        System.assertEquals('Contact1', result1[0].LastName);
-        System.assertEquals(1, result2.size());
-        System.assertEquals('Contact2', result2[0].LastName);
-        System.assertEquals(1, result3.size());
-        System.assertEquals('Contact3', result3[0].LastName);
+
+
+    }
+
+    @IsTest
+    static void indexOnDateWithGetSObject() {
+        Date date1 = Date.newInstance(2023, 1, 1);
+        Date date2 = Date.newInstance(2023, 1, 2);
+        Date date3 = Date.newInstance(2023, 1, 3);
+
+        List<Contact> contacts = new List<Contact> {
+            new Contact(LastName = 'Contact1', Birthdate = date1),
+            new Contact(LastName = 'Contact2', Birthdate = date2),
+            new Contact(LastName = 'Contact3', Birthdate = date3)
+        };
+
+        SObjectIndex theIndex = new SObjectIndex(Contact.Birthdate).putAll(contacts);
+
+        Contact result1 = (Contact) theIndex.get(new Contact(Birthdate = date1));
+        Contact result2 = (Contact) theIndex.get(new Contact(Birthdate = date2));
+        Contact result3 = (Contact) theIndex.get(new Contact(Birthdate = date3));
+
+        Assert.areEqual('Contact1', result1?.LastName);
+        Assert.areEqual('Contact2', result2?.LastName);
+        Assert.areEqual('Contact3', result3?.LastName);
+
     }
 
     @IsTest
@@ -380,20 +405,20 @@ private class SObjectIndexTest {
         Date date1 = Date.newInstance(2023, 1, 1);
         Date date2 = Date.newInstance(2023, 1, 2);
 
-        Contact contact1 = new Contact(LastName = 'Doe', Birthdate = date1);
-        Contact contact2 = new Contact(LastName = 'Doe', Birthdate = date2);
-
-        SObjectIndex theIndex = new SObjectIndex(new List<String>{BIRTHDATE, LAST_NAME})
-                .putAll(new List<Contact>{contact1, contact2});
+        SObjectIndex theIndex = new SObjectIndex(Contact.Birthdate, Contact.LastName)
+                .putAll(new List<Contact>{
+                    new Contact(LastName = 'Doe', Birthdate = date1),
+                    new Contact(LastName = 'Doe', Birthdate = date2)
+                });
 
         Contact result1 = (Contact)theIndex.get(new Map<String, Object>{BIRTHDATE => date1, LAST_NAME => 'Doe'});
         Contact result2 = (Contact)theIndex.get(new Map<String, Object>{BIRTHDATE => date2, LAST_NAME => 'Doe'});
 
-        System.assertNotEquals(null, result1);
-        System.assertEquals(date1, result1.Birthdate);
-        System.assertNotEquals(null, result2);
-        System.assertEquals(date2, result2.Birthdate);
-        System.assertNotEquals(result1.Birthdate, result2.Birthdate);
+        Assert.isNotNull(result1);
+        Assert.areEqual(date1, result1.Birthdate);
+        Assert.isNotNull(result2);
+        Assert.areEqual(date2, result2.Birthdate);
+        Assert.areNotEqual(result1.Birthdate, result2.Birthdate);
     }
 
     @IsTest
@@ -410,9 +435,9 @@ private class SObjectIndexTest {
         Contact result1 = (Contact)theIndex.get(new Contact(AccountId = togAccount.Id, Birthdate = date1));
         Contact result2 = (Contact)theIndex.get(new Contact(AccountId = togAccount.Id, Birthdate = date2));
 
-        System.assertNotEquals(null, result1);
-        System.assertEquals('Contact1', result1.LastName);
-        System.assertNotEquals(null, result2);
-        System.assertEquals('Contact2', result2.LastName);
+        Assert.isNotNull(result1);
+        Assert.areEqual('Contact1', result1.LastName);
+        Assert.isNotNull(result2);
+        Assert.areEqual('Contact2', result2.LastName);
     }
 }

@@ -30,6 +30,8 @@ global class SObjectIndex implements SObjectIndexI, Container {
         this(new List<String>{field1.getDescribe().getName(), field2.getDescribe().getName(), field3.getDescribe().getName()}, 0);
     }
 
+
+
     global SObjectIndex(List<String> indexFields)  {
         this(indexFields, 0);
     }
@@ -51,12 +53,17 @@ global class SObjectIndex implements SObjectIndexI, Container {
         return this;
     }
 
+    global SObjectIndex setNormalizeKeys(Boolean normalizeKeys) {
+        this.normalizeKeys = normalizeKeys;
+        return this;
+    }
+
     private final List<String> allIndexFields;
     private final Integer thisIndexDepth;
     private final String thisIndexField;
     private final Boolean isLastIndexLayer;
     private Function keyFunction;
-
+    private Boolean normalizeKeys = false;
     private Map<Object, SObjectIndexI> children;
 
     private SObjectIndex(List<String> allIndexFields, Integer fieldDepth) {
@@ -287,11 +294,13 @@ global class SObjectIndex implements SObjectIndexI, Container {
     }
 
     private Object getKeyFrom(SObject obj) {
-        return keyFunction.call(normalizeValue(SObjectGetter.get(obj, thisIndexField)));
+        return normalizeKeys ? keyFunction.call(normalizeValue(SObjectGetter.get(obj, thisIndexField)))
+            : keyFunction.call(SObjectGetter.get(obj, thisIndexField));
     }
 
     private Object getKeyFrom(Map<String, Object> aMap) {
-        return keyFunction.call(normalizeValue(aMap.get(thisIndexField)));
+        return normalizeKeys ? keyFunction.call(normalizeValue(aMap.get(thisIndexField)))
+            : keyFunction.call(aMap.get(thisIndexField));
     }
 
     private static Object normalizeValue(Object value) {
