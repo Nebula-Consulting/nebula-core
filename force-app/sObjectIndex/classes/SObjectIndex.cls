@@ -53,6 +53,11 @@ global class SObjectIndex implements SObjectIndexI, Container {
         return this;
     }
 
+    /**
+     * @param normalizeKeys If true, then when putting or getting objects in the index, any Date, Datetime, or Time values on indexed fields will be converted to Strings first. This is to work around the fact that Salesforce's Map implementation does not consider two Date, Datetime, or Time instances with the same value to be equal keys, which can lead to unintuitive behavior in the index. Enabling this option will mean that such values are treated as equal keys in the index. Note that this only affects the keys in the index - the actual SObjects stored in the index will still have their Date, Datetime, and Time fields stored as their original types.
+     *
+     * @return SObjectIndex class
+     */
     global SObjectIndex setNormalizeKeys(Boolean normalizeKeys) {
         this.normalizeKeys = normalizeKeys;
         return this;
@@ -294,16 +299,17 @@ global class SObjectIndex implements SObjectIndexI, Container {
     }
 
     private Object getKeyFrom(SObject obj) {
-        return normalizeKeys ? keyFunction.call(normalizeValue(SObjectGetter.get(obj, thisIndexField)))
-            : keyFunction.call(SObjectGetter.get(obj, thisIndexField));
+        return keyFunction.call(normalizeValue(SObjectGetter.get(obj, thisIndexField)));
     }
 
     private Object getKeyFrom(Map<String, Object> aMap) {
-        return normalizeKeys ? keyFunction.call(normalizeValue(aMap.get(thisIndexField)))
-            : keyFunction.call(aMap.get(thisIndexField));
+        return keyFunction.call(normalizeValue(aMap.get(thisIndexField)));
     }
 
-    private static Object normalizeValue(Object value) {
+    private Object normalizeValue(Object value) {
+        if (normalizeKeys == false) {
+            return value;
+        }
         if (value instanceof Date) {
             return String.valueOf((Date)value);
         } else if (value instanceof Datetime) {
