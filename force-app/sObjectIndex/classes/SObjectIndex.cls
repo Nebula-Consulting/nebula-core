@@ -143,7 +143,7 @@ global class SObjectIndex implements SObjectIndexI, Container {
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
     global List<SObject> getAll(Object key) {
-        SObjectIndexI thisIndex = children.get(keyFunction.call(key));
+        SObjectIndexI thisIndex = children.get(keyFunction.call(normalizeValue(key)));
         return thisIndex == null ? new List<SObject>() : thisIndex.values();
     }
 
@@ -254,7 +254,7 @@ global class SObjectIndex implements SObjectIndexI, Container {
     * the current top-level. null if there is no match
     */
     global SObjectIndex getSubIndex(Object key) {
-        return (SObjectIndex)children.get(keyFunction.call(key));
+        return (SObjectIndex)children.get(keyFunction.call(normalizeValue(key)));
     }
 
     /**
@@ -287,10 +287,21 @@ global class SObjectIndex implements SObjectIndexI, Container {
     }
 
     private Object getKeyFrom(SObject obj) {
-        return keyFunction.call(SObjectGetter.get(obj, thisIndexField));
+        return keyFunction.call(normalizeValue(SObjectGetter.get(obj, thisIndexField)));
     }
 
     private Object getKeyFrom(Map<String, Object> aMap) {
-        return keyFunction.call(aMap.get(thisIndexField));
+        return keyFunction.call(normalizeValue(aMap.get(thisIndexField)));
+    }
+
+    private static Object normalizeValue(Object value) {
+        if (value instanceof Date) {
+            return String.valueOf((Date)value);
+        } else if (value instanceof Datetime) {
+            return String.valueOf((Datetime)value);
+        } else if (value instanceof Time) {
+            return String.valueOf((Time)value);
+        }
+        return value;
     }
 }

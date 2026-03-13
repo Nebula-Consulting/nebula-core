@@ -346,4 +346,73 @@ private class SObjectIndexTest {
         System.assert(keySetName.contains(DOE));
         System.assert(keySetName.contains('Deer'));
     }
+
+    private static final String BIRTHDATE = Contact.Birthdate.getDescribe().getName();
+
+    @IsTest
+    static void indexOnDate() {
+        Date date1 = Date.newInstance(2023, 1, 1);
+        Date date2 = Date.newInstance(2023, 1, 2);
+        Date date3 = Date.newInstance(2023, 1, 3);
+
+        List<Contact> contacts = new List<Contact> {
+                new Contact(LastName = 'Contact1', Birthdate = date1),
+                new Contact(LastName = 'Contact2', Birthdate = date2),
+                new Contact(LastName = 'Contact3', Birthdate = date3)
+        };
+
+        SObjectIndex theIndex = new SObjectIndex(BIRTHDATE).putAll(contacts);
+
+        List<Contact> result1 = theIndex.getAll(date1);
+        List<Contact> result2 = theIndex.getAll(date2);
+        List<Contact> result3 = theIndex.getAll(date3);
+
+        System.assertEquals(1, result1.size());
+        System.assertEquals('Contact1', result1[0].LastName);
+        System.assertEquals(1, result2.size());
+        System.assertEquals('Contact2', result2[0].LastName);
+        System.assertEquals(1, result3.size());
+        System.assertEquals('Contact3', result3[0].LastName);
+    }
+
+    @IsTest
+    static void indexOnDateMultiFieldMap() {
+        Date date1 = Date.newInstance(2023, 1, 1);
+        Date date2 = Date.newInstance(2023, 1, 2);
+
+        Contact contact1 = new Contact(LastName = 'Doe', Birthdate = date1);
+        Contact contact2 = new Contact(LastName = 'Doe', Birthdate = date2);
+
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{BIRTHDATE, LAST_NAME})
+                .putAll(new List<Contact>{contact1, contact2});
+
+        Contact result1 = (Contact)theIndex.get(new Map<String, Object>{BIRTHDATE => date1, LAST_NAME => 'Doe'});
+        Contact result2 = (Contact)theIndex.get(new Map<String, Object>{BIRTHDATE => date2, LAST_NAME => 'Doe'});
+
+        System.assertNotEquals(null, result1);
+        System.assertEquals(date1, result1.Birthdate);
+        System.assertNotEquals(null, result2);
+        System.assertEquals(date2, result2.Birthdate);
+        System.assertNotEquals(result1.Birthdate, result2.Birthdate);
+    }
+
+    @IsTest
+    static void indexOnDateSObjectSpec() {
+        Date date1 = Date.newInstance(2023, 1, 1);
+        Date date2 = Date.newInstance(2023, 1, 2);
+
+        Contact contact1 = new Contact(AccountId = togAccount.Id, LastName = 'Contact1', Birthdate = date1);
+        Contact contact2 = new Contact(AccountId = togAccount.Id, LastName = 'Contact2', Birthdate = date2);
+
+        SObjectIndex theIndex = new SObjectIndex(new List<String>{ACCOUNT_ID, BIRTHDATE})
+                .putAll(new List<Contact>{contact1, contact2});
+
+        Contact result1 = (Contact)theIndex.get(new Contact(AccountId = togAccount.Id, Birthdate = date1));
+        Contact result2 = (Contact)theIndex.get(new Contact(AccountId = togAccount.Id, Birthdate = date2));
+
+        System.assertNotEquals(null, result1);
+        System.assertEquals('Contact1', result1.LastName);
+        System.assertNotEquals(null, result2);
+        System.assertEquals('Contact2', result2.LastName);
+    }
 }
