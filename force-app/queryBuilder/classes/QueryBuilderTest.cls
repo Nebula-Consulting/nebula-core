@@ -216,6 +216,39 @@ private class QueryBuilderTest {
 
         System.assertEquals(1, accounts.size());
         System.assertEquals(testAccount.Name, accounts[0].Name);
-        System.assert(query.contains('WITH SECURITY_ENFORCED'), 'Should contain WITH SECURITY_ENFORCED, is: ' + query);
+        System.assert(query.contains('WITH USER_MODE'), 'Should contain WITH USER_MODE, is: ' + query);
+    }
+
+    @IsTest
+    public static void withUserMode() {
+        Test.startTest();
+        String query = new QueryBuilder(Account.SObjectType)
+            .addField(Account.Name)
+            .setPaginationClause('LIMIT 1')
+            .withUserMode()
+            .getQuery();
+
+        List<Account> accounts = Database.query(query);
+        Test.stopTest();
+
+        System.assertEquals(1, accounts.size());
+        System.assertEquals(testAccount.Name, accounts[0].Name);
+        System.assert(query.contains('WITH USER_MODE'), 'Should contain WITH USER_MODE, is: ' + query);
+    }
+    @IsTest
+    public static void withSystemMode() {
+        Test.startTest();
+        String query = new QueryBuilder(Account.SObjectType)
+            .addField(Account.Name)
+            .setPaginationClause('LIMIT 1')
+            .withSystemMode()
+            .getQuery();
+
+        List<Account> accounts = Database.query(query);
+        Test.stopTest();
+
+        System.assertEquals(1, accounts.size());
+        System.assertEquals(testAccount.Name, accounts[0].Name);
+        System.assert(query.contains('WITH SYSTEM_MODE'), 'Should contain WITH SYSTEM_MODE, is: ' + query);
     }
 }

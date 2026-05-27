@@ -13,7 +13,8 @@ global inherited sharing class QueryBuilder {
     private List<QueryBuilder> subQueries = new List<QueryBuilder>();
     private String orderByClause;
     private String paginationClause;
-    private Boolean withSecurityEnforced = false;
+    private Boolean withUserMode = false;
+    private Boolean withSystemMode = false;
     private String groupBy;
 
     global QueryBuilder(SObjectType sObjectType) {
@@ -127,8 +128,23 @@ global inherited sharing class QueryBuilder {
         return this;
     }
 
+    /**
+     * @return QueryBuilder
+     *
+     * Kept for backwards compatibility, but use the withUserMode instead.
+     */
     global QueryBuilder withSecurityEnforced() {
-        withSecurityEnforced = true;
+        withUserMode = true;
+        return this;
+    }
+
+    global QueryBuilder withUserMode() {
+        withUserMode = true;
+        return this;
+    }
+
+    global QueryBuilder withSystemMode() {
+        withSystemMode = true;
         return this;
     }
 
@@ -152,8 +168,11 @@ global inherited sharing class QueryBuilder {
             theQuery += ' WHERE ' + whereClause;
         }
 
-        if(withSecurityEnforced) {
-            theQuery += ' WITH SECURITY_ENFORCED';
+        if(withUserMode && !withSystemMode) {
+            theQuery += ' WITH USER_MODE ';
+        }
+        if(withSystemMode && !withUserMode) {
+            theQuery += ' WITH SYSTEM_MODE ';
         }
 
         if(groupBy != null) {
