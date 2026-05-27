@@ -4,8 +4,8 @@
       "path": "force-app",
       "default": true,
       "package": "Nebula Core",
-      "versionName": "0.82",
-      "versionNumber": "0.82.0.NEXT"
+      "versionName": "0.83",
+      "versionNumber": "0.83.0.NEXT"
     },
     {
       "path": "examples"
@@ -40,6 +40,7 @@
     "Nebula Core@0.80.0-2": "04t6M000000gb7IQAQ",
     "Nebula Core@0.81.0-1": "04tQB000000FUx3YAG",
     "Nebula Core@0.81.0-2": "04tQB000000VrWHYA0",
-    "Nebula Core@0.82.0-1": "04tQB000000Vrb7YAC"
+    "Nebula Core@0.82.0-1": "04tQB000000Vrb7YAC",
+    "Nebula Core@0.83.0-2": "04tQB000002NDD7YAO"
   }
 }
