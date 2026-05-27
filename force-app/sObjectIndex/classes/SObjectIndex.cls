@@ -30,6 +30,8 @@ global class SObjectIndex implements SObjectIndexI, Container {
         this(new List<String>{field1.getDescribe().getName(), field2.getDescribe().getName(), field3.getDescribe().getName()}, 0);
     }
 
+
+
     global SObjectIndex(List<String> indexFields)  {
         this(indexFields, 0);
     }
@@ -51,12 +53,22 @@ global class SObjectIndex implements SObjectIndexI, Container {
         return this;
     }
 
+    /**
+     * @param normalizeKeys If true, then when putting or getting objects in the index, any Date, Datetime, or Time values on indexed fields will be converted to Strings first. This is to work around the fact that Salesforce's Map implementation does not consider two Date, Datetime, or Time instances with the same value to be equal keys, which can lead to unintuitive behavior in the index. Enabling this option will mean that such values are treated as equal keys in the index. Note that this only affects the keys in the index - the actual SObjects stored in the index will still have their Date, Datetime, and Time fields stored as their original types.
+     *
+     * @return SObjectIndex class
+     */
+    global SObjectIndex setNormalizeKeys(Boolean normalizeKeys) {
+        this.normalizeKeys = normalizeKeys;
+        return this;
+    }
+
     private final List<String> allIndexFields;
     private final Integer thisIndexDepth;
     private final String thisIndexField;
     private final Boolean isLastIndexLayer;
     private Function keyFunction;
-
+    private Boolean normalizeKeys = false;
     private Map<Object, SObjectIndexI> children;
 
     private SObjectIndex(List<String> allIndexFields, Integer fieldDepth) {
@@ -143,7 +155,7 @@ global class SObjectIndex implements SObjectIndexI, Container {
     * @return a list of matching objects. If there is no match, an empty list is returned
     */
     global List<SObject> getAll(Object key) {
-        SObjectIndexI thisIndex = children.get(keyFunction.call(key));
+        SObjectIndexI thisIndex = children.get(keyFunction.call(normalizeValue(key)));
         return thisIndex == null ? new List<SObject>() : thisIndex.values();
     }
 
@@ -254,7 +266,7 @@ global class SObjectIndex implements SObjectIndexI, Container {
     * the current top-level. null if there is no match
     */
     global SObjectIndex getSubIndex(Object key) {
-        return (SObjectIndex)children.get(keyFunction.call(key));
+        return (SObjectIndex)children.get(keyFunction.call(normalizeValue(key)));
     }
 
     /**
@@ -287,10 +299,24 @@ global class SObjectIndex implements SObjectIndexI, Container {
     }
 
     private Object getKeyFrom(SObject obj) {
-        return keyFunction.call(SObjectGetter.get(obj, thisIndexField));
+        return keyFunction.call(normalizeValue(SObjectGetter.get(obj, thisIndexField)));
     }
 
     private Object getKeyFrom(Map<String, Object> aMap) {
-        return keyFunction.call(aMap.get(thisIndexField));
+        return keyFunction.call(normalizeValue(aMap.get(thisIndexField)));
+    }
+
+    private Object normalizeValue(Object value) {
+        if (normalizeKeys == false) {
+            return value;
+        }
+        if (value instanceof Date) {
+            return String.valueOf((Date)value);
+        } else if (value instanceof Datetime) {
+            return String.valueOf((Datetime)value);
+        } else if (value instanceof Time) {
+            return String.valueOf((Time)value);
+        }
+        return value;
     }
 }
