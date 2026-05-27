@@ -13,7 +13,7 @@
   ],
   "namespace": "nebc",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "59.0",
+  "sourceApiVersion": "66.0",
   "packageAliases": {
     "Nebula Core": "0Ho0J000000XZAHSA4",
     "Nebula Triggers": "0Ho6M0000008OKGSA2",
