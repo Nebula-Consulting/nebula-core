@@ -1,8 +1,8 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 14/07/2021
- * @description Adds the given value to a collection-like class supporting add(). Note that this is not a terminator
- * function
+ * @description Adds the given value to a collection-like class supporting add(). Supports Set, List, SObjectIndex,
+ * and Map (using TwoTuple for key-value pairs). Note that this is not a terminator function
  */
 global with sharing class AddTo implements Function {
 
@@ -22,6 +22,10 @@ global with sharing class AddTo implements Function {
 
     global AddTo(SObjectIndex container) {
         addable = new SObjectIndexAddable(container);
+    }
+
+    global AddTo(Map<Object, Object> container) {
+        addable = new MapObjectAddable(container);
     }
 
     global Object call(Object o) {
@@ -77,6 +81,20 @@ global with sharing class AddTo implements Function {
 
         public void add(Object o) {
             container.put((SObject)o);
+        }
+    }
+
+    private class MapObjectAddable implements Addable {
+
+        private Map<Object, Object> container;
+
+        public MapObjectAddable(Map<Object, Object> container) {
+            this.container = container;
+        }
+
+        public void add(Object o) {
+            TwoTuple tuple = (TwoTuple)o;
+            container.put(tuple.left, tuple.right);
         }
     }
 }
